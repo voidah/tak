@@ -71,8 +71,8 @@ void Engine::Init()
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diff);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light0Spec);
 
-    CenterMouse();
-    HideCursor();
+    //CenterMouse();
+    //HideCursor();
 
     CHECK_GL_ERROR();
 }
@@ -116,7 +116,10 @@ void Engine::Render(float elapsedTime)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
     m_game->Render3d(elapsedTime);
+    glDisable(GL_BLEND);
 
     if(m_wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -166,11 +169,11 @@ void Engine::KeyReleaseEvent(unsigned char key)
 
 void Engine::MouseMoveEvent(int x, int y)
 {
-    int dx = x;
-    int dy = y;
-    MakeRelativeToCenter(dx, dy);
+    //int dx = x;
+    //int dy = y;
+    //MakeRelativeToCenter(dx, dy);
 
-    CenterMouse();
+    //CenterMouse();
 }
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
@@ -257,8 +260,6 @@ void Engine::DrawHud(float elapsedTime)
 
     // Bind de la texture pour le font
 
-    glLoadIdentity();
-    m_game->Render2d(elapsedTime);
 
     m_textureFont.Bind();
     std::ostringstream ss;
@@ -289,6 +290,12 @@ void Engine::DrawHud(float elapsedTime)
     glEnable(GL_DEPTH_TEST);
 
 
+
+    glLoadIdentity();
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    m_game->Render2d(elapsedTime);
+    glDisable(GL_BLEND);
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
