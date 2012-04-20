@@ -123,7 +123,7 @@ void Engine::Render(float elapsedTime)
 
     if(m_wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    DrawHud(elapsedTime);
+    Render2d(elapsedTime);
     if(m_wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -233,7 +233,7 @@ void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 }
 
 
-void Engine::DrawHud(float elapsedTime)
+void Engine::Render2d(float elapsedTime)
 {
     // Setter le blend function, tout ce qui sera noir sera transparent
     glDisable(GL_LIGHTING);

@@ -35,7 +35,7 @@ class Engine : public OpenglContext
         bool LoadTexture(Texture& texture, const std::string& filename, bool stopOnError = true);
 
         void PrintText(unsigned int x, unsigned int y, const std::string& t);
-        void DrawHud(float elapsedTime);
+        void Render2d(float elapsedTime);
 
 
 
