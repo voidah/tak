@@ -1,5 +1,5 @@
-#ifndef TOOL_H__
-#define TOOL_H__
+#ifndef TAK__TOOL_H__
+#define TAK__TOOL_H__
 
 #include <string>
 #include <cstdlib>

@@ -1,5 +1,5 @@
-#ifndef OPENGLCONTEXT_H__
-#define OPENGLCONTEXT_H__
+#ifndef TAK__OPENGLCONTEXT_H__
+#define TAK__OPENGLCONTEXT_H__
 
 #include "define.h"
 

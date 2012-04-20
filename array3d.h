@@ -1,5 +1,5 @@
-#ifndef ARRAY3D_H__
-#define ARRAY3D_H__
+#ifndef TAK__ARRAY3D_H__
+#define TAK__ARRAY3D_H__
 
 #include "define.h"
 #include <cassert>

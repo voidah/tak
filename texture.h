@@ -1,5 +1,5 @@
-#ifndef TEXTURE_H__
-#define TEXTURE_H__
+#ifndef TAK__TEXTURE_H__
+#define TAK__TEXTURE_H__
 
 #include "define.h"
 #include <IL/il.h>

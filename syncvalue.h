@@ -1,5 +1,5 @@
-#ifndef SYNCVALUE_H__
-#define SYNCVALUE_H__
+#ifndef TAK__SYNCVALUE_H__
+#define TAK__SYNCVALUE_H__
 
 #include <algorithm>
 

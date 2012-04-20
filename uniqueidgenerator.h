@@ -1,5 +1,5 @@
-#ifndef UNIQUEIDGENERATOR_H__
-#define UNIQUEIDGENERATOR_H__
+#ifndef TAK__UNIQUEIDGENERATOR_H__
+#define TAK__UNIQUEIDGENERATOR_H__
 
 // Generate sequential (unique) values for any types that 
 // has a default ctor and supports the post-increment operator

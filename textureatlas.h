@@ -1,5 +1,6 @@
-#ifndef TEXTUREATLAS_H__
-#define TEXTUREATLAS_H__
+#ifndef TAK__TEXTUREATLAS_H__
+#define TAK__TEXTUREATLAS_H__
+
 #include "define.h"
 #include <string>
 #include <map>

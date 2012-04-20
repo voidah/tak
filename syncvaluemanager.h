@@ -1,5 +1,5 @@
-#ifndef SYNCVALUEMANAGER_H__
-#define SYNCVALUEMANAGER_H__
+#ifndef TAK__SYNCVALUEMANAGER_H__
+#define TAK__SYNCVALUEMANAGER_H__
 
 #include "syncvalue.h"
 #include <set>

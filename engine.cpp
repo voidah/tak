@@ -6,11 +6,13 @@
 #include <cstdlib>
 #include <cassert>
 #include <sstream>
+#include "game.h"
 
 
 
-Engine::Engine() : m_wireframe(false), m_takeScreenshot(false)
+Engine::Engine(Game* game) : m_game(game), m_wireframe(false), m_takeScreenshot(false)
 {
+    game->m_syncValueManager = &m_syncValueManager;
 }
 
 Engine::~Engine()
@@ -54,25 +56,9 @@ void Engine::Init()
     glShadeModel(GL_SMOOTH);
 
     glEnable (GL_LINE_SMOOTH);
-
-    // TODO
-
-    // TODO
-    //unsigned int type = 2;
-    //for(int x = 0; x < CHUNK_SIZE_X; ++x)
-    //{
-    //    for(int z = 0; z < CHUNK_SIZE_Z; ++z)
-    //    {
-    //        for(int y = 0; y < 32; ++y)
-    //        {
-    //            if(x % 2 == 0 && z % 2 == 0)
-    //                SetBlock(x, y, z, y % BTYPE_LAST);
-    //        }
-    //    }
-    //}
     glEnable(GL_CULL_FACE);
-
     glEnable(GL_LIGHTING);
+
     // Light
     GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};
     GLfloat light0Amb[4]  = {0.9f, 0.9f, 0.9f, 1.0f};
@@ -105,14 +91,17 @@ void Engine::LoadResource()
     //std::cout << "Loading and compiling shaders..." << std::endl;
     //if(!m_shader01.Load(SHADER_PATH "shader01.vert", SHADER_PATH "shader01.frag", true))
     //{
-        //std::cout << "Failed to load shader" << std::endl;
-        //exit(1);
+    //std::cout << "Failed to load shader" << std::endl;
+    //exit(1);
     //}
     //CHECK_GL_ERROR();
+
+    m_game->LoadResource();
 }
 
 void Engine::UnloadResource()
 {
+    m_game->UnloadResource();
 }
 
 void Engine::Render(float elapsedTime)
@@ -127,9 +116,11 @@ void Engine::Render(float elapsedTime)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    m_game->Render3d(elapsedTime);
+
     if(m_wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    DrawHud();
+    DrawHud(elapsedTime);
     if(m_wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
@@ -248,7 +239,7 @@ void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 }
 
 
-void Engine::DrawHud()
+void Engine::DrawHud(float elapsedTime)
 {
     // Setter le blend function, tout ce qui sera noir sera transparent
     glDisable(GL_LIGHTING);
@@ -265,8 +256,11 @@ void Engine::DrawHud()
     glPushMatrix();
 
     // Bind de la texture pour le font
-    m_textureFont.Bind();
 
+    glLoadIdentity();
+    m_game->Render2d(elapsedTime);
+
+    m_textureFont.Bind();
     std::ostringstream ss;
 
     ss << PROJECT_NAME << " - v" << MAJOR_VERSION << "." << MINOR_VERSION;

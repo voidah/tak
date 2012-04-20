@@ -1,5 +1,5 @@
-#ifndef DEFINE_H__
-#define DEFINE_H__
+#ifndef TAK__DEFINE_H__
+#define TAK__DEFINE_H__
 
 #include <GL/glew.h>
 #include <SFML/Window.hpp>
@@ -35,9 +35,9 @@ typedef unsigned int uint;
 #define CHUNK_SIZE_Y 128
 #define CHUNK_SIZE_Z 16
 
-#define TEXTURE_PATH        "../tak/media/textures/minecraft4kids/"
-#define SHADER_PATH        "../tak/media/shaders/"
-#define WORLD_PATH        "../tak/media/worlds/"
+#define TEXTURE_PATH        "./media/textures/minecraft4kids/"
+#define SHADER_PATH        "./media/shaders/"
+#define WORLD_PATH        "./media/worlds/"
 
 #ifndef M_PI
 #define M_PI           3.14159265358979323846

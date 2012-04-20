@@ -12,3 +12,5 @@
 #include "tool.h"
 #include "uniqueidgenerator.h"
 #include "vector3.h"
+#include "game.h"
+#include "init.h"

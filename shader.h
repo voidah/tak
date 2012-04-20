@@ -1,5 +1,5 @@
-#ifndef SHADER_H
-#define SHADER_H
+#ifndef TAK__SHADER_H
+#define TAK__SHADER_H
 #include <string>
 #include "define.h"
 

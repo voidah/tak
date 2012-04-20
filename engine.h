@@ -1,5 +1,5 @@
-#ifndef ENGINE_H__
-#define ENGINE_H__
+#ifndef TAK__ENGINE_H__
+#define TAK__ENGINE_H__
 #include "define.h"
 #include "tool.h"
 #include "openglcontext.h"
@@ -10,13 +10,14 @@
 
 // TODO
 #include "texture.h"
+#include "mesh.h"
 
-
+class Game;
 
 class Engine : public OpenglContext
 {
     public:
-        Engine();
+        Engine(Game* game);
         virtual ~Engine();
         virtual void Init();
         virtual void DeInit();
@@ -34,11 +35,12 @@ class Engine : public OpenglContext
         bool LoadTexture(Texture& texture, const std::string& filename, bool stopOnError = true);
 
         void PrintText(unsigned int x, unsigned int y, const std::string& t);
-        void DrawHud();
+        void DrawHud(float elapsedTime);
 
 
 
     private:
+        Game* m_game;
         bool m_wireframe;
         bool m_takeScreenshot;
 

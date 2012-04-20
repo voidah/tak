@@ -1,5 +1,5 @@
-#ifndef ARRAY2D_H__
-#define ARRAY2D_H__
+#ifndef TAK__ARRAY2D_H__
+#define TAK__ARRAY2D_H__
 #include "define.h"
 #include <cassert>
 

@@ -1,5 +1,5 @@
-#ifndef VECTOR3_H__
-#define VECTOR3_H__
+#ifndef TAK__VECTOR3_H__
+#define TAK__VECTOR3_H__
 
 #include <iostream>
 #include <cmath>

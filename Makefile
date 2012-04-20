@@ -27,12 +27,6 @@ $(BINFILE) : $(OBJS)
 	@echo Creating $(BINFILE)...
 	@$(CC) $(LFLAGS) -shared -o $(BINFILE) *.o
 
-	#@echo AR -scr $(BINFILE) *.o
-	#@ar -scr $(BINFILE) *.o
-	
-	#@echo RANLIB $(BINFILE)
-	#@ranlib $(BINFILE)
-
 %.o : %.cpp
 	@echo CC $@
 	@$(CC) $(CFLAGS) -c $< -o $@
