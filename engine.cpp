@@ -9,7 +9,7 @@
 
 
 
-Engine::Engine() : m_wireframe(false), m_takeScreenshot(false), m_synctest(0, 1.0f, 10, &m_syncValueManager)
+Engine::Engine() : m_wireframe(false), m_takeScreenshot(false)
 {
 }
 
@@ -144,13 +144,13 @@ void Engine::KeyPressEvent(unsigned char key)
 {
     switch(key)
     {
-        case 0:	    // ESC
+        case 36:	    // ESC
             Stop();
             break;
-        case 58:	// F10
+        case 94:	// F10
             SetFullscreen(!IsFullscreen());
             break;
-        case 112:       // P
+        case 15:       // P
             m_takeScreenshot = true;
             break;
         default:
@@ -163,7 +163,7 @@ void Engine::KeyReleaseEvent(unsigned char key)
 {
     switch(key)
     {
-        case 121:       // Y
+        case 24:       // Y
             m_wireframe = !m_wireframe;
             if(m_wireframe)
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

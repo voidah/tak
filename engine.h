@@ -45,11 +45,7 @@ class Engine : public OpenglContext
         Texture m_textureFont;
         Shader m_shader01;
 
-
-
         SyncValueManager m_syncValueManager;
-        SyncValueLinearSwing<float> m_synctest;
-
 };
 
 #endif // ENGINE_H__
