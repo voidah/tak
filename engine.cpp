@@ -13,6 +13,7 @@
 Engine::Engine(Game* game) : m_game(game), m_wireframe(false), m_takeScreenshot(false)
 {
     game->m_syncValueManager = &m_syncValueManager;
+    game->m_particleManager = &m_particleManager;
 }
 
 Engine::~Engine()
@@ -126,6 +127,21 @@ void Engine::Render(float elapsedTime)
     Render2d(elapsedTime);
     if(m_wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    // Show particles
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glDepthMask(GL_FALSE);
+    //glDisable(GL_LIGHTING); // TODO
+    //glDisable(GL_CULL_FACE); // TODO
+    m_particleManager.Update(elapsedTime);
+    //m_particleManager.Render(m_player.Position());
+    m_particleManager.Render(Vector3f(0, 0, 20.f));
+    //glEnable(GL_CULL_FACE); // TODO
+    //glEnable(GL_LIGHTING); // TODO
+    glDepthMask(GL_TRUE);
+    glDisable(GL_BLEND);
+
 
     if(m_takeScreenshot)
     {

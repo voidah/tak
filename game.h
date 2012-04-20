@@ -52,9 +52,11 @@ class Game
 
     protected:
         void AddSyncValue(SyncValue* sv);
+        ParticleManager* GetParticleManager();
 
     private:
         SyncValueManager* m_syncValueManager;
+        ParticleManager* m_particleManager;
         std::string m_name;
         std::string m_version;
 

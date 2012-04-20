@@ -7,6 +7,7 @@
 //#include "texturebank.h"
 #include "array2d.h"
 #include "syncvaluemanager.h"
+#include "particlemanager.h"
 
 // TODO
 #include "texture.h"
@@ -48,6 +49,7 @@ class Engine : public OpenglContext
         //Shader m_shader01;
 
         SyncValueManager m_syncValueManager;
+        ParticleManager m_particleManager;
 };
 
 #endif // ENGINE_H__
