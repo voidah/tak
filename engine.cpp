@@ -44,7 +44,7 @@ void Engine::Init()
     printf("Maximum texture size: %d\n\n", texSize);
 
 
-    glClearColor(84.f / 255.f, 118.f / 255.f, 244.f / 255.f, 1.f);
+    glClearColor(m_game->Config.ClearColor.x, m_game->Config.ClearColor.y, m_game->Config.ClearColor.z, 1.f);
     glEnable( GL_TEXTURE_2D );
 
     glMatrixMode(GL_PROJECTION);
@@ -253,20 +253,28 @@ void Engine::Render2d(float elapsedTime)
     m_textureFont.Bind();
     std::ostringstream ss;
 
-    ss << m_game->GetName() << " - v" << m_game->GetVersion();
-    ss << " (" << __DATE__ << " - " << __TIME__ << ")";
-    PrintText(10, Height() - 20, ss.str());
+    int offset = 20;
+    if(m_game->Config.ShowVersion)
+    {
+        ss << m_game->GetName() << " - v" << m_game->GetVersion();
+        ss << " (" << __DATE__ << " - " << __TIME__ << ")";
+        PrintText(10, Height() - offset, ss.str());
+        offset += 15;
+    }
 
 
     static int lowFps = 99999;
     static int highFps = 0;
-    int curFps = GetFps();
-    if(curFps < lowFps && curFps > 10)
-        lowFps = curFps;
-    highFps = std::max(highFps, curFps);
-    ss.str("");
-    ss << "Fps: " << GetFps() << " (min=" << lowFps << ", max=" << highFps << ")";
-    PrintText(10, Height() - 35, ss.str());
+    if(m_game->Config.ShowFps)
+    {
+        int curFps = GetFps();
+        if(curFps < lowFps && curFps > 10)
+            lowFps = curFps;
+        highFps = std::max(highFps, curFps);
+        ss.str("");
+        ss << "Fps: " << GetFps() << " (min=" << lowFps << ", max=" << highFps << ")";
+        PrintText(10, Height() - offset, ss.str());
+    }
 
     //ss.str("");
     //ss << "View distance: " << VIEW_DISTANCE;

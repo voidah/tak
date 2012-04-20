@@ -27,6 +27,29 @@ class Game
         const std::string& GetName() const;
         const std::string& GetVersion() const;
 
+    public:
+        struct ConfigInfo
+        {
+            uint InitialWidth;
+            uint InitialHeight;
+
+            bool ShowFps;
+            bool ShowVersion;
+
+            Vector3f ClearColor;
+
+            ConfigInfo()
+            {
+                InitialWidth = 640;
+                InitialHeight = 480;
+
+                ShowFps = true;
+                ShowVersion = true;
+
+                ClearColor = Vector3f(0, 0, 0);
+            };
+        } Config;
+
     protected:
         void AddSyncValue(SyncValue* sv);
 

@@ -9,7 +9,7 @@ bool RunGame(Game* game)
 
     Engine engine(game);
     engine.SetMaxFps(99999);
-    engine.Start(game->GetName(), 640, 480, false, 0);
+    engine.Start(game->GetName(), game->Config.InitialWidth, game->Config.InitialHeight, false, 0);
 
     return true;
 }
