@@ -57,10 +57,10 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
                     MousePressEvent(MOUSE_BUTTON_WHEEL_DOWN, Event.mouseButton.x, Event.mouseButton.y);
                 break;
             case sf::Event::GainedFocus:
-                WindowsFocusEvent(true);
+                WindowFocusEvent(true);
                 break;
             case sf::Event::LostFocus:
-                WindowsFocusEvent(false);
+                WindowFocusEvent(false);
                 break;
             }
         }

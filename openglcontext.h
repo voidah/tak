@@ -31,7 +31,7 @@ public:
     virtual void MouseMoveEvent(int x, int y) = 0;
     virtual void MousePressEvent(const MOUSE_BUTTON &button, int x, int y) = 0;
     virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y) = 0;
-    virtual void WindowsFocusEvent(bool hasFocus) = 0;
+    virtual void WindowFocusEvent(bool hasFocus) = 0;
 
 
     bool Start(const std::string& title, int width, int height, bool fullscreen, int antialiasingFactor = 0);

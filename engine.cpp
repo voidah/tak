@@ -151,6 +151,7 @@ void Engine::KeyPressEvent(unsigned char key)
             std::cout << "Unhandled key: " << (int)key << std::endl;
     }
 
+    m_game->KeyPressEvent(key);
 }
 
 void Engine::KeyReleaseEvent(unsigned char key)
@@ -165,38 +166,28 @@ void Engine::KeyReleaseEvent(unsigned char key)
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             break;
     }
+
+    m_game->KeyReleaseEvent(key);
 }
 
 void Engine::MouseMoveEvent(int x, int y)
 {
-    //int dx = x;
-    //int dy = y;
-    //MakeRelativeToCenter(dx, dy);
-
-    //CenterMouse();
+    m_game->MouseMoveEvent(x, y);
 }
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 {
-    switch(button)
-    {
-        case MOUSE_BUTTON_LEFT:
-            break;
-        case MOUSE_BUTTON_RIGHT:
-            break;
-        case MOUSE_BUTTON_MIDDLE:
-            break;
-        default:
-            break;
-    }
+    m_game->MousePressEvent(button, x, y);
 }
 
 void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 {
+    m_game->MouseReleaseEvent(button, x, y);
 }
 
-void Engine::WindowsFocusEvent(bool hasFocus)
+void Engine::WindowFocusEvent(bool hasFocus)
 {
+    m_game->WindowFocusEvent(hasFocus);
 }
 
 bool Engine::LoadTexture(Texture& texture, const std::string& filename, bool stopOnError)
@@ -259,8 +250,6 @@ void Engine::DrawHud(float elapsedTime)
     glPushMatrix();
 
     // Bind de la texture pour le font
-
-
     m_textureFont.Bind();
     std::ostringstream ss;
 
@@ -283,14 +272,13 @@ void Engine::DrawHud(float elapsedTime)
     //ss << "View distance: " << VIEW_DISTANCE;
     //PrintText(10, 55, ss.str());
 
-
-
     glEnable(GL_LIGHTING);
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 
 
 
+    // Call game's Render2d method
     glLoadIdentity();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);

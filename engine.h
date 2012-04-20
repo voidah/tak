@@ -29,7 +29,7 @@ class Engine : public OpenglContext
         virtual void MouseMoveEvent(int x, int y);
         virtual void MousePressEvent(const MOUSE_BUTTON &button, int x, int y);
         virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y);
-        virtual void WindowsFocusEvent(bool hasFocus);
+        virtual void WindowFocusEvent(bool hasFocus);
 
     private:
         bool LoadTexture(Texture& texture, const std::string& filename, bool stopOnError = true);
