@@ -2,7 +2,7 @@
 #include "define.h"
 #include <fstream>
 
-OpenglContext::OpenglContext() : m_maxFps(999999), m_fullscreen(false), m_antialiasingFactor(0), m_title("")
+OpenglContext::OpenglContext() : m_maxFps(999999), m_fullscreen(false), m_antialiasingFactor(0), m_title(""), m_lastFrameTime(0)
 {
 }
 
@@ -20,39 +20,41 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
     Init();
     LoadResource();
 
-    while (m_app.IsOpened())
+    sf::Clock clock;
+
+    while (m_app.isOpen())
     {
         sf::Event Event;
-        while (m_app.GetEvent(Event))
+        while (m_app.pollEvent(Event))
         {
-            switch(Event.Type)
+            switch(Event.type)
             {
             case sf::Event::Closed:
-                m_app.Close();
+                m_app.close();
                 break;
             case sf::Event::Resized:
-                glViewport(0, 0, Event.Size.Width, Event.Size.Height);
+                glViewport(0, 0, Event.size.width, Event.size.height);
                 break;
             case sf::Event::KeyPressed:
-                KeyPressEvent(Event.Key.Code);
+                KeyPressEvent(Event.key.code);
                 break;
             case sf::Event::KeyReleased:
-                KeyReleaseEvent(Event.Key.Code);
+                KeyReleaseEvent(Event.key.code);
                 break;
             case sf::Event::MouseMoved:
-                MouseMoveEvent(Event.MouseMove.X, Event.MouseMove.Y);
+                MouseMoveEvent(Event.mouseMove.x, Event.mouseMove.y);
                 break;
             case sf::Event::MouseButtonPressed:
-                MousePressEvent(ConvertMouseButton(Event.MouseButton.Button), Event.MouseButton.X, Event.MouseButton.Y);
+                MousePressEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
                 break;
             case sf::Event::MouseButtonReleased:
-                MouseReleaseEvent(ConvertMouseButton(Event.MouseButton.Button), Event.MouseButton.X, Event.MouseButton.Y);
+                MouseReleaseEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
                 break;
             case sf::Event::MouseWheelMoved:
-                if(Event.MouseWheel.Delta > 0)
-                    MousePressEvent(MOUSE_BUTTON_WHEEL_UP, Event.MouseButton.X, Event.MouseButton.Y);
+                if(Event.mouseWheel.delta > 0)
+                    MousePressEvent(MOUSE_BUTTON_WHEEL_UP, Event.mouseButton.x, Event.mouseButton.y);
                 else
-                    MousePressEvent(MOUSE_BUTTON_WHEEL_DOWN, Event.MouseButton.X, Event.MouseButton.Y);
+                    MousePressEvent(MOUSE_BUTTON_WHEEL_DOWN, Event.mouseButton.x, Event.mouseButton.y);
                 break;
             case sf::Event::GainedFocus:
                 WindowsFocusEvent(true);
@@ -63,9 +65,11 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
             }
         }
 
-        m_app.SetActive();
-        Render(m_app.GetFrameTime());
-        m_app.Display();
+        m_app.setActive();
+        m_lastFrameTime = clock.getElapsedTime().asSeconds();
+        Render(m_lastFrameTime);
+        clock.restart();
+        m_app.display();
     }
 
     UnloadResource();
@@ -76,29 +80,29 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 
 bool OpenglContext::Stop()
 {
-    m_app.Close();
+    m_app.close();
     return true;
 }
 
 void OpenglContext::CenterMouse()
 {
-    m_app.SetCursorPosition(Width() / 2, Height() / 2);
+    sf::Mouse::setPosition(sf::Vector2i(Width() / 2, Height() / 2), m_app);
 }
 
 int OpenglContext::Width() const
 {
-    return m_app.GetWidth();
+    return m_app.getSize().x;
 }
 
 int OpenglContext::Height() const
 {
-    return m_app.GetHeight();
+    return m_app.getSize().y;
 }
 
 void OpenglContext::SetMaxFps(int maxFps)
 {
     m_maxFps = maxFps;
-    m_app.SetFramerateLimit(maxFps);
+    m_app.setFramerateLimit(maxFps);
 }
 
 int OpenglContext::GetMaxFps() const
@@ -108,7 +112,7 @@ int OpenglContext::GetMaxFps() const
 
 int OpenglContext::GetFps() const
 {
-    return (int)(1.f / m_app.GetFrameTime());
+    return (int)(1.f / m_lastFrameTime);
 }
 
 void OpenglContext::SetFullscreen(bool fullscreen)
@@ -176,12 +180,12 @@ void OpenglContext::MakeRelativeToCenter(int& x, int& y) const
 
 void OpenglContext::ShowCursor()
 {
-    m_app.ShowMouseCursor(true);
+    m_app.setMouseCursorVisible(true);
 }
 
 void OpenglContext::HideCursor()
 {
-    m_app.ShowMouseCursor(false);
+    m_app.setMouseCursorVisible(false);
 }
 
 void OpenglContext::ShowCrossCursor() const
@@ -191,7 +195,7 @@ void OpenglContext::ShowCrossCursor() const
 
 void OpenglContext::InitWindow(int width, int height)
 {
-    m_app.Create(sf::VideoMode(width, height, 32), m_title.c_str(), m_fullscreen ? sf::Style::Fullscreen : (sf::Style::Resize|sf::Style::Close), sf::WindowSettings(32, 8, m_antialiasingFactor));
+    m_app.create(sf::VideoMode(width, height, 32), m_title.c_str(), m_fullscreen ? sf::Style::Fullscreen : (sf::Style::Resize|sf::Style::Close), sf::ContextSettings(32, 8, m_antialiasingFactor));
 }
 
 OpenglContext::MOUSE_BUTTON OpenglContext::ConvertMouseButton(sf::Mouse::Button button) const

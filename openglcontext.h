@@ -68,6 +68,7 @@ private:
     bool		m_fullscreen;
     int		m_antialiasingFactor;
     std::string m_title;
+    float       m_lastFrameTime;
 };
 
 #endif // OPENGLCONTEXT_H__

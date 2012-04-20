@@ -12,9 +12,9 @@ DEBUGGER = insight
 DFLAGS =
 
 #COMPILER_FLAGS = -I/home/voider/mydata/current/toolbox -I/usr/X11R6/include -I/usr/local/include -I./external/noise/include -finline-functions -DFREEGLUT_STATIC
-COMPILER_FLAGS = -I/usr/X11R6/include -I/usr/local/include -I./external/noise/include -I./external/enet-1.3.1/include -I./external/sfml16_linux64/include -finline-functions
+COMPILER_FLAGS = -I/usr/X11R6/include -I/usr/local/include -I./external/noise/include -I./external/enet-1.3.1/include -finline-functions
 #LINKER_FLAGS = -lm -L/usr/X11R6/lib -L/usr/local/lib -Lexternal/sfml16_linux64/lib -lGL -lGLU -lpthread -lsfml-system-s -lsfml-window-s -lsfml-graphics-s -lsfml-system-s -lXrandr -lIL -lILU -lX11
-LINKER_FLAGS = -lm -L/usr/X11R6/lib -L/usr/local/lib -Lexternal/sfml16_linux64/lib -lGL -lGLU -lpthread -lsndfile -lopenal -lsfml-audio-s -lsfml-graphics-s -lsfml-window-s -lsfml-system-s -lXrandr -lIL -lILU -lX11 -ldl
+LINKER_FLAGS = -lm -L/usr/X11R6/lib -L/usr/local/lib -Lexternal/sfml16_linux64/lib -lGL -lGLU -lpthread -lsndfile -lopenal -lGLEW -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -lXrandr -lIL -lILU -lX11 -ldl
 #LINKER_FLAGS = -L/home/voider/mydata/current/toolbox -L/usr/X11R6/lib -L/usr/local/lib -L./external/noise/lib -lnoise -ltoolbox
 
 # Release:
