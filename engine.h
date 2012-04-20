@@ -45,7 +45,7 @@ class Engine : public OpenglContext
         bool m_takeScreenshot;
 
         Texture m_textureFont;
-        Shader m_shader01;
+        //Shader m_shader01;
 
         SyncValueManager m_syncValueManager;
 };

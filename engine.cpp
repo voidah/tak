@@ -60,7 +60,7 @@ void Engine::Init()
     glEnable(GL_LIGHTING);
 
     // Light
-    GLfloat light0Pos[4]  = {0.0f, CHUNK_SIZE_Y, 0.0f, 1.0f};
+    GLfloat light0Pos[4]  = {0.0f, 50.f, 0.0f, 1.0f};
     GLfloat light0Amb[4]  = {0.9f, 0.9f, 0.9f, 1.0f};
     GLfloat light0Diff[4] = {1.0f, 1.0f, 1.0f, 1.0f};
     GLfloat light0Spec[4] = {0.2f, 0.2f, 0.2f, 1.0f};
@@ -83,7 +83,7 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
-    LoadTexture(m_textureFont, TEXTURE_PATH "font.bmp");
+    LoadTexture(m_textureFont, "tak/resource/font.bmp");
     CHECK_GL_ERROR();
 
     //LoadTexture(m_textureFont, TEXTURE_PATH "font.bmp");
@@ -253,7 +253,7 @@ void Engine::Render2d(float elapsedTime)
     m_textureFont.Bind();
     std::ostringstream ss;
 
-    ss << PROJECT_NAME << " - v" << MAJOR_VERSION << "." << MINOR_VERSION;
+    ss << m_game->GetName() << " - v" << m_game->GetVersion();
     ss << " (" << __DATE__ << " - " << __TIME__ << ")";
     PrintText(10, Height() - 20, ss.str());
 
