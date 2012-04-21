@@ -117,10 +117,12 @@ void Engine::Render(float elapsedTime)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    glPushMatrix();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     m_game->Render3d(elapsedTime);
     glDisable(GL_BLEND);
+    glPopMatrix();
 
     if(m_wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -128,19 +130,6 @@ void Engine::Render(float elapsedTime)
     if(m_wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    // Show particles
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    glDepthMask(GL_FALSE);
-    //glDisable(GL_LIGHTING); // TODO
-    //glDisable(GL_CULL_FACE); // TODO
-    m_particleManager.Update(elapsedTime);
-    //m_particleManager.Render(m_player.Position());
-    m_particleManager.Render(Vector3f(0, 0, 20.f));
-    //glEnable(GL_CULL_FACE); // TODO
-    //glEnable(GL_LIGHTING); // TODO
-    glDepthMask(GL_TRUE);
-    glDisable(GL_BLEND);
 
 
     if(m_takeScreenshot)
@@ -235,13 +224,13 @@ void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 
         glBegin(GL_QUADS);
         glTexCoord2f(left, 1.0f - top - 0.0625f);
-        glVertex2f(0, 0);
-        glTexCoord2f(left + 0.0625f, 1.0f - top - 0.0625f);
-        glVertex2f(12, 0);
-        glTexCoord2f(left + 0.0625f, 1.0f - top);
-        glVertex2f(12, 12);
-        glTexCoord2f(left, 1.0f - top);
         glVertex2f(0, 12);
+        glTexCoord2f(left + 0.0625f, 1.0f - top - 0.0625f);
+        glVertex2f(12, 12);
+        glTexCoord2f(left + 0.0625f, 1.0f - top);
+        glVertex2f(12, 0);
+        glTexCoord2f(left, 1.0f - top);
+        glVertex2f(0, 0);
         glEnd();
 
         glTranslatef(8, 0, 0);
@@ -261,7 +250,8 @@ void Engine::Render2d(float elapsedTime)
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    glOrtho(0, Width(), 0, Height(), -1, 1);
+    //glOrtho(0, Width(), 0, Height(), -1, 1);
+    glOrtho(0, Width(), Height(), 0, -1000.0, 1000.0);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
 
@@ -274,7 +264,7 @@ void Engine::Render2d(float elapsedTime)
     {
         ss << m_game->GetName() << " - v" << m_game->GetVersion();
         ss << " (" << __DATE__ << " - " << __TIME__ << ")";
-        PrintText(10, Height() - offset, ss.str());
+        PrintText(10, offset, ss.str());
         offset += 15;
     }
 
@@ -289,7 +279,7 @@ void Engine::Render2d(float elapsedTime)
         highFps = std::max(highFps, curFps);
         ss.str("");
         ss << "Fps: " << GetFps() << " (min=" << lowFps << ", max=" << highFps << ")";
-        PrintText(10, Height() - offset, ss.str());
+        PrintText(10, offset, ss.str());
     }
 
     //ss.str("");
@@ -306,8 +296,27 @@ void Engine::Render2d(float elapsedTime)
     glLoadIdentity();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
+    glPushMatrix();
     m_game->Render2d(elapsedTime);
+    glPopMatrix();
     glDisable(GL_BLEND);
+
+
+    // Show particles
+    glLoadIdentity();
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glDepthMask(GL_FALSE);
+    //glDisable(GL_LIGHTING); // TODO
+    //glDisable(GL_CULL_FACE); // TODO
+    m_particleManager.Update(elapsedTime);
+    //m_particleManager.Render(m_player.Position());
+    m_particleManager.Render(Vector3f(0.f, 0, 50.f));
+    //glEnable(GL_CULL_FACE); // TODO
+    //glEnable(GL_LIGHTING); // TODO
+    glDepthMask(GL_TRUE);
+    glDisable(GL_BLEND);
+
 
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
