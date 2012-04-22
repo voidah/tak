@@ -20,6 +20,11 @@ ParticleManager* Game::GetParticleManager()
     return m_particleManager;
 }
 
+void Game::PrintText(int x, int y, const std::string& text)
+{
+    m_engine->PrintText(x, y, text);
+}
+
 const std::string& Game::GetName() const
 {
     return m_name;

@@ -54,11 +54,15 @@ class Game
         void AddSyncValue(SyncValue* sv);
         ParticleManager* GetParticleManager();
 
+        void PrintText(int x, int y, const std::string& text);
+
     private:
         SyncValueManager* m_syncValueManager;
         ParticleManager* m_particleManager;
         std::string m_name;
         std::string m_version;
+
+        Engine* m_engine;
 
         friend class Engine;
 };

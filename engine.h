@@ -32,10 +32,11 @@ class Engine : public OpenglContext
         virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y);
         virtual void WindowFocusEvent(bool hasFocus);
 
+        void PrintText(int x, int y, const std::string& t);
+
     private:
         bool LoadTexture(Texture& texture, const std::string& filename, bool stopOnError = true);
 
-        void PrintText(unsigned int x, unsigned int y, const std::string& t);
         void Render2d(float elapsedTime);
 
 

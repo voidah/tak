@@ -14,6 +14,7 @@ Engine::Engine(Game* game) : m_game(game), m_wireframe(false), m_takeScreenshot(
 {
     game->m_syncValueManager = &m_syncValueManager;
     game->m_particleManager = &m_particleManager;
+    game->m_engine = this;
 }
 
 Engine::~Engine()
@@ -211,8 +212,9 @@ bool Engine::LoadTexture(Texture& texture, const std::string& filename, bool sto
 }
 
 
-void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
+void Engine::PrintText(int x, int y, const std::string& t)
 {
+    glPushMatrix();
     glLoadIdentity();
     glTranslatef(x, y, 0);
     for(unsigned int i=0; i<t.length(); ++i)
@@ -235,65 +237,26 @@ void Engine::PrintText(unsigned int x, unsigned int y, const std::string& t)
 
         glTranslatef(8, 0, 0);
     }
+    glPopMatrix();
 }
 
 
 void Engine::Render2d(float elapsedTime)
 {
-    // Setter le blend function, tout ce qui sera noir sera transparent
-    glDisable(GL_LIGHTING);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    glEnable(GL_BLEND);
-
+    //=========================================================================
+    // Set projection and modelview matrix
+    //=========================================================================
     glDisable(GL_DEPTH_TEST);
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    //glOrtho(0, Width(), 0, Height(), -1, 1);
     glOrtho(0, Width(), Height(), 0, -1000.0, 1000.0);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
 
-    // Bind de la texture pour le font
-    m_textureFont.Bind();
-    std::ostringstream ss;
-
-    int offset = 20;
-    if(m_game->Config.ShowVersion)
-    {
-        ss << m_game->GetName() << " - v" << m_game->GetVersion();
-        ss << " (" << __DATE__ << " - " << __TIME__ << ")";
-        PrintText(10, offset, ss.str());
-        offset += 15;
-    }
-
-
-    static int lowFps = 99999;
-    static int highFps = 0;
-    if(m_game->Config.ShowFps)
-    {
-        int curFps = GetFps();
-        if(curFps < lowFps && curFps > 10)
-            lowFps = curFps;
-        highFps = std::max(highFps, curFps);
-        ss.str("");
-        ss << "Fps: " << GetFps() << " (min=" << lowFps << ", max=" << highFps << ")";
-        PrintText(10, offset, ss.str());
-    }
-
-    //ss.str("");
-    //ss << "View distance: " << VIEW_DISTANCE;
-    //PrintText(10, 55, ss.str());
-
-    glEnable(GL_LIGHTING);
-    glDisable(GL_BLEND);
-    glEnable(GL_DEPTH_TEST);
-
-
-
+    //=========================================================================
     // Call game's Render2d method
-    glLoadIdentity();
+    //=========================================================================
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glPushMatrix();
@@ -301,8 +264,9 @@ void Engine::Render2d(float elapsedTime)
     glPopMatrix();
     glDisable(GL_BLEND);
 
-
+    //=========================================================================
     // Show particles
+    //=========================================================================
     glLoadIdentity();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
@@ -318,6 +282,46 @@ void Engine::Render2d(float elapsedTime)
     glDisable(GL_BLEND);
 
 
+    //=========================================================================
+    // Text
+    //=========================================================================
+    glDisable(GL_LIGHTING);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glEnable(GL_BLEND);
+
+    m_textureFont.Bind();
+    std::ostringstream ss;
+
+    int offset = 20;
+    if(m_game->Config.ShowVersion)
+    {
+        ss << m_game->GetName() << " - v" << m_game->GetVersion();
+        ss << " (" << __DATE__ << " - " << __TIME__ << ")";
+        PrintText(10, offset, ss.str());
+        offset += 15;
+    }
+
+    static int lowFps = 99999;
+    static int highFps = 0;
+    if(m_game->Config.ShowFps)
+    {
+        int curFps = GetFps();
+        if(curFps < lowFps && curFps > 10)
+            lowFps = curFps;
+        highFps = std::max(highFps, curFps);
+        ss.str("");
+        ss << "Fps: " << GetFps() << " (min=" << lowFps << ", max=" << highFps << ")";
+        PrintText(10, offset, ss.str());
+    }
+
+    glEnable(GL_LIGHTING);
+    glDisable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+
+    //=========================================================================
+    // Restore projection and modelview matrix
+    //=========================================================================
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);

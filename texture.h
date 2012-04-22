@@ -8,10 +8,10 @@
 class Texture
 {
 public:
-    Texture(const std::string& filename = "");
+    Texture();
     ~Texture();
 
-    bool Load(const std::string& filename);
+    bool Load(const std::string& filename, bool mipmap = true);
     bool IsValid() const;
     void Bind() const;
 
