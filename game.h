@@ -17,6 +17,7 @@ class Game
         virtual bool UnloadResource() = 0;
         virtual void Render3d(float elapsedTime) = 0;
         virtual void Render2d(float elapsedTime) = 0;
+        virtual void RenderText(float elapsedTime) = 0;
         virtual void KeyPressEvent(unsigned char key) = 0;
         virtual void KeyReleaseEvent(unsigned char key) = 0;
         virtual void MouseMoveEvent(int x, int y) = 0;
@@ -32,6 +33,7 @@ class Game
         {
             uint InitialWidth;
             uint InitialHeight;
+            uint AntialiasingFactor;
 
             bool ShowFps;
             bool ShowVersion;
@@ -42,6 +44,8 @@ class Game
             {
                 InitialWidth = 640;
                 InitialHeight = 480;
+
+                AntialiasingFactor = 0;
 
                 ShowFps = true;
                 ShowVersion = true;
