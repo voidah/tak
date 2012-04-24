@@ -271,13 +271,13 @@ void Engine::Render2d(float elapsedTime)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     glDepthMask(GL_FALSE);
-    //glDisable(GL_LIGHTING); // TODO
+    glDisable(GL_LIGHTING); // TODO
     //glDisable(GL_CULL_FACE); // TODO
     m_particleManager.Update(elapsedTime);
     //m_particleManager.Render(m_player.Position());
     m_particleManager.Render(Vector3f(0.f, 0, 50.f));
     //glEnable(GL_CULL_FACE); // TODO
-    //glEnable(GL_LIGHTING); // TODO
+    glEnable(GL_LIGHTING); // TODO
     glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
 
