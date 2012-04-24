@@ -315,6 +315,8 @@ void Engine::Render2d(float elapsedTime)
         PrintText(10, offset, ss.str());
     }
 
+    m_game->RenderText(elapsedTime);
+
     glEnable(GL_LIGHTING);
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
