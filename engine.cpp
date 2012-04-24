@@ -85,18 +85,8 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
-    LoadTexture(m_textureFont, "tak/resource/font.bmp");
+    LoadTexture(m_textureFont, "../tak/resource/font.bmp");
     CHECK_GL_ERROR();
-
-    //LoadTexture(m_textureFont, TEXTURE_PATH "font.bmp");
-    //CHECK_GL_ERROR();
-    //std::cout << "Loading and compiling shaders..." << std::endl;
-    //if(!m_shader01.Load(SHADER_PATH "shader01.vert", SHADER_PATH "shader01.frag", true))
-    //{
-    //std::cout << "Failed to load shader" << std::endl;
-    //exit(1);
-    //}
-    //CHECK_GL_ERROR();
 
     m_game->LoadResource();
 }
@@ -246,6 +236,7 @@ void Engine::Render2d(float elapsedTime)
     //=========================================================================
     // Set projection and modelview matrix
     //=========================================================================
+    CHECK_GL_ERROR();
     glDisable(GL_DEPTH_TEST);
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -253,6 +244,7 @@ void Engine::Render2d(float elapsedTime)
     glOrtho(0, Width(), Height(), 0, -1000.0, 1000.0);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
+    CHECK_GL_ERROR();
 
     //=========================================================================
     // Call game's Render2d method
@@ -263,6 +255,7 @@ void Engine::Render2d(float elapsedTime)
     m_game->Render2d(elapsedTime);
     glPopMatrix();
     glDisable(GL_BLEND);
+    CHECK_GL_ERROR();
 
     //=========================================================================
     // Show particles
@@ -273,13 +266,17 @@ void Engine::Render2d(float elapsedTime)
     glDepthMask(GL_FALSE);
     //glDisable(GL_LIGHTING); // TODO
     //glDisable(GL_CULL_FACE); // TODO
+    CHECK_GL_ERROR();
     m_particleManager.Update(elapsedTime);
+    CHECK_GL_ERROR();
     //m_particleManager.Render(m_player.Position());
     m_particleManager.Render(Vector3f(0.f, 0, 50.f));
+    CHECK_GL_ERROR();
     //glEnable(GL_CULL_FACE); // TODO
     //glEnable(GL_LIGHTING); // TODO
     glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
+    CHECK_GL_ERROR();
 
 
     //=========================================================================
@@ -289,8 +286,10 @@ void Engine::Render2d(float elapsedTime)
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     glEnable(GL_BLEND);
+    CHECK_GL_ERROR();
 
     m_textureFont.Bind();
+    CHECK_GL_ERROR();
     std::ostringstream ss;
 
     int offset = 20;
@@ -314,10 +313,12 @@ void Engine::Render2d(float elapsedTime)
         ss << "Fps: " << GetFps() << " (min=" << lowFps << ", max=" << highFps << ")";
         PrintText(10, offset, ss.str());
     }
+    CHECK_GL_ERROR();
 
     glEnable(GL_LIGHTING);
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
+    CHECK_GL_ERROR();
 
     //=========================================================================
     // Restore projection and modelview matrix
@@ -326,6 +327,6 @@ void Engine::Render2d(float elapsedTime)
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
-
+    CHECK_GL_ERROR();
 }
 

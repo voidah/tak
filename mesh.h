@@ -12,13 +12,13 @@ struct VertexData3d
     typedef float TCOORD_TYPE;
 
     enum  A{ VCOORD_COUNT = 3 };
-    typename VertexData3d::VCOORD_TYPE x, y, z;
+    VertexData3d::VCOORD_TYPE x, y, z;
 
     enum B { COLOR_COUNT = 3 };
-    typename VertexData3d::COLOR_TYPE r, g, b;
+    VertexData3d::COLOR_TYPE r, g, b;
 
     enum C { TCOORD_COUNT = 2 };
-    typename VertexData3d::TCOORD_TYPE u, v;
+    VertexData3d::TCOORD_TYPE u, v;
 
     VertexData3d() {}
     VertexData3d(float _x, float _y, float _z, float _r, float _g, float _b, float _u, float _v) : x(_x), y(_y), z(_z), r(_r), g(_g), b(_b), u(_u), v(_v) {}
@@ -33,13 +33,13 @@ struct VertexData2d
     typedef float TCOORD_TYPE;
 
     enum  A{ VCOORD_COUNT = 2 };
-    typename VertexData3d::VCOORD_TYPE x, y;
+    VertexData3d::VCOORD_TYPE x, y;
 
     enum B { COLOR_COUNT = 3 };
-    typename VertexData3d::COLOR_TYPE r, g, b;
+    VertexData3d::COLOR_TYPE r, g, b;
 
     enum C { TCOORD_COUNT = 2 };
-    typename VertexData3d::TCOORD_TYPE u, v;
+    VertexData3d::TCOORD_TYPE u, v;
 
     float padding;
 
