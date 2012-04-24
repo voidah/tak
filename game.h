@@ -32,6 +32,7 @@ class Game
         {
             uint InitialWidth;
             uint InitialHeight;
+            uint AntialiasingFactor;
 
             bool ShowFps;
             bool ShowVersion;
@@ -42,6 +43,8 @@ class Game
             {
                 InitialWidth = 640;
                 InitialHeight = 480;
+
+                AntialiasingFactor = 0;
 
                 ShowFps = true;
                 ShowVersion = true;
