@@ -85,7 +85,7 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
-    LoadTexture(m_textureFont, "../tak/resource/font.bmp");
+    LoadTexture(m_textureFont, "../../tak/resource/font.bmp");
     CHECK_GL_ERROR();
 
     m_game->LoadResource();
