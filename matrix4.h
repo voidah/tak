@@ -44,6 +44,7 @@ class Matrix4
 
         void SetZero();
         void SetIdentity();
+        void SetPerspectiveProjection(const T& fov, const T& aspect, const T& nearPlane, const T& farPlane);
 
         bool IsZero() const;
         bool IsIdentity() const;
@@ -258,6 +259,22 @@ void Matrix4<T>::SetZero()
 void Matrix4<T>::SetIdentity()
 {
     *this = IDENTITY;
+}
+
+
+    template <class T>
+void Matrix4<T>::SetPerspectiveProjection(const T& fov, const T& aspect, const T& nearPlane, const T& farPlane)
+{
+    const float h = T(1) / tan(fov * T(PI_OVER_360));
+    T negDepth = nearPlane - farPlane;
+
+    SetZero();
+
+    m_11 = h / aspect;
+    m_22 = h;
+    m_33 = (farPlane + nearPlane) / negDepth;
+    m_34 = T(2) * (nearPlane * farPlane) / negDepth;
+    m_43 = -T(1);
 }
 
 template <class T>
