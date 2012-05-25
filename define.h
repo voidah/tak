@@ -27,8 +27,11 @@ typedef unsigned short ushort;
 typedef unsigned int uint;
 
 #ifndef M_PI
-#define M_PI           3.14159265358979323846
+#define M_PI           3.1415926535897932384626433832795
 #endif
+
+#define PI_OVER_180	 0.017453292519943295769236907684886
+#define PI_OVER_360	 0.0087266462599716478846184538424431
 
 #define DEGTORAD(x) ((x * M_PI) / 180.0)
 #define RADTODEG(x) ((180.0 * x) / M_PI)
