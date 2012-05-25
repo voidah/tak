@@ -41,10 +41,9 @@ bool Texture::Load(const std::string& filename, bool mipmap)
     // n'est plus capable de charger d'images au format PNG
     if (!ilLoadImage((const ILstring)filename.c_str()))
     {
-        //ILenum Error = ilGetError();
-        //while ((Error = ilGetError()) != IL_NO_ERROR) { 
-        //printf("%d: %s\n", Error, iluErrorString(Error)); 
-        //}
+        ILenum Error;
+        while ((Error = ilGetError()) != IL_NO_ERROR)
+            printf("Error ilLoadImage #%d: %s\n", Error, iluErrorString(Error)); 
         return false;
     }
 
