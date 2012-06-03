@@ -148,8 +148,6 @@ void Engine::KeyPressEvent(unsigned char key)
         case 15:       // P
             m_takeScreenshot = true;
             break;
-        default:
-            std::cout << "Unhandled key: " << (int)key << std::endl;
     }
 
     m_game->KeyPressEvent(key);
