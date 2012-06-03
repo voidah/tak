@@ -3,7 +3,7 @@
 
 UniqueIdGenerator<SceneNode::IdType> SceneNode::m_idGenerator;
 
-SceneNode::SceneNode(const std::string& name) : m_parent(0), m_name(name), m_posX(0), m_posY(0), m_posZ(0), m_rotX(0), m_rotY(0), m_rotZ(0), m_scaleX(1.f), m_scaleY(1.f), m_scaleZ(1.f)
+SceneNode::SceneNode(const std::string& name) : m_parent(0), m_name(name), m_active(true), m_visible(true), m_posX(0), m_posY(0), m_posZ(0), m_rotX(0), m_rotY(0), m_rotZ(0), m_scaleX(1.f), m_scaleY(1.f), m_scaleZ(1.f)
 {
     m_id = m_idGenerator.Get();
 
@@ -25,6 +25,26 @@ SceneNode::IdType SceneNode::GetId() const
 const std::string& SceneNode::GetName() const
 {
     return m_name;
+}
+
+void SceneNode::SetActive(bool v)
+{
+    m_active = v;
+}
+
+bool SceneNode::IsActive() const
+{
+    return m_active;
+}
+
+void SceneNode::SetVisible(bool v)
+{
+    m_visible = v;
+}
+
+bool SceneNode::IsVisible() const
+{
+    return m_visible;
 }
 
 void SceneNode::SetParent(SceneNode* node)
@@ -136,6 +156,9 @@ void SceneNode::InternalShowGraphGraphviz(std::ofstream& file, const SceneNode* 
 
 void SceneNode::InternalUpdate(float elapsedTime, SceneParams& params)
 {
+    if(!IsActive())
+        return;
+
     Update(elapsedTime, params);
 
     for(ChildNodes::const_iterator it = m_childs.begin(); it != m_childs.end(); ++it)
@@ -146,6 +169,9 @@ void SceneNode::InternalUpdate(float elapsedTime, SceneParams& params)
 
 void SceneNode::InternalRender(Matrix4f projection, Matrix4f modelview, Shader* shader, SceneParams& params)
 {
+    if(!IsVisible())
+        return;
+
     modelview.ApplyTranslation(m_posX, m_posY, m_posZ);
     modelview.ApplyRotation(m_rotX, 1.f, 0, 0);
     modelview.ApplyRotation(m_rotY, 0, 1.f, 0);
@@ -156,7 +182,7 @@ void SceneNode::InternalRender(Matrix4f projection, Matrix4f modelview, Shader* 
     CHECK_GL_ERROR();
 
     //if(!GetParent())
-        //std::cout << "=============================" << std::endl;
+    //std::cout << "=============================" << std::endl;
     //std::cout << "Rendering " << GetName() << std::endl;
     Render(params);
 

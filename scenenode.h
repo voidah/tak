@@ -22,6 +22,11 @@ class SceneNode
         IdType GetId() const;
         const std::string& GetName() const;
 
+        void SetActive(bool v);
+        bool IsActive() const;
+        void SetVisible(bool v);
+        bool IsVisible() const;
+
         void SetParent(SceneNode* node);
         SceneNode* GetParent() const;
 
@@ -60,6 +65,9 @@ class SceneNode
         IdType m_id;
 
         std::string m_name;
+
+        bool m_active;
+        bool m_visible;
 
         float m_posX, m_posY, m_posZ;
         float m_rotX, m_rotY, m_rotZ;
