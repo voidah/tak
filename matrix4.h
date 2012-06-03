@@ -49,6 +49,11 @@ class Matrix4
         bool IsZero() const;
         bool IsIdentity() const;
 
+        void ApplyTranslation(const T& x, const T& y, const T&z);
+        void ApplyRotation(const T& angle, const T& x, const T& y, const T&z);
+        void ApplyScale(const T& x, const T& y, const T&z);
+
+        T* GetInternalValues();
         std::string ToString(const std::string& lineBegin = "|", const std::string& lineEnd = "|\n") const;
 
         //void Transpose();
@@ -275,6 +280,54 @@ void Matrix4<T>::SetPerspectiveProjection(const T& fov, const T& aspect, const T
     m_33 = (farPlane + nearPlane) / negDepth;
     m_34 = T(2) * (nearPlane * farPlane) / negDepth;
     m_43 = -T(1);
+}
+
+    template <class T>
+void Matrix4<T>::ApplyTranslation(const T& x, const T& y, const T&z)
+{
+    Matrix4<T> tmp(
+            1, 0, 0, x,
+            0, 1, 0, y,
+            0, 0, 1, z,
+            0, 0, 0, 1);
+
+    *this *= tmp;
+}
+
+    template <class T>
+void Matrix4<T>::ApplyRotation(const T& angle, const T& x, const T& y, const T&z)
+{
+    // TODO axis (x, y, z) must be normalized...
+
+    T s = sin(DEGTORAD(angle));
+    T c = cos(DEGTORAD(angle));
+    T ic = T(1) - c;
+
+    Matrix4<T> tmp(
+            x * x * ic + c,     y * x * ic + (z*s),  z * x * ic - (y*s),   0,
+            x * y * ic - (z*s), y * y * ic + c,      z * y * ic + (x*s),   0,
+            x * z * ic + (y*s), y * z * ic - (x*s),  z * z * ic + c,       0,
+            0,                  0,                   0,                    1);
+
+    *this *= tmp;
+}
+
+    template <class T>
+void Matrix4<T>::ApplyScale(const T& x, const T& y, const T&z)
+{
+    Matrix4<T> tmp(
+            x, 0, 0, 0,
+            0, y, 0, 0,
+            0, 0, z, 0,
+            0, 0, 0, 1);
+
+    *this *= tmp;
+}
+
+    template <class T>
+T* Matrix4<T>::GetInternalValues()
+{
+    return m_values;
 }
 
 template <class T>
