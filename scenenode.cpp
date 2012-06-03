@@ -134,34 +134,35 @@ void SceneNode::InternalShowGraphGraphviz(std::ofstream& file, const SceneNode* 
     }
 }
 
-void SceneNode::InternalUpdate(float elapsedTime)
+void SceneNode::InternalUpdate(float elapsedTime, SceneParams& params)
 {
-    Update(elapsedTime);
+    Update(elapsedTime, params);
 
     for(ChildNodes::const_iterator it = m_childs.begin(); it != m_childs.end(); ++it)
     {
-        (*it)->InternalUpdate(elapsedTime);
+        (*it)->InternalUpdate(elapsedTime, params);
     }
 }
 
-void SceneNode::InternalRender(Matrix4f projection, Matrix4f modelview, Shader* shader)
+void SceneNode::InternalRender(Matrix4f projection, Matrix4f modelview, Shader* shader, SceneParams& params)
 {
     modelview.ApplyTranslation(m_posX, m_posY, m_posZ);
     modelview.ApplyRotation(m_rotX, 1.f, 0, 0);
     modelview.ApplyRotation(m_rotY, 0, 1.f, 0);
     modelview.ApplyRotation(m_rotZ, 0, 0, 1.f);
     modelview.ApplyScale(m_scaleX, m_scaleY, m_scaleZ);
+    shader->SetMat4Uniform("projectionMatrix", projection.GetInternalValues());
     shader->SetMat4Uniform("modelViewMatrix", modelview.GetInternalValues());
     CHECK_GL_ERROR();
 
     //if(!GetParent())
         //std::cout << "=============================" << std::endl;
     //std::cout << "Rendering " << GetName() << std::endl;
-    Render();
+    Render(params);
 
     for(ChildNodes::const_iterator it = m_childs.begin(); it != m_childs.end(); ++it)
     {
-        (*it)->InternalRender(projection, modelview, shader);
+        (*it)->InternalRender(projection, modelview, shader, params);
     }
 }
 

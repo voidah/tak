@@ -7,6 +7,7 @@
 #include "define.h"
 #include "shader.h"
 #include "matrix4.h"
+#include "sceneparams.h"
 
 
 class SceneNode
@@ -41,15 +42,15 @@ class SceneNode
         typedef std::set<SceneNode*> ChildNodes;
 
     protected:
-        virtual void Update(float elapsedTime) = 0;
-        virtual void Render() = 0;
+        virtual void Update(float elapsedTime, SceneParams& params) = 0;
+        virtual void Render(SceneParams& params) = 0;
 
     private:
         void InternalShowGraphConsole(const SceneNode* node, int level = 0) const;
         void InternalShowGraphGraphviz(std::ofstream& file, const SceneNode* node) const;
 
-        void InternalUpdate(float elapsedTime);
-        void InternalRender(Matrix4f projection, Matrix4f modelview, Shader* shader);
+        void InternalUpdate(float elapsedTime, SceneParams& params);
+        void InternalRender(Matrix4f projection, Matrix4f modelview, Shader* shader, SceneParams& params);
 
     private:
         SceneNode* m_parent;

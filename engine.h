@@ -32,6 +32,7 @@ class Engine : public OpenglContext
         virtual void MousePressEvent(const MOUSE_BUTTON &button, int x, int y);
         virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y);
         virtual void WindowFocusEvent(bool hasFocus);
+        virtual void WindowResizeEvent(int width, int height);
 
         void PrintText(int x, int y, const std::string& t);
 

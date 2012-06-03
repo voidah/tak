@@ -3,7 +3,7 @@
 
 Scene::Scene() : m_root(0), m_defaultShader(0)
 {
-    m_projection.SetPerspectiveProjection(90.f, 0.75f, 0.01f, 5000.0f);
+    InitDefaultPerspective(1, 1);
 }
 
 Scene::~Scene()
@@ -13,7 +13,7 @@ Scene::~Scene()
 void Scene::Update(float elapsedTime)
 {
     if(m_root)
-        m_root->InternalUpdate(elapsedTime);
+        m_root->InternalUpdate(elapsedTime, m_params);
 }
 
 bool Scene::Render()
@@ -24,7 +24,7 @@ bool Scene::Render()
     if(m_root)
     {
         m_defaultShader->Use();
-        m_root->InternalRender(m_projection, Matrix4f::IDENTITY, m_defaultShader);
+        m_root->InternalRender(m_projection, Matrix4f::IDENTITY, m_defaultShader, m_params);
         Shader::Disable();
     }
 
@@ -41,19 +41,27 @@ SceneNode* Scene::GetRoot() const
     return m_root;
 }
 
+void Scene::WindowResizeEvent(int width, int height)
+{
+    m_params.SetWidth(width);
+    m_params.SetHeight(height);
+    InitDefaultPerspective(width, height);
+}
+
 bool Scene::InitDefaultShaderIfNeeded()
 {
     // Default scene shader, can be changed by a scenenode
     // This one will be used otherwise
     static const char* defaultVertexShader = 
         "varying vec4 light;\n"
+        "uniform mat4 projectionMatrix;\n"
         "uniform mat4 modelViewMatrix;\n"
         "void main()\n"
         "{\n"
         "    light = gl_Color;\n"
         "    gl_TexCoord[0] = gl_MultiTexCoord0;\n"
         //"    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;\n"
-        "    gl_Position = gl_ProjectionMatrix * modelViewMatrix * gl_Vertex;\n"
+        "    gl_Position = projectionMatrix * modelViewMatrix * gl_Vertex;\n"
         "}\n";
 
     static const char* defaultFragmentShader = 
@@ -84,4 +92,9 @@ bool Scene::InitDefaultShaderIfNeeded()
     }
 
     return true;
+}
+
+bool Scene::InitDefaultPerspective(int width, int height)
+{
+    m_projection.SetPerspectiveProjection(90.f, (float)width / (float)height, 0.01f, 5000.0f);
 }

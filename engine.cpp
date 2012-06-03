@@ -190,6 +190,12 @@ void Engine::WindowFocusEvent(bool hasFocus)
 {
     m_game->WindowFocusEvent(hasFocus);
 }
+ 
+void Engine::WindowResizeEvent(int width, int height)
+{
+    m_scene.WindowResizeEvent(width, height);
+    m_game->WindowResizeEvent(width, height);
+}
 
 bool Engine::LoadTexture(Texture& texture, const std::string& filename, bool stopOnError)
 {

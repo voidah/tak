@@ -20,6 +20,9 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
     Init();
     LoadResource();
 
+    // Make sure the resize event is called at least once for the intial window dimension
+    WindowResizeEvent(width, height);
+
     sf::Clock clock;
 
     while (m_app.isOpen())
@@ -34,6 +37,7 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
                 break;
             case sf::Event::Resized:
                 glViewport(0, 0, Event.size.width, Event.size.height);
+                WindowResizeEvent(Event.size.width, Event.size.height);
                 break;
             case sf::Event::KeyPressed:
                 KeyPressEvent(Event.key.code);

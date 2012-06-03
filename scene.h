@@ -4,6 +4,7 @@
 #include "scenenode.h"
 #include "shader.h"
 #include "matrix4.h"
+#include "sceneparams.h"
 
 class Scene
 {
@@ -17,12 +18,17 @@ class Scene
         void SetRoot(SceneNode* node);
         SceneNode* GetRoot() const;
 
+        void WindowResizeEvent(int width, int height);
+
     private:
         bool InitDefaultShaderIfNeeded();
+        bool InitDefaultPerspective(int width, int height);
 
     private:
         SceneNode* m_root;
         Shader* m_defaultShader;
+
+        SceneParams m_params;
 
         Matrix4f m_projection;
 };
