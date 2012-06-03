@@ -1,7 +1,7 @@
 #include "game.h"
 #include <cassert>
 
-Game::Game(const std::string& name, const std::string& version) : m_syncValueManager(0), m_name(name), m_version(version)
+Game::Game(const std::string& name, const std::string& version) : m_syncValueManager(0), m_name(name), m_version(version), m_engine(0), m_scene(0)
 {
 }
 
@@ -33,4 +33,9 @@ const std::string& Game::GetName() const
 const std::string& Game::GetVersion() const
 {
     return m_version;
+}
+
+Scene& Game::GetScene() const
+{
+    return *m_scene;
 }

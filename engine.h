@@ -8,6 +8,7 @@
 #include "array2d.h"
 #include "syncvaluemanager.h"
 #include "particlemanager.h"
+#include "scene.h"
 
 // TODO
 #include "texture.h"
@@ -51,6 +52,8 @@ class Engine : public OpenglContext
 
         SyncValueManager m_syncValueManager;
         ParticleManager m_particleManager;
+
+        Scene m_scene;
 };
 
 #endif // ENGINE_H__

@@ -14,6 +14,7 @@ Engine::Engine(Game* game) : m_game(game), m_wireframe(false), m_takeScreenshot(
 {
     game->m_syncValueManager = &m_syncValueManager;
     game->m_particleManager = &m_particleManager;
+    game->m_scene = &m_scene;
     game->m_engine = this;
 }
 
@@ -53,6 +54,7 @@ void Engine::Init()
     glLoadIdentity();
     //gluPerspective( 45.0f, Width() / Height(), 0.01f, 1000.0f);
     gluPerspective( 90.0f, (float)Width() / Height(), 0.01f, 5000.0f);
+
     glEnable(GL_DEPTH_TEST);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     glShadeModel(GL_SMOOTH);
@@ -102,6 +104,8 @@ void Engine::Render(float elapsedTime)
         return;
 
     m_syncValueManager.Update(elapsedTime);
+    m_scene.Update(elapsedTime);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Transformations initiales
@@ -112,6 +116,7 @@ void Engine::Render(float elapsedTime)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     m_game->Render3d(elapsedTime);
+    m_scene.Render();
     glDisable(GL_BLEND);
     glPopMatrix();
 

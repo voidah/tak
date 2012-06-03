@@ -60,6 +60,8 @@ class Game
 
         void PrintText(int x, int y, const std::string& text);
 
+        Scene& GetScene() const;
+
     private:
         SyncValueManager* m_syncValueManager;
         ParticleManager* m_particleManager;
@@ -67,6 +69,7 @@ class Game
         std::string m_version;
 
         Engine* m_engine;
+        Scene* m_scene;
 
         friend class Engine;
 };
