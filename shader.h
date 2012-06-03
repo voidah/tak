@@ -6,8 +6,14 @@
 class Shader
 {
     public:    
-        bool Load(const std::string& vertFile, const std::string& fragFile, bool verbose = false);
+        Shader();
+        ~Shader();
+
+        bool LoadFromFile(const std::string& vertFile, const std::string& fragFile, bool verbose = false);
+        bool LoadFromMemory(const std::string& vertShader, const std::string& fragShader, bool verbose = false);
         void Use() const;
+
+        bool IsValid() const;
 
         GLint BindIntUniform(const std::string& name) const;
         void UpdateIntUniform(GLint name, GLint value) const;
@@ -15,13 +21,16 @@ class Shader
         void SetVec3Uniform(const std::string& name, GLfloat x, GLfloat y, GLfloat z) const;
         void SetFloatUniform(const std::string& name, GLfloat value) const;
         void UpdateFloatUniform(GLint name, GLfloat value) const;
+        void SetMat4Uniform(const std::string& name, float values[16]) const;
 
         static void Disable();
 
-    public: // TODO remettre ca private...
+    private:
         GLenum m_program;
         GLenum m_vertexShader;
         GLenum m_fragmentShader;
+
+        bool m_valid;
 
     private:
         bool CheckShaderError(GLenum shader, bool verbose);
