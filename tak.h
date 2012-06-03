@@ -14,3 +14,4 @@
 #include "vector3.h"
 #include "game.h"
 #include "init.h"
+#include "scene.h"
