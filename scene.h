@@ -20,6 +20,8 @@ class Scene
 
         void WindowResizeEvent(int width, int height);
 
+        SceneParams& GetParams();
+
     private:
         bool InitDefaultShaderIfNeeded();
         bool InitDefaultPerspective(int width, int height);

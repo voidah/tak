@@ -48,6 +48,11 @@ void Scene::WindowResizeEvent(int width, int height)
     InitDefaultPerspective(width, height);
 }
 
+SceneParams& Scene::GetParams()
+{
+    return m_params;
+}
+
 bool Scene::InitDefaultShaderIfNeeded()
 {
     // Default scene shader, can be changed by a scenenode
