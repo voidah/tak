@@ -48,7 +48,7 @@ class SceneNode
 
     protected:
         virtual void Update(float elapsedTime, SceneParams& params) = 0;
-        virtual void Render(SceneParams& params) = 0;
+        virtual void Render(Matrix4f& projection, Matrix4f& modelview, SceneParams& params) = 0;
 
     private:
         void InternalShowGraphConsole(const SceneNode* node, int level = 0) const;

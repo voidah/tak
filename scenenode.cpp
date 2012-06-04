@@ -184,7 +184,7 @@ void SceneNode::InternalRender(Matrix4f projection, Matrix4f modelview, Shader* 
     //if(!GetParent())
     //std::cout << "=============================" << std::endl;
     //std::cout << "Rendering " << GetName() << std::endl;
-    Render(params);
+    Render(projection, modelview, params);
 
     for(ChildNodes::const_iterator it = m_childs.begin(); it != m_childs.end(); ++it)
     {
