@@ -18,10 +18,12 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
     InitWindow(width, height);
 
     Init();
-    LoadResource();
 
     // Make sure the resize event is called at least once for the intial window dimension
     WindowResizeEvent(width, height);
+
+    LoadResource();
+
 
     sf::Clock clock;
 
