@@ -12,6 +12,7 @@ public:
     ~Texture();
 
     bool Load(const std::string& filename, bool mipmap = true);
+    bool LoadFromMemoryRGBA(const uint8* data, int width, int height, bool mipmap = true);
     bool IsValid() const;
     void Bind() const;
 
