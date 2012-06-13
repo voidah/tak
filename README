@@ -1,1 +1,23 @@
 TODO
+
+
+Dependencies: 
+The game linking with tak should also link with the following libraries:
+
+Windows:
+Devil - already in tak source tree
+GLEW - already in tak source tree
+SFML - already in tak source tree
+Boost - Should be installed and configured under visual studio (boostpro installer or manually). You should then set the BOOST_PATH environment variable to your boost installation (eg: C:\Program Files (x86)\boost\boost_1_47 OR C:\boost\boost_1_49_0)
+
+To manually install boost on windows:
+Download boost, extract it to C:\boost
+in the boost folder, in a terminal, run bootstrap, then .\b2
+Set the BOOST_PATH environment variable
+
+
+Linux gcc/mingw:
+Boost
+Devil
+GLEW
+SFML
