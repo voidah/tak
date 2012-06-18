@@ -15,3 +15,5 @@
 #include "game.h"
 #include "init.h"
 #include "scene.h"
+#include "font.h"
+#include "unicode.h"
