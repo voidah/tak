@@ -45,7 +45,7 @@ bool Font::Load(const std::string& f, int textureSize, const std::string& ansiCo
         if(charCode == ' ')
             bound.width = charSize / 2; // TODO hack
 
-        if(bound.width > charSize) // TODO hack
+        if(bound.width > charSize * 2) // TODO hack
             continue;
 
         char ss[2];
@@ -101,7 +101,7 @@ bool Font::Load(const std::string& f, int textureSize, const std::string& ansiCo
     //img.saveToFile("fontmap.bmp");
 
     img.flipVertically();
-    m_texture.LoadFromMemoryRGBA(img.getPixelsPtr(), textureSize, textureSize, true);
+    m_texture.LoadFromMemoryRGBA(f, img.getPixelsPtr(), textureSize, textureSize, true);
 
     return true;
 }
@@ -111,7 +111,7 @@ const Font::CharInfo& Font::GetCharInfo(char asciiChar) const
     return m_charInfo[(unsigned char)asciiChar];
 }
 
-const Texture& Font::GetTexture() const
+Texture& Font::GetTexture()
 {
     return m_texture;
 }

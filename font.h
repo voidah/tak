@@ -42,7 +42,7 @@ class Font
         bool Load(const std::string& f, int textureSize = 512, const std::string& ansiCodePage = "ISO−8859−1");
         const CharInfo& GetCharInfo(char asciiChar) const;
 
-        const Texture& GetTexture() const;
+        Texture& GetTexture();
         std::string GetAnsiCodePage() const;
 
     private:

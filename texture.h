@@ -15,12 +15,19 @@ public:
     ~Texture();
 
     bool Load(const std::string& filename, bool mipmap = true);
-    bool LoadFromMemoryRGBA(const uint8* data, int width, int height, bool mipmap = true);
+    bool LoadFromMemoryRGBA(const std::string& name, const uint8* data, int width, int height, bool mipmap = true);
     bool IsValid() const;
     void Bind() const;
 
+    uint GetTextureId() const;
+    std::string GetTextureName() const;
+
+    bool operator==(const Texture& texture) const;
+    bool operator!=(const Texture& texture) const;
+
 private:
     GLuint  m_textureId;
+    std::string m_textureName;
     bool    m_isValid;
 };
 

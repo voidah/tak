@@ -19,6 +19,8 @@ Texture::~Texture()
 
 bool Texture::Load(const std::string& filename, bool mipmap)
 {
+    m_textureName = filename;
+
     // Initialize Devil only once:
     static bool alreadyInitialized = false;
     if(!alreadyInitialized)
@@ -76,8 +78,10 @@ bool Texture::Load(const std::string& filename, bool mipmap)
     return true;
 }
 
-bool Texture::LoadFromMemoryRGBA(const uint8* data, int width, int height, bool mipmap)
+bool Texture::LoadFromMemoryRGBA(const std::string& name, const uint8* data, int width, int height, bool mipmap)
 {
+    m_textureName = name;
+
     glGenTextures(1, &m_textureId);
     glBindTexture(GL_TEXTURE_2D, m_textureId);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -110,5 +114,25 @@ void Texture::Bind() const
 {
     assert(IsValid());
     glBindTexture(GL_TEXTURE_2D, m_textureId);
+}
+
+uint Texture::GetTextureId() const
+{
+    return m_textureId;
+}
+
+std::string Texture::GetTextureName() const
+{
+    return m_textureName;
+}
+
+bool Texture::operator==(const Texture& texture) const
+{
+    return (m_textureId == texture.m_textureId);
+}
+
+bool Texture::operator!=(const Texture& texture) const
+{
+    return !operator==(texture);
 }
 
