@@ -1,6 +1,14 @@
 #include "font.h"
 #include "unicode.h"
 
+Font::Font()
+{
+}
+
+Font::~Font()
+{
+}
+
 bool Font::Load(const std::string& f, int textureSize, const std::string& ansiCodePage)
 {
     m_ansiCodePage = ansiCodePage;

@@ -2,11 +2,14 @@
 #define TAK__TEXTURE_H__
 
 #include "define.h"
+#include "nocopy.h"
 #include <IL/il.h>
 #include <string>
 
 class Texture
 {
+    NOCOPY(Texture);
+
 public:
     Texture();
     ~Texture();
@@ -15,11 +18,6 @@ public:
     bool LoadFromMemoryRGBA(const uint8* data, int width, int height, bool mipmap = true);
     bool IsValid() const;
     void Bind() const;
-
-private:
-    // Disallow texture object to be copied
-    Texture(const Texture&);
-    Texture& operator=(const Texture&);
 
 private:
     GLuint  m_textureId;

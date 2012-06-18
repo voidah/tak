@@ -3,10 +3,13 @@
 
 #include "define.h"
 #include "texture.h"
+#include "nocopy.h"
 #include <string>
 
 class Font
 {
+    NOCOPY(Font);
+
     public:
         struct CharInfo
         {
@@ -34,6 +37,8 @@ class Font
         };
 
     public:
+        Font();
+        ~Font();
         bool Load(const std::string& f, int textureSize = 512, const std::string& ansiCodePage = "ISO−8859−1");
         const CharInfo& GetCharInfo(char asciiChar) const;
 

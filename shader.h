@@ -2,9 +2,12 @@
 #define TAK__SHADER_H
 #include <string>
 #include "define.h"
+#include "nocopy.h"
 
 class Shader
 {
+    NOCOPY(Shader);
+
     public:    
         Shader();
         ~Shader();
