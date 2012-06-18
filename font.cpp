@@ -1,7 +1,7 @@
 #include "font.h"
 #include "unicode.h"
 
-bool Font::Load(const std::string& f, const std::string& ansiCodePage)
+bool Font::Load(const std::string& f, int textureSize, const std::string& ansiCodePage)
 {
     m_ansiCodePage = ansiCodePage;
 
@@ -12,18 +12,19 @@ bool Font::Load(const std::string& f, const std::string& ansiCodePage)
     for(int i = 0; i < 256; ++i)
         m_charInfo[i].Set(1, 1, 1, 1, 0, 0, 0);
 
-    const int texSize = 512;
-
     sf::RenderTexture texture;
-    if(!texture.create(texSize, texSize))
+    if(!texture.create(textureSize, textureSize))
         return false;
 
     texture.clear(sf::Color::Transparent);
 
-    const std::string cs = Unicode::FromUtf8ToAnsi(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~abcé", ansiCodePage);
+    //const std::string cs = Unicode::FromUtf8ToAnsi(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~abcé", ansiCodePage);
+    std::string cs(256 - 32, 0);
+    for(int i = 32; i < 256; ++i)
+        cs[i - 32] = i;
 
     int charPerSide = sqrt(cs.length()) + 1;
-    int charSize = texSize / charPerSide;
+    int charSize = textureSize / charPerSide;
 
     for(int i = 0; i < cs.length(); ++i)
     {
@@ -55,10 +56,10 @@ bool Font::Load(const std::string& f, const std::string& ansiCodePage)
         //std::cout << "BOUND: " << (int)(charCode & 0xff) << ", '" << (char)charCode << "', \t" << charSize << ", \t" << bound.left << ", \t" << bound.top << ", \t" << bound.width << ", \t" << bound.height << std::endl;
 
         float offset = bound.height + bound.top;
-        float tx = (float)(x * charSize + bound.left) / (float)texSize;
-        float ty = ((float)((charPerSide - y - 1) * charSize - offset + 1) / (float)texSize);
-        float tw = (float)bound.width / (float)texSize;
-        float th = (float)bound.height / (float)texSize;
+        float tx = (float)(x * charSize + bound.left) / (float)textureSize;
+        float ty = ((float)((charPerSide - y - 1) * charSize - offset + 1) / (float)textureSize);
+        float tw = (float)bound.width / (float)textureSize;
+        float th = (float)bound.height / (float)textureSize;
 
 
 #if 0
@@ -92,7 +93,7 @@ bool Font::Load(const std::string& f, const std::string& ansiCodePage)
     //img.saveToFile("fontmap.bmp");
 
     img.flipVertically();
-    m_texture.LoadFromMemoryRGBA(img.getPixelsPtr(), texSize, texSize, true);
+    m_texture.LoadFromMemoryRGBA(img.getPixelsPtr(), textureSize, textureSize, true);
 
     return true;
 }
