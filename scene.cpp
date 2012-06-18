@@ -24,6 +24,7 @@ bool Scene::Render()
     if(m_root)
     {
         m_defaultShader->Use();
+        m_params.SetCurrentTexture(0);
         m_root->InternalRender(m_projection, Matrix4f::IDENTITY, m_defaultShader, m_params);
         Shader::Disable();
     }
