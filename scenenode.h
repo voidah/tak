@@ -8,6 +8,7 @@
 #include "shader.h"
 #include "matrix4.h"
 #include "sceneparams.h"
+#include "texture.h"
 
 
 class SceneNode
@@ -16,11 +17,23 @@ class SceneNode
         typedef uint64 IdType;
 
     public:
+        struct Material
+        {
+            Texture* texture;
+
+            Material() : texture(0) {}
+        };
+
+    public:
         SceneNode(const std::string& name);
         virtual ~SceneNode();
 
         IdType GetId() const;
         const std::string& GetName() const;
+
+        Material& GetMaterial();
+        void SetTexture(Texture* texture);
+        Texture* GetTexture() const;
 
         void SetActive(bool v);
         bool IsActive() const;
@@ -40,6 +53,10 @@ class SceneNode
         void SetRotationAbsolute(float x, float y, float z);
         void SetScaleRelative(float x, float y, float z);
         void SetScaleAbsolute(float x, float y, float z);
+
+        float GetRotX() const;
+        float GetRotY() const;
+        float GetRotZ() const;
 
         void ShowGraph(bool useGraphviz = false) const;
 
@@ -65,6 +82,8 @@ class SceneNode
         IdType m_id;
 
         std::string m_name;
+
+        Material m_material;
 
         bool m_active;
         bool m_visible;

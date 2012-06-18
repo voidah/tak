@@ -1,5 +1,6 @@
 #include "scenenode.h"
 #include "tool.h"
+#include <cassert>
 
 UniqueIdGenerator<SceneNode::IdType> SceneNode::m_idGenerator;
 
@@ -25,6 +26,21 @@ SceneNode::IdType SceneNode::GetId() const
 const std::string& SceneNode::GetName() const
 {
     return m_name;
+}
+
+SceneNode::Material& SceneNode::GetMaterial()
+{
+    return m_material;
+}
+
+void SceneNode::SetTexture(Texture* texture)
+{
+    m_material.texture = texture;
+}
+
+Texture* SceneNode::GetTexture() const
+{
+    return m_material.texture;
 }
 
 void SceneNode::SetActive(bool v)
@@ -115,6 +131,21 @@ void SceneNode::SetScaleAbsolute(float x, float y, float z)
     m_scaleZ = z;
 }
 
+float SceneNode::GetRotX() const
+{
+    return m_rotX;
+}
+
+float SceneNode::GetRotY() const
+{
+    return m_rotY;
+}
+
+float SceneNode::GetRotZ() const
+{
+    return m_rotZ;
+}
+
 void SceneNode::ShowGraph(bool useGraphviz) const
 {
     if(useGraphviz)
@@ -181,14 +212,36 @@ void SceneNode::InternalRender(Matrix4f projection, Matrix4f modelview, Shader* 
     shader->SetMat4Uniform("modelViewMatrix", modelview.GetInternalValues());
     CHECK_GL_ERROR();
 
-    //if(!GetParent())
-    //std::cout << "=============================" << std::endl;
-    //std::cout << "Rendering " << GetName() << std::endl;
+
+    // Backup current texture
+    Texture* textureBackup = params.GetCurrentTexture();
+
+    Texture* texture = GetTexture();
+    if(texture && texture != textureBackup)
+    {
+            std::cout << "Binding texture name=" << texture->GetTextureName() << std::endl;
+            texture->Bind();
+
+            params.SetCurrentTexture(texture);
+    }
+    else
+        std::cout << "no bind, same texture" << std::endl;
+
+    if(!GetParent())
+        std::cout << "=============================" << std::endl;
+    std::cout << "Rendering " << GetName() << std::endl;
     Render(projection, modelview, params);
 
     for(ChildNodes::const_iterator it = m_childs.begin(); it != m_childs.end(); ++it)
     {
         (*it)->InternalRender(projection, modelview, shader, params);
+    }
+
+    if(textureBackup != params.GetCurrentTexture())
+    {
+        params.SetCurrentTexture(textureBackup);
+        if(textureBackup)
+            textureBackup->Bind();
     }
 }
 
