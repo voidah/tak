@@ -13,7 +13,12 @@ Scene::~Scene()
 void Scene::Update(float elapsedTime)
 {
     if(m_root)
+    {
+        if(m_camera)
+            m_camera->Update(elapsedTime);
+
         m_root->InternalUpdate(elapsedTime, m_params);
+    }
 }
 
 bool Scene::Render()
