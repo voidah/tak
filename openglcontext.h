@@ -10,14 +10,6 @@
 class OpenglContext
 {
 public:
-    enum MOUSE_BUTTON {
-        MOUSE_BUTTON_NONE       = 0x00,
-        MOUSE_BUTTON_LEFT       = 0x01,
-        MOUSE_BUTTON_MIDDLE     = 0x02,
-        MOUSE_BUTTON_RIGHT      = 0x04,
-        MOUSE_BUTTON_WHEEL_UP   = 0x08,
-        MOUSE_BUTTON_WHEEL_DOWN = 0x10
-    };
     OpenglContext();
     virtual ~OpenglContext();
 

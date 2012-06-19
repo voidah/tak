@@ -7,9 +7,6 @@
 class Game
 {
     public:
-        typedef Engine::MOUSE_BUTTON MOUSE_BUTTON;
-
-    public:
         Game(const std::string& name, const std::string& version);
         virtual ~Game();
 

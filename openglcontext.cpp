@@ -204,7 +204,7 @@ void OpenglContext::InitWindow(int width, int height)
     m_app.create(sf::VideoMode(width, height, 32), m_title.c_str(), m_fullscreen ? sf::Style::Fullscreen : (sf::Style::Resize|sf::Style::Close), sf::ContextSettings(32, 8, m_antialiasingFactor));
 }
 
-OpenglContext::MOUSE_BUTTON OpenglContext::ConvertMouseButton(sf::Mouse::Button button) const
+MOUSE_BUTTON OpenglContext::ConvertMouseButton(sf::Mouse::Button button) const
 {
     switch(button)
     {
