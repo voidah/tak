@@ -150,6 +150,7 @@ void Engine::KeyPressEvent(unsigned char key)
             break;
     }
 
+    m_scene.KeyPressEvent(key);
     m_game->KeyPressEvent(key);
 }
 
@@ -166,29 +167,34 @@ void Engine::KeyReleaseEvent(unsigned char key)
             break;
     }
 
+    m_scene.KeyReleaseEvent(key);
     m_game->KeyReleaseEvent(key);
 }
 
 void Engine::MouseMoveEvent(int x, int y)
 {
+    m_scene.MouseMoveEvent(x, y);
     m_game->MouseMoveEvent(x, y);
 }
 
 void Engine::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
 {
+    m_scene.MousePressEvent(button, x, y);
     m_game->MousePressEvent(button, x, y);
 }
 
 void Engine::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
 {
+    m_scene.MouseReleaseEvent(button, x, y);
     m_game->MouseReleaseEvent(button, x, y);
 }
 
 void Engine::WindowFocusEvent(bool hasFocus)
 {
+    m_scene.WindowFocusEvent(hasFocus);
     m_game->WindowFocusEvent(hasFocus);
 }
- 
+
 void Engine::WindowResizeEvent(int width, int height)
 {
     m_scene.WindowResizeEvent(width, height);

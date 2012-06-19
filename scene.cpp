@@ -47,8 +47,47 @@ SceneNode* Scene::GetRoot() const
     return m_root;
 }
 
+void Scene::KeyPressEvent(unsigned char key)
+{
+    if(m_camera)
+        m_camera->KeyPressEvent(key);
+}
+
+void Scene::KeyReleaseEvent(unsigned char key)
+{
+    if(m_camera)
+        m_camera->KeyReleaseEvent(key);
+}
+
+void Scene::MouseMoveEvent(int x, int y)
+{
+    if(m_camera)
+        m_camera->MouseMoveEvent(x, y);
+}
+
+void Scene::MousePressEvent(const MOUSE_BUTTON &button, int x, int y)
+{
+    if(m_camera)
+        m_camera->MousePressEvent(button, x, y);
+}
+
+void Scene::MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y)
+{
+    if(m_camera)
+        m_camera->MouseReleaseEvent(button, x, y);
+}
+
+void Scene::WindowFocusEvent(bool hasFocus)
+{
+    if(m_camera)
+        m_camera->WindowFocusEvent(hasFocus);
+}
+
 void Scene::WindowResizeEvent(int width, int height)
 {
+    if(m_camera)
+        m_camera->WindowResizeEvent(width, height);
+
     m_params.SetWidth(width);
     m_params.SetHeight(height);
     InitDefaultPerspective(width, height);

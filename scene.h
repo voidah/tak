@@ -19,6 +19,12 @@ class Scene
         void SetRoot(SceneNode* node);
         SceneNode* GetRoot() const;
 
+        void KeyPressEvent(unsigned char key);
+        void KeyReleaseEvent(unsigned char key);
+        void MouseMoveEvent(int x, int y);
+        void MousePressEvent(const MOUSE_BUTTON &button, int x, int y);
+        void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y);
+        void WindowFocusEvent(bool hasFocus);
         void WindowResizeEvent(int width, int height);
 
         SceneParams& GetParams();
