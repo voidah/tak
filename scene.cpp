@@ -1,7 +1,7 @@
 #include "scene.h"
 #include <cassert>
 
-Scene::Scene() : m_root(0), m_defaultShader(0)
+Scene::Scene() : m_root(0), m_defaultShader(0), m_camera(0)
 {
     InitDefaultPerspective(1, 1);
 }
@@ -25,7 +25,7 @@ bool Scene::Render()
     {
         m_defaultShader->Use();
         m_params.SetCurrentTexture(0);
-        m_root->InternalRender(m_projection, Matrix4f::IDENTITY, m_defaultShader, m_params);
+        m_root->InternalRender(m_projection, m_camera ? m_camera->GetMatrix() : Matrix4f::IDENTITY, m_defaultShader, m_params);
         Shader::Disable();
     }
 
@@ -52,6 +52,16 @@ void Scene::WindowResizeEvent(int width, int height)
 SceneParams& Scene::GetParams()
 {
     return m_params;
+}
+
+void Scene::SetCamera(Camera* camera)
+{
+    m_camera = camera;
+}
+
+Camera* Scene::GetCamera()
+{
+    return m_camera;
 }
 
 bool Scene::InitDefaultShaderIfNeeded()

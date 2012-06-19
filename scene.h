@@ -5,6 +5,7 @@
 #include "shader.h"
 #include "matrix4.h"
 #include "sceneparams.h"
+#include "camera.h"
 
 class Scene
 {
@@ -22,6 +23,9 @@ class Scene
 
         SceneParams& GetParams();
 
+        void SetCamera(Camera* camera);
+        Camera* GetCamera();
+
     private:
         bool InitDefaultShaderIfNeeded();
         bool InitDefaultPerspective(int width, int height);
@@ -33,6 +37,8 @@ class Scene
         SceneParams m_params;
 
         Matrix4f m_projection;
+
+        Camera* m_camera;
 };
 
 #endif // SCENE_H__
