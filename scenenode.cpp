@@ -219,17 +219,19 @@ void SceneNode::InternalRender(Matrix4f projection, Matrix4f modelview, Shader* 
     Texture* texture = GetTexture();
     if(texture && texture != textureBackup)
     {
-            std::cout << "Binding texture name=" << texture->GetTextureName() << std::endl;
+            //std::cout << "Binding texture name=" << texture->GetTextureName() << std::endl;
             texture->Bind();
 
             params.SetCurrentTexture(texture);
     }
     else
-        std::cout << "no bind, same texture" << std::endl;
+    {
+        //std::cout << "no bind, same texture" << std::endl;
+    }
 
-    if(!GetParent())
-        std::cout << "=============================" << std::endl;
-    std::cout << "Rendering " << GetName() << std::endl;
+    //if(!GetParent())
+        //std::cout << "=============================" << std::endl;
+    //std::cout << "Rendering " << GetName() << std::endl;
     Render(projection, modelview, params);
 
     for(ChildNodes::const_iterator it = m_childs.begin(); it != m_childs.end(); ++it)
