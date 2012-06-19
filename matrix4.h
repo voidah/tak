@@ -5,6 +5,9 @@
 #include <sstream>
 #include <ostream>
 
+#include "define.h"
+#include "vector3.h"
+
 template <class T>
 class Matrix4
 {
@@ -46,6 +49,8 @@ class Matrix4
         void SetIdentity();
         void SetPerspectiveProjection(const T& fov, const T& aspect, const T& nearPlane, const T& farPlane);
         void SetOrthographicProjection(const T& left, const T& right, const T& bottom, const T& top, const T& nearPlane, const T& farPlane);
+
+        void SetLookAt(const Vector3<T>& eyePosition, const Vector3<T>& lookAtPosition, Vector3<T> upVector = Vector3<T>(T(0), T(1), T(0)));
 
         bool IsZero() const;
         bool IsIdentity() const;
@@ -305,6 +310,45 @@ void Matrix4<T>::SetOrthographicProjection(const T& left, const T& right, const 
     m_42 = T(0);
     m_43 = T(0);
     m_44 = T(1);
+}
+
+    template <class T>
+void Matrix4<T>::SetLookAt(const Vector3<T>& eyePosition, const Vector3<T>& lookAtPosition, Vector3<T> upVector)
+{
+    Vector3f L = lookAtPosition - eyePosition;
+    L.Normalize();
+
+    upVector.Normalize();
+    Vector3f S = L.Cross(upVector);
+    S.Normalize();
+
+    Vector3f U = S.Cross(L);
+
+    Matrix4<T> M;
+    M.m_11 = S.x;
+    M.m_12 = S.y;
+    M.m_13 = S.z;
+    M.m_14 = 0;
+
+    M.m_21 = U.x;
+    M.m_22 = U.y;
+    M.m_23 = U.z;
+    M.m_24 = 0;
+
+    M.m_31 = -L.x;
+    M.m_32 = -L.y;
+    M.m_33 = -L.z;
+    M.m_34 = 0;
+
+    M.m_41 = 0;
+    M.m_42 = 0;
+    M.m_43 = 0;
+    M.m_44 = 1.f;
+
+
+    SetIdentity();
+    *this *= M;
+    ApplyTranslation(-eyePosition.x, -eyePosition.y, -eyePosition.z);
 }
 
     template <class T>
