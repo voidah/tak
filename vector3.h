@@ -109,9 +109,10 @@ void Vector3<T>::Normalize()
     T n = Length();
     if(n != 0)
     {
-        this->x /= n;
-        this->y /= n;
-        this->z /= n;
+        T inv = T(1) / n;
+        this->x *= inv;
+        this->y *= inv;
+        this->z *= inv;
     }
 }
 
