@@ -38,6 +38,9 @@ class Game
 
             Vector3f ClearColor;
 
+            bool ShowCursor;
+            bool CenterMouse;
+
             ConfigInfo()
             {
                 InitialWidth = 640;
@@ -49,6 +52,9 @@ class Game
                 ShowVersion = true;
 
                 ClearColor = Vector3f(0, 0, 0);
+
+                ShowCursor = true;
+                CenterMouse = false;
             };
         } Config;
 
