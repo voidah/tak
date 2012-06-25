@@ -2,7 +2,7 @@
 #include "define.h"
 #include <fstream>
 
-OpenglContext::OpenglContext() : m_maxFps(999999), m_fullscreen(false), m_antialiasingFactor(0), m_title(""), m_lastFrameTime(0)
+OpenglContext::OpenglContext() : m_maxFps(999999), m_fullscreen(false), m_antialiasingFactor(0), m_title(""), m_lastFrameTime(0), m_cursorVisible(true)
 {
 }
 
@@ -34,40 +34,40 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
         {
             switch(Event.type)
             {
-            case sf::Event::Closed:
-                m_app.close();
-                break;
-            case sf::Event::Resized:
-                glViewport(0, 0, Event.size.width, Event.size.height);
-                WindowResizeEvent(Event.size.width, Event.size.height);
-                break;
-            case sf::Event::KeyPressed:
-                KeyPressEvent(Event.key.code);
-                break;
-            case sf::Event::KeyReleased:
-                KeyReleaseEvent(Event.key.code);
-                break;
-            case sf::Event::MouseMoved:
-                MouseMoveEvent(Event.mouseMove.x, Event.mouseMove.y);
-                break;
-            case sf::Event::MouseButtonPressed:
-                MousePressEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
-                break;
-            case sf::Event::MouseButtonReleased:
-                MouseReleaseEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
-                break;
-            case sf::Event::MouseWheelMoved:
-                if(Event.mouseWheel.delta > 0)
-                    MousePressEvent(MOUSE_BUTTON_WHEEL_UP, Event.mouseButton.x, Event.mouseButton.y);
-                else
-                    MousePressEvent(MOUSE_BUTTON_WHEEL_DOWN, Event.mouseButton.x, Event.mouseButton.y);
-                break;
-            case sf::Event::GainedFocus:
-                WindowFocusEvent(true);
-                break;
-            case sf::Event::LostFocus:
-                WindowFocusEvent(false);
-                break;
+                case sf::Event::Closed:
+                    m_app.close();
+                    break;
+                case sf::Event::Resized:
+                    glViewport(0, 0, Event.size.width, Event.size.height);
+                    WindowResizeEvent(Event.size.width, Event.size.height);
+                    break;
+                case sf::Event::KeyPressed:
+                    KeyPressEvent(Event.key.code);
+                    break;
+                case sf::Event::KeyReleased:
+                    KeyReleaseEvent(Event.key.code);
+                    break;
+                case sf::Event::MouseMoved:
+                    MouseMoveEvent(Event.mouseMove.x, Event.mouseMove.y);
+                    break;
+                case sf::Event::MouseButtonPressed:
+                    MousePressEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
+                    break;
+                case sf::Event::MouseButtonReleased:
+                    MouseReleaseEvent(ConvertMouseButton(Event.mouseButton.button), Event.mouseButton.x, Event.mouseButton.y);
+                    break;
+                case sf::Event::MouseWheelMoved:
+                    if(Event.mouseWheel.delta > 0)
+                        MousePressEvent(MOUSE_BUTTON_WHEEL_UP, Event.mouseButton.x, Event.mouseButton.y);
+                    else
+                        MousePressEvent(MOUSE_BUTTON_WHEEL_DOWN, Event.mouseButton.x, Event.mouseButton.y);
+                    break;
+                case sf::Event::GainedFocus:
+                    WindowFocusEvent(true);
+                    break;
+                case sf::Event::LostFocus:
+                    WindowFocusEvent(false);
+                    break;
             }
         }
 
@@ -187,11 +187,18 @@ void OpenglContext::MakeRelativeToCenter(int& x, int& y) const
 void OpenglContext::ShowCursor()
 {
     m_app.setMouseCursorVisible(true);
+    m_cursorVisible = true;
 }
 
 void OpenglContext::HideCursor()
 {
     m_app.setMouseCursorVisible(false);
+    m_cursorVisible = false;
+}
+
+bool OpenglContext::IsCursorVisible() const
+{
+    return m_cursorVisible;
 }
 
 void OpenglContext::ShowCrossCursor() const
@@ -208,14 +215,14 @@ MOUSE_BUTTON OpenglContext::ConvertMouseButton(sf::Mouse::Button button) const
 {
     switch(button)
     {
-    case sf::Mouse::Left:
-        return MOUSE_BUTTON_LEFT;
-    case sf::Mouse::Middle:
-        return MOUSE_BUTTON_MIDDLE;
-    case sf::Mouse::Right:
-        return MOUSE_BUTTON_RIGHT;
-    default:
-        return MOUSE_BUTTON_NONE;
+        case sf::Mouse::Left:
+            return MOUSE_BUTTON_LEFT;
+        case sf::Mouse::Middle:
+            return MOUSE_BUTTON_MIDDLE;
+        case sf::Mouse::Right:
+            return MOUSE_BUTTON_RIGHT;
+        default:
+            return MOUSE_BUTTON_NONE;
     }
 }
 

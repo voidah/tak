@@ -49,6 +49,7 @@ protected:
 
     void ShowCursor();
     void HideCursor();
+    bool IsCursorVisible() const;
     void ShowCrossCursor() const;
 
 private:
@@ -62,6 +63,7 @@ private:
     int		m_antialiasingFactor;
     std::string m_title;
     float       m_lastFrameTime;
+    bool        m_cursorVisible;
 };
 
 #endif // OPENGLCONTEXT_H__

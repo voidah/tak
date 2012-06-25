@@ -103,6 +103,15 @@ void Engine::Render(float elapsedTime)
     if(elapsedTime == 0)
         return;
 
+    bool showCursor = m_game->Config.ShowCursor;
+    if(IsCursorVisible() != showCursor)
+    {
+        if(showCursor)
+            ShowCursor();
+        else
+            HideCursor();
+    }
+
     m_syncValueManager.Update(elapsedTime);
     m_scene.Update(elapsedTime);
 
@@ -173,6 +182,15 @@ void Engine::KeyReleaseEvent(unsigned char key)
 
 void Engine::MouseMoveEvent(int x, int y)
 {
+    if(m_game->Config.CenterMouse)
+    {
+        MakeRelativeToCenter(x, y);
+
+        if(x == 0 && y == 0)
+            return;
+        CenterMouse();
+    }
+
     m_scene.MouseMoveEvent(x, y);
     m_game->MouseMoveEvent(x, y);
 }
