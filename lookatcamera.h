@@ -16,6 +16,9 @@ class LookAtCamera : public Camera
         virtual void MousePressEvent(const MOUSE_BUTTON &button, int x, int y);
         virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y);
 
+        float GetRotationX() const;
+        float GetRotationY() const;
+
     private:
         Vector3f m_lookAt;
         float m_distance;

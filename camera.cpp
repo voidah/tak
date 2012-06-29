@@ -8,11 +8,6 @@ Camera::~Camera()
 {
 }
 
-const Matrix4f& Camera::GetMatrix() const
-{
-    return m_view;
-}
-
 void Camera::KeyPressEvent(unsigned char key)
 {
     // Default camera behavior, do nothing
@@ -46,5 +41,10 @@ void Camera::WindowFocusEvent(bool hasFocus)
 void Camera::WindowResizeEvent(int width, int height)
 {
     // Default camera behavior, do nothing
+}
+
+const Matrix4f& Camera::GetMatrix() const
+{
+    return m_view;
 }
 
