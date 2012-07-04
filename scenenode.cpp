@@ -4,7 +4,7 @@
 
 UniqueIdGenerator<SceneNode::IdType> SceneNode::m_idGenerator;
 
-SceneNode::SceneNode(const std::string& name) : m_parent(0), m_name(name), m_active(true), m_visible(true), m_posX(0), m_posY(0), m_posZ(0), m_rotX(0), m_rotY(0), m_rotZ(0), m_scaleX(1.f), m_scaleY(1.f), m_scaleZ(1.f)
+SceneNode::SceneNode(const std::string& name) : m_parent(0), m_name(name), m_rigidBody(0), m_active(true), m_visible(true), m_posX(0), m_posY(0), m_posZ(0), m_rotX(0), m_rotY(0), m_rotZ(0), m_scaleX(1.f), m_scaleY(1.f), m_scaleZ(1.f)
 {
     m_id = m_idGenerator.Get();
 
@@ -96,11 +96,21 @@ void SceneNode::SetPositionRelative(float x, float y, float z)
     m_posZ += z;
 }
 
+void SceneNode::SetPositionRelative(const Vector3f& pos)
+{
+    SetPositionRelative(pos.x, pos.y, pos.z);
+}
+
 void SceneNode::SetPositionAbsolute(float x, float y, float z)
 {
     m_posX = x;
     m_posY = y;
     m_posZ = z;
+}
+
+void SceneNode::SetPositionAbsolute(const Vector3f& pos)
+{
+    SetPositionAbsolute(pos.x, pos.y, pos.z);
 }
 
 void SceneNode::SetRotationRelative(float x, float y, float z)
@@ -110,11 +120,21 @@ void SceneNode::SetRotationRelative(float x, float y, float z)
     m_rotZ += z;
 }
 
+void SceneNode::SetRotationRelative(const Vector3f& rot)
+{
+    SetRotationRelative(rot.x, rot.y, rot.z);
+}
+
 void SceneNode::SetRotationAbsolute(float x, float y, float z)
 {
     m_rotX = x;
     m_rotY = y;
     m_rotZ = z;
+}
+
+void SceneNode::SetRotationAbsolute(const Vector3f& rot)
+{
+    SetRotationAbsolute(rot.x, rot.y, rot.z);
 }
 
 void SceneNode::SetScaleRelative(float x, float y, float z)
@@ -124,11 +144,21 @@ void SceneNode::SetScaleRelative(float x, float y, float z)
     m_scaleZ += z;
 }
 
+void SceneNode::SetScaleRelative(const Vector3f& scale)
+{
+    SetScaleRelative(scale.x, scale.y, scale.z);
+}
+
 void SceneNode::SetScaleAbsolute(float x, float y, float z)
 {
     m_scaleX = x;
     m_scaleY = y;
     m_scaleZ = z;
+}
+
+void SceneNode::SetScaleAbsolute(const Vector3f& scale)
+{
+    SetScaleAbsolute(scale.x, scale.y, scale.z);
 }
 
 float SceneNode::GetRotX() const
@@ -144,6 +174,24 @@ float SceneNode::GetRotY() const
 float SceneNode::GetRotZ() const
 {
     return m_rotZ;
+}
+
+RigidBody* SceneNode::AddToPhysic(float weight, const Vector3f& position)
+{
+    // Nodes that can be added to physic should implement this method.
+    // Simply assert if it's not the case.
+    assert(false);
+    return 0;
+}
+
+RigidBody* SceneNode::GetBoundRigidBody()
+{
+    return m_rigidBody;
+}
+
+bool SceneNode::IsBoundToRigidBody() const
+{
+    return (m_rigidBody != 0);
 }
 
 void SceneNode::ShowGraph(bool useGraphviz) const
@@ -162,6 +210,11 @@ void SceneNode::ShowGraph(bool useGraphviz) const
     }
     else
         InternalShowGraphConsole(this);
+}
+
+void SceneNode::BindToRigidBody(RigidBody* rigidBody)
+{
+    m_rigidBody = rigidBody;
 }
 
 void SceneNode::InternalShowGraphConsole(const SceneNode* node, int level) const
@@ -189,6 +242,16 @@ void SceneNode::InternalUpdate(float elapsedTime, SceneParams& params)
 {
     if(!IsActive())
         return;
+
+    if(IsBoundToRigidBody())
+    {
+        //std::cout << "SceneNode::InternalUpdate: " << m_rigidBody->GetRotation() << std::endl;
+        SetPositionAbsolute(m_rigidBody->GetPosition());
+
+        //Vector3f rotRad = m_rigidBody->GetRotation();
+        //SetRotationAbsolute(RADTODEG(rotRad.x), RADTODEG(rotRad.y), RADTODEG(rotRad.z));
+        SetRotationAbsolute(m_rigidBody->GetRotation());
+    }
 
     Update(elapsedTime, params);
 
@@ -219,10 +282,10 @@ void SceneNode::InternalRender(Matrix4f projection, Matrix4f modelview, Shader* 
     Texture* texture = GetTexture();
     if(texture && texture != textureBackup)
     {
-            //std::cout << "Binding texture name=" << texture->GetTextureName() << std::endl;
-            texture->Bind();
+        //std::cout << "Binding texture name=" << texture->GetTextureName() << std::endl;
+        texture->Bind();
 
-            params.SetCurrentTexture(texture);
+        params.SetCurrentTexture(texture);
     }
     else
     {
@@ -230,7 +293,7 @@ void SceneNode::InternalRender(Matrix4f projection, Matrix4f modelview, Shader* 
     }
 
     //if(!GetParent())
-        //std::cout << "=============================" << std::endl;
+    //std::cout << "=============================" << std::endl;
     //std::cout << "Rendering " << GetName() << std::endl;
     Render(projection, modelview, params);
 

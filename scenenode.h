@@ -9,6 +9,8 @@
 #include "matrix4.h"
 #include "sceneparams.h"
 #include "texture.h"
+#include "rigidbody.h"
+#include "vector3.h"
 
 
 class SceneNode
@@ -48,15 +50,27 @@ class SceneNode
         void RemoveChild(SceneNode* node);
 
         void SetPositionRelative(float x, float y, float z);
+        void SetPositionRelative(const Vector3f& pos);
         void SetPositionAbsolute(float x, float y, float z);
+        void SetPositionAbsolute(const Vector3f& pos);
+
         void SetRotationRelative(float x, float y, float z);
+        void SetRotationRelative(const Vector3f& rot);
         void SetRotationAbsolute(float x, float y, float z);
+        void SetRotationAbsolute(const Vector3f& rot);
+
         void SetScaleRelative(float x, float y, float z);
+        void SetScaleRelative(const Vector3f& scale);
         void SetScaleAbsolute(float x, float y, float z);
+        void SetScaleAbsolute(const Vector3f& scale);
 
         float GetRotX() const;
         float GetRotY() const;
         float GetRotZ() const;
+
+        virtual RigidBody* AddToPhysic(float weight, const Vector3f& position);
+        RigidBody* GetBoundRigidBody();
+        bool IsBoundToRigidBody() const;
 
         void ShowGraph(bool useGraphviz = false) const;
 
@@ -64,6 +78,8 @@ class SceneNode
         typedef std::set<SceneNode*> ChildNodes;
 
     protected:
+        void BindToRigidBody(RigidBody* rigidBody);
+
         virtual void Update(float elapsedTime, SceneParams& params) = 0;
         virtual void Render(Matrix4f& projection, Matrix4f& modelview, SceneParams& params) = 0;
 
@@ -84,6 +100,7 @@ class SceneNode
         std::string m_name;
 
         Material m_material;
+        RigidBody* m_rigidBody;
 
         bool m_active;
         bool m_visible;

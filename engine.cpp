@@ -7,6 +7,7 @@
 #include <cassert>
 #include <sstream>
 #include "game.h"
+#include "physicengine.h"
 
 
 
@@ -30,6 +31,8 @@ void Engine::Init()
         std::cerr << "Error while initializing glew.. abording (" << glewGetErrorString(err) << ")" << std::endl;
         abort();
     }
+
+    GPhysicEngine.Init();
 
     // Informations:
     const GLubyte* string;
@@ -135,7 +138,15 @@ void Engine::Render(float elapsedTime)
     if(m_wireframe)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    // Physic graphical debug output:
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    if(m_scene.GetCamera())
+        glMultMatrixf(m_scene.GetCamera()->GetMatrix().GetInternalValues());
+    GPhysicEngine.DrawDebug();
 
+    // Simulate physic
+    GPhysicEngine.Update(elapsedTime);
 
     if(m_takeScreenshot)
     {
@@ -275,6 +286,7 @@ void Engine::Render2d(float elapsedTime)
     glPushMatrix();
     glLoadIdentity();
     glOrtho(0, Width(), Height(), 0, -1000.0, 1000.0);
+
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     CHECK_GL_ERROR();

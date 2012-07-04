@@ -9,6 +9,7 @@ Devil - already in tak source tree
 GLEW - already in tak source tree
 SFML - already in tak source tree
 Boost - Should be installed and configured under visual studio (boostpro installer or manually). You should then set the BOOST_PATH environment variable to your boost installation (eg: C:\Program Files (x86)\boost\boost_1_47 OR C:\boost\boost_1_49_0)
+Bullet Physics
 
 To manually install boost on windows:
 Download boost, extract it to C:\boost
@@ -21,3 +22,4 @@ Boost
 Devil
 GLEW
 SFML
+Bullet Physics
