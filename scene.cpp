@@ -14,10 +14,10 @@ void Scene::Update(float elapsedTime)
 {
     if(m_root)
     {
+        m_root->InternalUpdate(elapsedTime, m_params);
+
         if(m_camera)
             m_camera->Update(elapsedTime);
-
-        m_root->InternalUpdate(elapsedTime, m_params);
     }
 }
 
@@ -106,6 +106,11 @@ void Scene::SetCamera(Camera* camera)
 Camera* Scene::GetCamera()
 {
     return m_camera;
+}
+
+const Matrix4f& Scene::GetDefaultPerspective() const
+{
+    return m_projection;
 }
 
 bool Scene::InitDefaultShaderIfNeeded()

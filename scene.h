@@ -32,6 +32,8 @@ class Scene
         void SetCamera(Camera* camera);
         Camera* GetCamera();
 
+        const Matrix4f& GetDefaultPerspective() const;
+
     private:
         bool InitDefaultShaderIfNeeded();
         bool InitDefaultPerspective(int width, int height);
