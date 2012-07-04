@@ -59,6 +59,7 @@ class Matrix4
         void ApplyRotation(const T& angle, const T& x, const T& y, const T&z);
         void ApplyScale(const T& x, const T& y, const T&z);
 
+        const T* GetInternalValues() const;
         T* GetInternalValues();
         std::string ToString(const std::string& lineBegin = "|", const std::string& lineEnd = "|\n") const;
 
@@ -395,6 +396,12 @@ void Matrix4<T>::ApplyScale(const T& x, const T& y, const T&z)
 
     template <class T>
 T* Matrix4<T>::GetInternalValues()
+{
+    return m_values;
+}
+
+    template <class T>
+const T* Matrix4<T>::GetInternalValues() const
 {
     return m_values;
 }
