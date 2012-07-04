@@ -10,25 +10,28 @@ template <class T>
 class Vector3 : public sf::Vector3<T>
 {
     public:
-    Vector3(const T& x = 0, const T& y = 0, const T& z = 0);
+        Vector3(const T& x = 0, const T& y = 0, const T& z = 0);
 
-    Vector3<T> operator+(const Vector3<T>& v) const;
-    Vector3<T> operator+(const T& v) const;
-    Vector3<T> operator-(const Vector3<T>& v) const;
-    Vector3<T> operator*(const Vector3<T>& v) const;
-    Vector3<T> operator*(const T& v) const;
-    T Length() const;
-    T Dot(const Vector3<T>& v) const;
-    Vector3<T> Cross(const Vector3<T>& v) const;
-    T GetAngle(const Vector3<T>& v) const;
-    void Normalize();
-    void Zero();
+        Vector3<T> operator+(const Vector3<T>& v) const;
+        Vector3<T> operator+(const T& v) const;
+        Vector3<T> operator-(const Vector3<T>& v) const;
+        Vector3<T> operator-() const;
+        Vector3<T> operator*(const Vector3<T>& v) const;
+        Vector3<T> operator*(const T& v) const;
+        T Length() const;
+        T Dot(const Vector3<T>& v) const;
+        Vector3<T> Cross(const Vector3<T>& v) const;
+        T GetAngle(const Vector3<T>& v) const;
+        void Normalize();
+        void Zero();
+
+        void RotateAroundAxis(const Vector3<T>& axis, const T& angle);
 };
 
 typedef Vector3<int> Vector3i;
 typedef Vector3<float> Vector3f;
 
-template <class T>
+    template <class T>
 std::ostream& operator<<(std::ostream& out, const Vector3<T>& v)
 {
     out << "[" << v.x << ", " << v.y << ", " << v.z << "]";
@@ -36,7 +39,7 @@ std::ostream& operator<<(std::ostream& out, const Vector3<T>& v)
 }
 
 
-template <class T>
+    template <class T>
 Vector3<T>::Vector3(const T& x, const T& y, const T& z) : sf::Vector3<T>(x, y, z)
 {
 }
@@ -60,6 +63,12 @@ Vector3<T> Vector3<T>::operator-(const Vector3<T>& v) const
 }
 
 template <class T>
+Vector3<T> Vector3<T>::operator-() const
+{
+    return Vector3<T>(-this->x, -this->y, -this->z);
+}
+
+template <class T>
 Vector3<T> Vector3<T>::operator*(const Vector3<T>& v) const
 {
     return Vector3<T>(this->x * v.x, this->y * v.y, this->z * v.z);
@@ -71,7 +80,6 @@ Vector3<T> Vector3<T>::operator*(const T& v) const
 {
     return Vector3<T>(this->x * v, this->y * v, this->z * v);
 }
-
 
 template <class T>
 T Vector3<T>::Length() const
@@ -89,8 +97,8 @@ template <class T>
 Vector3<T> Vector3<T>::Cross(const Vector3<T>& v) const
 {
     return Vector3<T>(this->y * v.z - v.y * this->z,
-                      this->z * v.x - v.z * this->x,
-                      this->x * v.y - v.x * this->y);
+            this->z * v.x - v.z * this->x,
+            this->x * v.y - v.x * this->y);
 }
 
 template <class T>
@@ -103,7 +111,7 @@ T Vector3<T>::GetAngle(const Vector3<T>& v) const
     return acos(Dot(v) / nm);
 }
 
-template <class T>
+    template <class T>
 void Vector3<T>::Normalize()
 {
     T n = Length();
@@ -116,11 +124,19 @@ void Vector3<T>::Normalize()
     }
 }
 
-template <class T>
+    template <class T>
 void Vector3<T>::Zero()
 {
-	this->x = this->y = this->z = 0;
+    this->x = this->y = this->z = 0;
 
+}
+
+    template <class T>
+void Vector3<T>::RotateAroundAxis(const Vector3<T>& axis, const T& angle)
+{
+    // http://stackoverflow.com/questions/3982877/opengl-rotation-of-an-object-around-a-line/4240058#4240058
+    Vector3<T> v = *this;
+    *this = ((v - axis * (axis * v)) * cos(DEGTORAD(angle))) + (axis.DotProduct(v) * sin(DEGTORAD(angle))) + (axis * (axis * v));
 }
 
 #endif // VECTOR3_H__
