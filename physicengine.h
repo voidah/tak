@@ -21,9 +21,14 @@ class PhysicEngine
         void DeInit();
 
         btCollisionWorld* GetCollisionWorld();
+        btDynamicsWorld* GetDynamicsWorld();
+        btBroadphaseInterface* GetBroadphase();
 
         void AddRigidBody(RigidBody* rigidBody);
         void RemoveRigidBody(RigidBody* rigidBody);
+
+        void AddAction(btActionInterface* action);
+        void RemoveAction(btActionInterface* action);
 
         void DrawDebug() const;
 

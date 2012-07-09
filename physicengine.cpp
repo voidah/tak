@@ -21,6 +21,18 @@ void PhysicEngine::RemoveRigidBody(RigidBody* rigidBody)
     m_dynamicsWorld->removeRigidBody(rigidBody->GetInternalHandle());
 }
 
+void PhysicEngine::AddAction(btActionInterface* action)
+{
+    assert(m_isValid);
+    m_dynamicsWorld->addAction(action);
+}
+
+void PhysicEngine::RemoveAction(btActionInterface* action)
+{
+    assert(m_isValid);
+    m_dynamicsWorld->removeAction(action);
+}
+
 void PhysicEngine::DrawDebug() const
 {
     if(m_isValid)
@@ -44,8 +56,11 @@ void PhysicEngine::Init()
     m_dynamicsWorld->setGravity(btVector3(0,-10,0));
 
     // TODO
-    //m_debugDrawer.setDebugMode(btIDebugDraw::DBG_NoDebug);
-    m_debugDrawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe | btIDebugDraw::DBG_DrawAabb | btIDebugDraw::DBG_DrawContactPoints);
+    //m_dynamicsWorld->getDispatchInfo().m_allowedCcdPenetration=0.0001f;
+
+    // TODO
+    m_debugDrawer.setDebugMode(btIDebugDraw::DBG_NoDebug);
+    //m_debugDrawer.setDebugMode(btIDebugDraw::DBG_DrawWireframe | btIDebugDraw::DBG_DrawAabb | btIDebugDraw::DBG_DrawContactPoints);
     m_dynamicsWorld->setDebugDrawer(&m_debugDrawer);
 
     m_isValid = true;
@@ -64,6 +79,16 @@ void PhysicEngine::DeInit()
 btCollisionWorld* PhysicEngine::GetCollisionWorld()
 {
     return m_dynamicsWorld;
+}
+
+btDynamicsWorld* PhysicEngine::GetDynamicsWorld()
+{
+    return m_dynamicsWorld;
+}
+
+btBroadphaseInterface* PhysicEngine::GetBroadphase()
+{
+    return m_broadphase;
 }
 
 
