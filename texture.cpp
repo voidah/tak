@@ -12,10 +12,18 @@ Texture::Texture() : m_isValid(false)
 
 Texture::~Texture()
 {
+}
+
+bool Texture::Load(const std::string& key, const OptionList& options)
+{
+    return Load(key, options.GetBoolean("mipmap", true));
+}
+
+bool Texture::Release()
+{
     if(IsValid())
         glDeleteTextures(1, &m_textureId);
 }
-
 
 bool Texture::Load(const std::string& filename, bool mipmap)
 {
