@@ -9,12 +9,15 @@ template <class T>
 class Resource
 {
     public:
+        typedef typename ResourceManager<T>::Options OptionList;
+
+    public:
         Resource() {}
         virtual ~Resource() {}
 
         // Those methods should never be called directly, resource
         // creation and deletion must all be done by the ResourceManager
-        virtual bool Load(const std::string& key) = 0;
+        virtual bool Load(const std::string& key, const OptionList& options) = 0;
         virtual bool Release() = 0;
 
         static T* Get(const std::string& key);
