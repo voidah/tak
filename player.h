@@ -7,6 +7,8 @@
 #include "rigidbody.h"
 #include "physicengine.h"
 
+#include <bullet/BulletDynamics/Character/btKinematicCharacterController.h>
+
 class Player
 {
     public:
@@ -26,6 +28,9 @@ class Player
         float GetEyeHeight() const;
 
         void Move(bool front, bool back, bool left, bool right, bool run, bool fly, float elapsedTime);
+
+        bool IsOnGround() const;
+        void Jump();
 
         // TODO remove these?
         void MoveForward(float distance);
@@ -146,7 +151,7 @@ class Player
             {
                 return m_collisions.end();
             }
-            
+
             int Count() const
             {
                 return m_collisions.size();
@@ -200,6 +205,10 @@ class Player
         float m_eyeHeight; // From foot
         Vector3f m_position;
         Vector3f m_rotation;
+
+        btKinematicCharacterController* m_character;
+        btPairCachingGhostObject* m_ghostObject;
+
 };
 
 #endif // TAK_PLAYER_H__
