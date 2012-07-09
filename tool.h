@@ -3,6 +3,8 @@
 
 #include <string>
 #include <cstdlib>
+#include <sstream>
+#include <vector>
 
 // TODO ne pas oublier de ne pas definir DEBUGMODE en release
 #ifndef DEBUGMODE
@@ -51,6 +53,28 @@ class Tool
                 return min + (T)((float)rand() * (float)(max - min) / (float)RAND_MAX);
             }
 
+        template <class T>
+            std::string ToString(const T& v)
+            {
+                std::ostringstream ss;
+                ss << v;
+                return v.str();
+            }
+
+        template <class T>
+            std::string ToNumber(const std::string& v)
+            {
+                std::ostringstream ss(v);
+                T value;
+                ss >> value;
+                return value;
+            }
+
+        static unsigned int SplitString(const std::string &input, const std::string &delim, std::vector<std::string> &output);
+        static std::string Trim(const std::string& str);
+
+        static std::string ToLower(std::string str);
+        static std::string ToUpper(std::string str);
 };
 
 #endif // TOOL_H__
