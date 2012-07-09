@@ -54,7 +54,7 @@ class Tool
             }
 
         template <class T>
-            std::string ToString(const T& v)
+            static std::string ToString(const T& v)
             {
                 std::ostringstream ss;
                 ss << v;
@@ -62,9 +62,9 @@ class Tool
             }
 
         template <class T>
-            std::string ToNumber(const std::string& v)
+            static T ToNumber(const std::string& v)
             {
-                std::ostringstream ss(v);
+                std::istringstream ss(v);
                 T value;
                 ss >> value;
                 return value;
