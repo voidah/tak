@@ -86,6 +86,7 @@ void Engine::Init()
 
 void Engine::DeInit()
 {
+    GPhysicEngine.DeInit();
 }
 
 void Engine::LoadResource()
