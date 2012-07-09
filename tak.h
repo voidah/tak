@@ -23,3 +23,5 @@
 #include "thirdpersoncamera.h"
 #include "physicengine.h"
 #include "player.h"
+#include "resourcemanager.h"
+#include "resource.h"
