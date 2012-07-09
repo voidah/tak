@@ -32,12 +32,6 @@ class Player
         bool IsOnGround() const;
         void Jump();
 
-        // TODO remove these?
-        void MoveForward(float distance);
-        void MoveBackward(float distance);
-        void MoveLeft(float distance);
-        void MoveRight(float distance);
-
         void SetPosition(const Vector3f& position);
         Vector3f GetPosition() const;
 

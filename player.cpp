@@ -187,22 +187,6 @@ void Player::Jump()
     m_character->jump();
 }
 
-void Player::MoveForward(float distance)
-{
-}
-
-void Player::MoveBackward(float distance)
-{
-}
-
-void Player::MoveLeft(float distance)
-{
-}
-
-void Player::MoveRight(float distance)
-{
-}
-
 void Player::SetPosition(const Vector3f& position)
 {
     m_position = position;
