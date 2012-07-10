@@ -28,7 +28,7 @@ class ResourceManager
                 }
 
                 template <class U>
-                    const U& GetNumber(const std::string& key, const U& defaultValue = U(0)) const
+                    U GetNumber(const std::string& key, const U& defaultValue = U(0)) const
                     {
                         OptionMap::const_iterator it = m_options.find(key);
                         if(it == m_options.end())
