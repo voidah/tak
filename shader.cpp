@@ -12,6 +12,16 @@ Shader::Shader() : m_valid(false)
 
 Shader::~Shader()
 {
+}
+
+
+bool Shader::Load(const std::string& key, const OptionList& options)
+{
+    return LoadFromFile(key + ".vert", key + ".frag", options.GetBoolean("verbose", true));
+}
+
+bool Shader::Release()
+{
     // TODO cleanup here?
 }
 

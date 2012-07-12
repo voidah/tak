@@ -2,17 +2,17 @@
 #define TAK__SHADER_H
 #include <string>
 #include "define.h"
-#include "nocopy.h"
+#include "resource.h"
 
-class Shader
+class Shader : public Resource<Shader>
 {
-    NOCOPY(Shader);
-
     public:    
         Shader();
         ~Shader();
 
-        bool LoadFromFile(const std::string& vertFile, const std::string& fragFile, bool verbose = false);
+        virtual bool Load(const std::string& key, const OptionList& options);
+        virtual bool Release();
+
         bool LoadFromMemory(const std::string& vertShader, const std::string& fragShader, bool verbose = false);
         void Use() const;
 
@@ -38,6 +38,7 @@ class Shader
     private:
         bool CheckShaderError(GLenum shader, bool verbose);
         bool CheckProgramError(GLenum program, bool showWarning, bool verbose);
+        bool LoadFromFile(const std::string& vertFile, const std::string& fragFile, bool verbose = false);
 };
 
 
