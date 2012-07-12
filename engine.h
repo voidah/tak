@@ -37,8 +37,6 @@ class Engine : public OpenglContext
         void PrintText(int x, int y, const std::string& t);
 
     private:
-        bool LoadTexture(Texture& texture, const std::string& filename, bool stopOnError = true);
-
         void Render2d(float elapsedTime);
 
 
@@ -48,7 +46,7 @@ class Engine : public OpenglContext
         bool m_wireframe;
         bool m_takeScreenshot;
 
-        Texture m_textureFont;
+        Texture* m_textureFont;
         //Shader m_shader01;
 
         SyncValueManager m_syncValueManager;

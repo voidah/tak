@@ -9,6 +9,15 @@ Font::~Font()
 {
 }
 
+bool Font::Load(const std::string& key, const OptionList& options)
+{
+    return Load(key, options.GetNumber<int>("texture_size", 512), options.GetString("ansi_codepage", "ISO−8859−1"));
+}
+
+bool Font::Release()
+{
+}
+
 bool Font::Load(const std::string& f, int textureSize, const std::string& ansiCodePage)
 {
     m_ansiCodePage = ansiCodePage;

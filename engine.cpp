@@ -91,7 +91,8 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
-    LoadTexture(m_textureFont, "../../tak/resource/font.bmp");
+    m_textureFont = Texture::Get("./tak/resource/font.bmp");
+    assert(m_textureFont);
     CHECK_GL_ERROR();
 
     m_game->LoadResource();
@@ -231,22 +232,6 @@ void Engine::WindowResizeEvent(int width, int height)
     m_game->WindowResizeEvent(width, height);
 }
 
-bool Engine::LoadTexture(Texture& texture, const std::string& filename, bool stopOnError)
-{
-    texture.Load(filename);
-    if(!texture.IsValid())
-    {
-        std::cerr << "Unable to load texture (" << filename << ")" << std::endl;
-        if(stopOnError)
-            Stop();
-
-        return false;
-    }
-
-    return true;
-}
-
-
 void Engine::PrintText(int x, int y, const std::string& t)
 {
     glPushMatrix();
@@ -334,7 +319,7 @@ void Engine::Render2d(float elapsedTime)
     glEnable(GL_BLEND);
     CHECK_GL_ERROR();
 
-    m_textureFont.Bind();
+    m_textureFont->Bind();
     CHECK_GL_ERROR();
     std::ostringstream ss;
 
