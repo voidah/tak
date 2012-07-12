@@ -2,7 +2,6 @@
 #define TAK__TEXTURE_H__
 
 #include "define.h"
-#include "nocopy.h"
 #include "resource.h"
 #include <IL/il.h>
 #include <string>
@@ -24,7 +23,7 @@ class Texture : public Resource<Texture>
 
         bool operator==(const Texture& texture) const;
         bool operator!=(const Texture& texture) const;
-        
+
     private:
         bool Load(const std::string& filename, bool mipmap);
 
