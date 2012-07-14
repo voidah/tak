@@ -162,4 +162,5 @@ bool Scene::InitDefaultShaderIfNeeded()
 bool Scene::InitDefaultPerspective(int width, int height)
 {
     m_projection.SetPerspectiveProjection(90.f, (float)width / (float)height, 0.01f, 5000.0f);
+	return true;
 }

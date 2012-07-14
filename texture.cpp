@@ -23,6 +23,7 @@ bool Texture::Release()
 {
     if(IsValid())
         glDeleteTextures(1, &m_textureId);
+	return true;
 }
 
 bool Texture::Load(const std::string& filename, bool mipmap)

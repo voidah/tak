@@ -23,6 +23,7 @@ bool Shader::Load(const std::string& key, const OptionList& options)
 bool Shader::Release()
 {
     // TODO cleanup here?
+	return true;
 }
 
 bool Shader::LoadFromFile(const std::string& vertFile, const std::string& fragFile, bool verbose)

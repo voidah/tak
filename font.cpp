@@ -16,6 +16,7 @@ bool Font::Load(const std::string& key, const OptionList& options)
 
 bool Font::Release()
 {
+	return true;
 }
 
 bool Font::Load(const std::string& f, int textureSize, const std::string& ansiCodePage)
@@ -40,7 +41,7 @@ bool Font::Load(const std::string& f, int textureSize, const std::string& ansiCo
     for(int i = 32; i < 256; ++i)
         cs[i - 32] = i;
 
-    int charPerSide = sqrt(cs.length()) + 1;
+    int charPerSide = sqrt((double)cs.length()) + 1;
     int charSize = textureSize / charPerSide;
 
     for(int i = 0; i < cs.length(); ++i)
