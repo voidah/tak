@@ -1,5 +1,5 @@
 #include "player.h"
-#include <bullet/BulletCollision/CollisionDispatch/btGhostObject.h>
+#include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 // TODO
 #define MOVEMENT_DIVIDER 6.000f

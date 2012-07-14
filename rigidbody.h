@@ -1,7 +1,7 @@
 #ifndef TAK_RIGIDBODY_H__
 #define TAK_RIGIDBODY_H__
 
-#include <bullet/btBulletDynamicsCommon.h>
+#include <btBulletDynamicsCommon.h>
 #include "vector3.h"
 
 class RigidBody

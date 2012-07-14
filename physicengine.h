@@ -1,7 +1,7 @@
 #ifndef TAK_PHYSICENGINE_H__
 #define TAK_PHYSICENGINE_H__
 
-#include <bullet/btBulletDynamicsCommon.h>
+#include <btBulletDynamicsCommon.h>
 #include "rigidbody.h"
 #include "gldebugdrawer.h"
 

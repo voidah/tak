@@ -7,7 +7,7 @@
 #include "rigidbody.h"
 #include "physicengine.h"
 
-#include <bullet/BulletDynamics/Character/btKinematicCharacterController.h>
+#include <BulletDynamics/Character/btKinematicCharacterController.h>
 
 class Player
 {
