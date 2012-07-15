@@ -1,0 +1,7 @@
+This small tool takes all shared lib dependencies and copy them alongside a linux executable
+
+Usage:
+$ ./bundleelf <executable>
+
+
+The executable can now load the .so directly if the LD_LIBRARY_PATH is set, of if the gcc rpath linker setting is used (-Wl,-R.)
