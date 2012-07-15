@@ -97,7 +97,12 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
+    // TODO remove that... engine does'nt need to load texture and display text
+#ifdef OSWINDOWS
     m_textureFont = Texture::Get("../../tak/resource/font.bmp");
+#else
+    m_textureFont = Texture::Get("./tak/resource/font.bmp");
+#endif
     assert(m_textureFont);
     CHECK_GL_ERROR();
 
