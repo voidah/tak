@@ -4,4 +4,4 @@ Usage:
 $ ./bundleelf <executable>
 
 
-The executable can now load the .so directly if the LD_LIBRARY_PATH is set, of if the gcc rpath linker setting is used (-Wl,-R.)
+The executable can now load the .so directly if the LD_LIBRARY_PATH is set, or if the gcc rpath linker setting is used (-Wl,-R.)
