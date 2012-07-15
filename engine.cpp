@@ -42,7 +42,13 @@ void Engine::Init()
     printf("Renderer: %s\n", string);
     string = glGetString(GL_VERSION);
     printf("OpenGL Version: %s\n", string);
+
     string = glGetString(GL_SHADING_LANGUAGE_VERSION);
+	if(!string)
+	{
+		std::cout << "Your graphic driver does'nt support shaders, exiting" << std::endl;
+		exit(1);
+	}
     printf("GLSL Version: %s\n", string);
 
     GLint texSize;
@@ -91,7 +97,7 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
-    m_textureFont = Texture::Get("./tak/resource/font.bmp");
+    m_textureFont = Texture::Get("../../tak/resource/font.bmp");
     assert(m_textureFont);
     CHECK_GL_ERROR();
 
