@@ -5,6 +5,7 @@
 #include "tool.h"
 #include <string>
 #include <map>
+#include <cassert>
 
 template <class T>
 class ResourceManager
@@ -85,17 +86,23 @@ class ResourceManager
         ~ResourceManager();
         static T* Get(const std::string& key);
 
+        static void SetBasePath(const std::string& basePath);
+
     private:
         typedef std::map<std::string, T*> Resources;
 
     private:
         static Resources m_resources;
+        static std::string m_basePath;
 
         NOCOPY(ResourceManager);
 };
 
 template <class T>
 typename ResourceManager<T>::Resources ResourceManager<T>::m_resources;
+
+template <class T>
+typename std::string ResourceManager<T>::m_basePath;
 
     template <class T>
 ResourceManager<T>::~ResourceManager()
@@ -114,6 +121,15 @@ T* ResourceManager<T>::Get(const std::string& key)
     Tool::SplitString(key, "|", tokens);
 
     std::string name = Tool::Trim(tokens[0]);
+    assert(name.length() > 0);
+
+    bool relativeToBasePath = false;
+    if(name[0] == '!')
+    {
+        name = name.substr(1);
+        assert(name.length() > 0);
+        relativeToBasePath = true;
+    }
 
     // Fill options list
     Options options;
@@ -131,7 +147,7 @@ T* ResourceManager<T>::Get(const std::string& key)
     // so that if the same file resource, with the same options is requested,
     // we can find it in the map. Added spaces between options should not result
     // in a different resource
-    std::string stdKey(name);
+    std::string stdKey(Tool::Trim(tokens[0]));
     for(typename Options::ConstIterator it = options.Begin(); it != options.End(); ++it)
     {
         stdKey += "|" + it->first + (it->second != "" ? "=" + it->second : "");
@@ -145,7 +161,7 @@ T* ResourceManager<T>::Get(const std::string& key)
 
     std::cout << "Loading resource '" << stdKey << "'" << std::endl;
     T* resource = new T();
-    if(!resource->Load(name, options))
+    if(!resource->Load((relativeToBasePath ? m_basePath : "") + name, options))
     {
         delete resource;
         return 0;
@@ -153,6 +169,22 @@ T* ResourceManager<T>::Get(const std::string& key)
 
     m_resources.insert(std::make_pair(stdKey, resource));
     return resource;
+}
+
+    template <class T>
+void ResourceManager<T>::SetBasePath(const std::string& basePath)
+{
+    m_basePath = basePath;
+
+    // Replace all backslashes by slashes (even on windows, to have uniform path)
+    for(int i = 0; i < m_basePath.length(); ++i)
+        if(m_basePath[i] == '\\')
+            m_basePath = '/';
+
+    // Terminate path by a slash if it's not already the case
+    char ending = m_basePath[m_basePath.length() - 1];
+    if(ending != '/' && ending != '\\')
+        m_basePath += '/';
 }
 
 
