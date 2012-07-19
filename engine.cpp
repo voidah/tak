@@ -46,7 +46,7 @@ void Engine::Init()
     string = glGetString(GL_SHADING_LANGUAGE_VERSION);
 	if(!string)
 	{
-		std::cout << "Your graphic driver does'nt support shaders, exiting" << std::endl;
+		std::cout << "Your graphic driver doesn't support shaders, exiting" << std::endl;
 		exit(1);
 	}
     printf("GLSL Version: %s\n", string);
