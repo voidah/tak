@@ -3,6 +3,7 @@
 
 #include "nocopy.h"
 #include "tool.h"
+#include <iostream>
 #include <string>
 #include <map>
 #include <cassert>
