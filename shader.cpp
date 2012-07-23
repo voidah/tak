@@ -23,7 +23,7 @@ bool Shader::Load(const std::string& key, const OptionList& options)
 bool Shader::Release()
 {
     // TODO cleanup here?
-	return true;
+    return true;
 }
 
 bool Shader::LoadFromFile(const std::string& vertFile, const std::string& fragFile, bool verbose)
@@ -104,6 +104,14 @@ bool Shader::LoadFromMemory(const std::string& vertShader, const std::string& fr
     CheckProgramError(m_program, true, verbose);
     CHECK_GL_ERROR();
 
+    if(verbose)
+    {
+        std::cout << "Shader attributes:" << std::endl;
+        ShowAttributes();
+        std::cout << "Shader uniforms:" << std::endl;
+        ShowUniforms();
+    }
+
     m_valid = true;
     return true;
 }
@@ -168,6 +176,44 @@ void Shader::SetMat4Uniform(const std::string& name, float values[16]) const
 void Shader::Disable()
 {
     glUseProgram(0);
+}
+
+void Shader::ShowAttributes() const
+{
+    GLint maxLength, nAttribs;
+    glGetProgramiv(m_program, GL_ACTIVE_ATTRIBUTES, &nAttribs);
+    glGetProgramiv(m_program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxLength);
+
+    GLchar * name = new GLchar[maxLength];
+    GLint written, size, location;
+    GLenum type;
+    for(int i = 0; i < nAttribs; i++)
+    {
+        glGetActiveAttrib(m_program, i, maxLength, &written, &size, &type, name);
+        location = glGetAttribLocation(m_program, name);
+        std::cout << "Location " << location << ": " << name << std::endl;
+    }
+
+    delete [] name;
+}
+
+void Shader::ShowUniforms() const
+{
+    GLint nUniforms, maxLen;
+    glGetProgramiv( m_program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLen);
+    glGetProgramiv( m_program, GL_ACTIVE_UNIFORMS, &nUniforms);
+
+    GLchar * name = new GLchar[maxLen];
+    GLint size, location;
+    GLsizei written;
+    GLenum type;
+    for(int i = 0; i < nUniforms; ++i)
+    {
+        glGetActiveUniform(m_program, i, maxLen, &written, &size, &type, name);
+        location = glGetUniformLocation(m_program, name);
+        std::cout << "Location " << location << ": " << name << std::endl;
+    }
+    delete [] name;
 }
 
 bool Shader::CheckShaderError(GLenum shader, bool verbose)
