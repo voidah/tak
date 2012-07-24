@@ -28,6 +28,9 @@ class Shader : public Resource<Shader>
 
         static void Disable();
 
+        void ShowAttributes() const;
+        void ShowUniforms() const;
+
     private:
         GLenum m_program;
         GLenum m_vertexShader;
