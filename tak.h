@@ -25,3 +25,4 @@
 #include "player.h"
 #include "resourcemanager.h"
 #include "resource.h"
+#include "model.h"
