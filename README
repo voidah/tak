@@ -23,3 +23,5 @@ Devil
 GLEW
 SFML
 Bullet Physics
+
+On arch: pacman --needed -S make gcc premake glew bullet boost boost-libs sfml devil
