@@ -28,9 +28,19 @@ bool Scene::Render()
 
     if(m_root)
     {
+
+        // Preparer render list, sorting objects to render
+        SceneNode::RenderList m_renderList;
+        m_root->InternalPrepareRender(m_renderList, m_projection, m_camera ? m_camera->GetMatrix() : Matrix4f::IDENTITY, m_params);
+
+        // Render!
         m_defaultShader->Use();
         m_params.SetCurrentTexture(0);
-        m_root->InternalRender(m_projection, m_camera ? m_camera->GetMatrix() : Matrix4f::IDENTITY, m_defaultShader, m_params);
+        for(SceneNode::RenderList::const_iterator it = m_renderList.begin(); it != m_renderList.end(); ++it)
+        {
+            SceneNode* node = it->second->GetNode();
+            node->InternalRender(it->second, m_defaultShader, m_params);
+        }
         Shader::Disable();
     }
 

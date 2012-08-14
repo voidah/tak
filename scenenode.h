@@ -3,6 +3,7 @@
 
 #include <set>
 #include <fstream>
+#include <map>
 #include "uniqueidgenerator.h"
 #include "define.h"
 #include "shader.h"
@@ -15,8 +16,61 @@
 
 class SceneNode
 {
+    protected:
+        class RenderBlock
+        {
+            public:
+                RenderBlock()
+                {
+                    m_id = m_idGenerator.Get();
+                    std::cout << "Created RenderBlock with id=" << m_id << std::endl;
+                }
+
+                void Set(SceneNode* node, const Matrix4f& projection, const Matrix4f& modelview)
+                {
+                    m_node = node;
+                    m_projection = projection;
+                    m_modelview = modelview;
+                }
+
+                virtual ~RenderBlock()
+                {
+                    std::cout << "Destroyed RenderBlock with id=" << m_id << std::endl;
+                }
+
+                uint64 GetId() const
+                {
+                    return m_id;
+                }
+
+                SceneNode* GetNode() const
+                {
+                    return m_node;
+                }
+
+                const Matrix4f& GetProjectionMatrix() const
+                {
+                    return m_projection;
+                }
+
+                const Matrix4f& GetModelviewMatrix() const
+                {
+                    return m_modelview;
+                }
+
+            private:
+                static UniqueIdGenerator<uint64> m_idGenerator;
+                uint64 m_id;
+
+                SceneNode* m_node;
+                Matrix4f m_projection;
+                Matrix4f m_modelview;
+        };
+
     public:
         typedef uint64 IdType;
+        typedef uint64 SortKeyType;
+        typedef std::multimap<SortKeyType, RenderBlock*> RenderList;
 
     public:
         struct Material
@@ -77,18 +131,32 @@ class SceneNode
     protected:
         typedef std::set<SceneNode*> ChildNodes;
 
+        enum FLAGS
+        {
+            FLAG_NONE       = 0x0000,
+            FLAG_2D         = 0x0001
+        };
+
     protected:
         void BindToRigidBody(RigidBody* rigidBody);
 
         virtual void Update(float elapsedTime, SceneParams& params) = 0;
-        virtual void Render(Matrix4f& projection, Matrix4f& modelview, SceneParams& params) = 0;
+        virtual void Render(const Matrix4f& projection, const Matrix4f& modelview, SceneParams& params) = 0;
+
+        virtual void UpdateProjectionMatrix(Matrix4f& projection);
+        virtual void UpdateModelviewMatrix(Matrix4f& modelview);
+
+        void SetFlag(FLAGS flag);
+        void UnsetFlag(FLAGS flag);
+        bool IsFlagSet(FLAGS flag);
 
     private:
         void InternalShowGraphConsole(const SceneNode* node, int level = 0) const;
         void InternalShowGraphGraphviz(std::ofstream& file, const SceneNode* node) const;
 
         void InternalUpdate(float elapsedTime, SceneParams& params);
-        void InternalRender(Matrix4f projection, Matrix4f modelview, Shader* shader, SceneParams& params);
+        void InternalPrepareRender(RenderList& renderList, Matrix4f projection, Matrix4f modelview, SceneParams& params);
+        void InternalRender(const RenderBlock* renderBlock, Shader* shader, SceneParams& params);
 
     private:
         SceneNode* m_parent;
@@ -99,6 +167,8 @@ class SceneNode
 
         std::string m_name;
 
+        uint m_flags;
+
         Material m_material;
         RigidBody* m_rigidBody;
 
@@ -108,6 +178,8 @@ class SceneNode
         float m_posX, m_posY, m_posZ;
         float m_rotX, m_rotY, m_rotZ;
         float m_scaleX, m_scaleY, m_scaleZ;
+
+        RenderBlock m_renderBlock;
 
         friend class Scene;
 };

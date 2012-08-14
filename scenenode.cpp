@@ -3,8 +3,9 @@
 #include <cassert>
 
 UniqueIdGenerator<SceneNode::IdType> SceneNode::m_idGenerator;
+UniqueIdGenerator<uint64> SceneNode::RenderBlock::m_idGenerator;
 
-SceneNode::SceneNode(const std::string& name) : m_parent(0), m_name(name), m_rigidBody(0), m_active(true), m_visible(true), m_posX(0), m_posY(0), m_posZ(0), m_rotX(0), m_rotY(0), m_rotZ(0), m_scaleX(1.f), m_scaleY(1.f), m_scaleZ(1.f)
+SceneNode::SceneNode(const std::string& name) : m_parent(0), m_name(name), m_flags(FLAG_NONE), m_rigidBody(0), m_active(true), m_visible(true), m_posX(0), m_posY(0), m_posZ(0), m_rotX(0), m_rotY(0), m_rotZ(0), m_scaleX(1.f), m_scaleY(1.f), m_scaleZ(1.f)
 {
     m_id = m_idGenerator.Get();
 
@@ -217,6 +218,33 @@ void SceneNode::BindToRigidBody(RigidBody* rigidBody)
     m_rigidBody = rigidBody;
 }
 
+void SceneNode::UpdateProjectionMatrix(Matrix4f& /*projection*/)
+{
+    // Bu default do nothing, but a derived node coule
+    // override this method to change the projection matrix
+}
+
+void SceneNode::UpdateModelviewMatrix(Matrix4f& /*modelview*/)
+{
+    // Bu default do nothing, but a derived node coule
+    // override this method to change the model view matrix
+}
+
+void SceneNode::SetFlag(FLAGS flag)
+{
+    m_flags |= flag;
+}
+
+void SceneNode::UnsetFlag(FLAGS flag)
+{
+    m_flags &= ~flag;
+}
+
+bool SceneNode::IsFlagSet(FLAGS flag)
+{
+    return ((m_flags & flag) == flag);
+}
+
 void SceneNode::InternalShowGraphConsole(const SceneNode* node, int level) const
 {
     for(int i = 0; i < level; ++i)
@@ -261,7 +289,7 @@ void SceneNode::InternalUpdate(float elapsedTime, SceneParams& params)
     }
 }
 
-void SceneNode::InternalRender(Matrix4f projection, Matrix4f modelview, Shader* shader, SceneParams& params)
+void SceneNode::InternalPrepareRender(RenderList& renderList, Matrix4f projection, Matrix4f modelview, SceneParams& params)
 {
     if(!IsVisible())
         return;
@@ -271,6 +299,29 @@ void SceneNode::InternalRender(Matrix4f projection, Matrix4f modelview, Shader* 
     modelview.ApplyRotation(m_rotY, 0, 1.f, 0);
     modelview.ApplyRotation(m_rotZ, 0, 0, 1.f);
     modelview.ApplyScale(m_scaleX, m_scaleY, m_scaleZ);
+
+    UpdateProjectionMatrix(projection);
+    UpdateModelviewMatrix(modelview);
+
+    SortKeyType key = 0;
+
+    if(IsFlagSet(FLAG_2D))
+        key = 1;
+
+    m_renderBlock.Set(this, projection, modelview);
+    renderList.insert(std::make_pair(key, &m_renderBlock));
+
+    for(ChildNodes::const_iterator it = m_childs.begin(); it != m_childs.end(); ++it)
+    {
+        (*it)->InternalPrepareRender(renderList, projection, modelview, params);
+    }
+}
+
+void SceneNode::InternalRender(const RenderBlock* renderBlock, Shader* shader, SceneParams& params)
+{
+    Matrix4f modelview = renderBlock->GetModelviewMatrix();
+    Matrix4f projection = renderBlock->GetProjectionMatrix();
+
     shader->SetMat4Uniform("projectionMatrix", projection.GetInternalValues());
     shader->SetMat4Uniform("modelViewMatrix", modelview.GetInternalValues());
     CHECK_GL_ERROR();
@@ -296,11 +347,6 @@ void SceneNode::InternalRender(Matrix4f projection, Matrix4f modelview, Shader* 
     //std::cout << "=============================" << std::endl;
     //std::cout << "Rendering " << GetName() << std::endl;
     Render(projection, modelview, params);
-
-    for(ChildNodes::const_iterator it = m_childs.begin(); it != m_childs.end(); ++it)
-    {
-        (*it)->InternalRender(projection, modelview, shader, params);
-    }
 
     if(textureBackup != params.GetCurrentTexture())
     {
