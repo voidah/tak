@@ -1,7 +1,10 @@
 #include <iostream>
-#include <assimp/assimp.hpp>
-#include <assimp/aiScene.h>
-#include <assimp/aiPostProcess.h>
+//#include <assimp/assimp.hpp>
+//#include <assimp/aiScene.h>
+//#include <assimp/aiPostProcess.h>
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
 #include <vector>
 #include <fstream>
 
@@ -21,6 +24,7 @@ void ProcessNode(const aiScene* scene, aiNode* node, aiMatrix4x4 transform, Vert
 
     transform *= node->mTransformation;
 
+
     std::cout << "Num mesh: " << node->mNumMeshes << std::endl;
     for(int i = 0; i < node->mNumMeshes; ++i)
     {
@@ -36,7 +40,8 @@ void ProcessNode(const aiScene* scene, aiNode* node, aiMatrix4x4 transform, Vert
         {
             Vertex vert;
             aiVector3D vertex = mesh->mVertices[j];
-            vertex *= transform;
+            //vertex *= transform;
+            vertex = transform * vertex;
 
             vert.x = vertex.x;
             vert.y = vertex.y;
@@ -54,9 +59,10 @@ void ProcessNode(const aiScene* scene, aiNode* node, aiMatrix4x4 transform, Vert
             std::cout << vertex.z << " ";
             std::cout << std::endl;
 
-
             vertices.push_back(vert);
         }
+
+        int vcount = vertices.size();
 
         // Show vertex index for each face
         std::cout << "\nIndexes: " << std::endl;
@@ -67,14 +73,14 @@ void ProcessNode(const aiScene* scene, aiNode* node, aiMatrix4x4 transform, Vert
             // Process only triangles..
             if(face.mNumIndices == 3)
             {
-                std::cout << face.mIndices[0] << " ";
-                std::cout << face.mIndices[1] << " ";
-                std::cout << face.mIndices[2] << " ";
+                std::cout << vcount + face.mIndices[0] << " ";
+                std::cout << vcount + face.mIndices[1] << " ";
+                std::cout << vcount + face.mIndices[2] << " ";
                 std::cout << std::endl;
 
-                indices.push_back(face.mIndices[0]);
-                indices.push_back(face.mIndices[1]);
-                indices.push_back(face.mIndices[2]);
+                indices.push_back(vcount + face.mIndices[0]);
+                indices.push_back(vcount + face.mIndices[1]);
+                indices.push_back(vcount + face.mIndices[2]);
             }
         }
     }
@@ -111,9 +117,9 @@ int main(int argc, char* argv[])
             aiProcess_Triangulate            |
             aiProcess_JoinIdenticalVertices  |
             aiProcess_SortByPType |
-            aiProcess_GenUVCoords |
-            aiProcess_OptimizeMeshes |
-            aiProcess_OptimizeGraph);
+            aiProcess_GenUVCoords);
+            //aiProcess_OptimizeMeshes |
+            //aiProcess_OptimizeGraph);
 
     // If the import failed, report it
     if( !scene)
