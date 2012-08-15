@@ -68,9 +68,87 @@ class SceneNode
         };
 
     public:
+        class SortKey
+        {
+            public:
+                typedef uint64 Type;
+
+            public:
+                // Order is important, the item with the higher priority is first...
+                // LAST _must_ be the last item in the enum
+                // When a new field is added, it's length must be added to m_fieldOption
+                enum Field { HUD, TEST, LAST };
+
+            public:
+                SortKey() : m_value(0)
+            {
+
+                // Perform some validation check... only once as it's static data
+                // This code probably should be enclosed in #ifdef DEBUG ...
+                static bool checked = false;
+
+                if(!checked)
+                {
+                    // Check that the item ordering in the enum is the same that m_fieldOption
+                    for(int i = 0; i < LAST; ++i)
+                    {
+                        assert((Field)i == m_fieldOption[i].field);
+                    }
+
+                    // Check that total bit count doesn't overflow Type size
+                    int bitCount = 0;
+                    for(int i = 0; i < LAST; ++i)
+                        bitCount += m_fieldOption[i].len;
+
+                    //std::cout << "SortKey used bits: " << bitCount << "/" << sizeof(Type) * 8 << std::endl;
+                    assert(bitCount < sizeof(Type) * 8);
+
+                    checked = true;
+                }
+            }
+
+                void SetValue(Field field, Type value)
+                {
+                    assert((int)field < LAST);
+
+                    // Make sure the value we receive fits in the bit count that
+                    // is reserved for that field
+                    assert(value < (Type(1) << m_fieldOption[field].len));
+
+                    int pos = sizeof(Type) * 8;
+                    for(int i = 0; i < field; ++i)
+                        pos -= m_fieldOption[i].len;
+
+                    //std::cout << "Setting value (" << value << ") for field=" << field << " with positition " << pos << std::endl;
+                    m_value |= (value << Type(pos - m_fieldOption[field].len));
+                }
+
+                Type GetValue() const
+                {
+                    return m_value;
+                }
+
+                bool operator<(const SortKey& v) const
+                {
+                    return m_value < v.m_value;
+                }
+
+            private:
+                Type m_value;
+
+            private:
+                struct FieldOption
+                {
+                    Field field;
+                    int len;
+                };
+
+                static FieldOption m_fieldOption[LAST];
+        };
+
+    public:
         typedef uint64 IdType;
-        typedef uint64 SortKeyType;
-        typedef std::multimap<SortKeyType, RenderBlock*> RenderList;
+        typedef std::multimap<SortKey, RenderBlock*> RenderList;
 
     public:
         struct Material

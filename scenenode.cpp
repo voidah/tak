@@ -5,6 +5,12 @@
 UniqueIdGenerator<SceneNode::IdType> SceneNode::m_idGenerator;
 UniqueIdGenerator<uint64> SceneNode::RenderBlock::m_idGenerator;
 
+// The order of these fields must match the order found in the SortKey::Field enum
+SceneNode::SortKey::FieldOption SceneNode::SortKey::m_fieldOption[SceneNode::SortKey::LAST] = {
+    {SceneNode::SortKey::HUD, 1},
+    {SceneNode::SortKey::TEST, 3}
+};
+
 SceneNode::SceneNode(const std::string& name) : m_parent(0), m_name(name), m_flags(FLAG_NONE), m_rigidBody(0), m_active(true), m_visible(true), m_posX(0), m_posY(0), m_posZ(0), m_rotX(0), m_rotY(0), m_rotZ(0), m_scaleX(1.f), m_scaleY(1.f), m_scaleZ(1.f)
 {
     m_id = m_idGenerator.Get();
@@ -303,10 +309,10 @@ void SceneNode::InternalPrepareRender(RenderList& renderList, Matrix4f projectio
     UpdateProjectionMatrix(projection);
     UpdateModelviewMatrix(modelview);
 
-    SortKeyType key = 0;
+    SortKey key;
 
     if(IsFlagSet(FLAG_HUD))
-        key = 1;
+        key.SetValue(SortKey::HUD, 1);
 
     m_renderBlock.Set(this, projection, modelview);
     renderList.insert(std::make_pair(key, &m_renderBlock));
