@@ -76,7 +76,7 @@ class SceneNode
             public:
                 // Order is important, the item with the higher priority is first...
                 // LAST _must_ be the last item in the enum
-                // When a new field is added, it's length must be added to m_fieldOption
+                // When a new field is added, it must be added to m_fieldOption
                 enum Field { HUD, TEST, LAST };
 
             public:
@@ -119,7 +119,6 @@ class SceneNode
                     for(int i = 0; i < field; ++i)
                         pos -= m_fieldOption[i].len;
 
-                    //std::cout << "Setting value (" << value << ") for field=" << field << " with positition " << pos << std::endl;
                     m_value |= (value << Type(pos - m_fieldOption[field].len));
                 }
 
