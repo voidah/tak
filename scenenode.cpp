@@ -326,12 +326,8 @@ void SceneNode::InternalRender(const RenderBlock* renderBlock, Shader* shader, S
     shader->SetMat4Uniform("modelViewMatrix", modelview.GetInternalValues());
     CHECK_GL_ERROR();
 
-
-    // Backup current texture
-    Texture* textureBackup = params.GetCurrentTexture();
-
     Texture* texture = GetTexture();
-    if(texture && texture != textureBackup)
+    if(texture && texture != params.GetCurrentTexture())
     {
         //std::cout << "Binding texture name=" << texture->GetTextureName() << std::endl;
         texture->Bind();
@@ -347,12 +343,5 @@ void SceneNode::InternalRender(const RenderBlock* renderBlock, Shader* shader, S
     //std::cout << "=============================" << std::endl;
     //std::cout << "Rendering " << GetName() << std::endl;
     Render(projection, modelview, params);
-
-    if(textureBackup != params.GetCurrentTexture())
-    {
-        params.SetCurrentTexture(textureBackup);
-        if(textureBackup)
-            textureBackup->Bind();
-    }
 }
 
