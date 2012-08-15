@@ -134,7 +134,7 @@ class SceneNode
         enum FLAGS
         {
             FLAG_NONE       = 0x0000,
-            FLAG_2D         = 0x0001
+            FLAG_HUD         = 0x0001
         };
 
     protected:

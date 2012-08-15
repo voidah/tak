@@ -305,7 +305,7 @@ void SceneNode::InternalPrepareRender(RenderList& renderList, Matrix4f projectio
 
     SortKeyType key = 0;
 
-    if(IsFlagSet(FLAG_2D))
+    if(IsFlagSet(FLAG_HUD))
         key = 1;
 
     m_renderBlock.Set(this, projection, modelview);
