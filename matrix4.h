@@ -59,6 +59,8 @@ class Matrix4
         void ApplyRotation(const T& angle, const T& x, const T& y, const T&z);
         void ApplyScale(const T& x, const T& y, const T&z);
 
+        Vector3<T> GetTranslation() const;
+
         const T* GetInternalValues() const;
         T* GetInternalValues();
         std::string ToString(const std::string& lineBegin = "|", const std::string& lineEnd = "|\n") const;
@@ -394,13 +396,25 @@ void Matrix4<T>::ApplyScale(const T& x, const T& y, const T&z)
     *this *= tmp;
 }
 
+template <class T>
+Vector3<T> Matrix4<T>::GetTranslation() const
+{
+    // NOTE: Works only if the matrix doesn't contains scale information (only rotation and translation)
+    // Reference: http://www.gamedev.net/topic/397751-how-to-get-camera-position/
+    T x = -(m_11 * m_14 + m_21 * m_24 + m_31 * m_34);
+    T y = -(m_12 * m_14 + m_22 * m_24 + m_32 * m_34);
+    T z = -(m_13 * m_14 + m_23 * m_24 + m_33 * m_34);
+
+    return Vector3<T>(x, y, z);
+}
+
     template <class T>
 T* Matrix4<T>::GetInternalValues()
 {
     return m_values;
 }
 
-    template <class T>
+template <class T>
 const T* Matrix4<T>::GetInternalValues() const
 {
     return m_values;
