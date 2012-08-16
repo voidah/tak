@@ -11,7 +11,7 @@ SceneNode::SortKey::FieldOption SceneNode::SortKey::m_fieldOption[SceneNode::Sor
     {SceneNode::SortKey::TEST, 3}
 };
 
-SceneNode::SceneNode(const std::string& name) : m_parent(0), m_name(name), m_flags(FLAG_NONE), m_rigidBody(0), m_active(true), m_visible(true), m_posX(0), m_posY(0), m_posZ(0), m_rotX(0), m_rotY(0), m_rotZ(0), m_scaleX(1.f), m_scaleY(1.f), m_scaleZ(1.f)
+SceneNode::SceneNode(const std::string& name) : m_parent(0), m_name(name), m_flags(FLAG_NONE), m_rigidBody(0), m_active(true), m_visible(true), m_position(0, 0, 0), m_rotation(0, 0, 0), m_scale(1.f, 1.f, 1.f)
 {
     m_id = m_idGenerator.Get();
 
@@ -98,9 +98,9 @@ void SceneNode::RemoveChild(SceneNode* node)
 
 void SceneNode::SetPositionRelative(float x, float y, float z)
 {
-    m_posX += x;
-    m_posY += y;
-    m_posZ += z;
+    m_position.x += x;
+    m_position.y += y;
+    m_position.z += z;
 }
 
 void SceneNode::SetPositionRelative(const Vector3f& pos)
@@ -110,9 +110,9 @@ void SceneNode::SetPositionRelative(const Vector3f& pos)
 
 void SceneNode::SetPositionAbsolute(float x, float y, float z)
 {
-    m_posX = x;
-    m_posY = y;
-    m_posZ = z;
+    m_position.x = x;
+    m_position.y = y;
+    m_position.z = z;
 }
 
 void SceneNode::SetPositionAbsolute(const Vector3f& pos)
@@ -122,9 +122,9 @@ void SceneNode::SetPositionAbsolute(const Vector3f& pos)
 
 void SceneNode::SetRotationRelative(float x, float y, float z)
 {
-    m_rotX += x;
-    m_rotY += y;
-    m_rotZ += z;
+    m_rotation.x += x;
+    m_rotation.y += y;
+    m_rotation.z += z;
 }
 
 void SceneNode::SetRotationRelative(const Vector3f& rot)
@@ -134,9 +134,9 @@ void SceneNode::SetRotationRelative(const Vector3f& rot)
 
 void SceneNode::SetRotationAbsolute(float x, float y, float z)
 {
-    m_rotX = x;
-    m_rotY = y;
-    m_rotZ = z;
+    m_rotation.x = x;
+    m_rotation.y = y;
+    m_rotation.z = z;
 }
 
 void SceneNode::SetRotationAbsolute(const Vector3f& rot)
@@ -146,9 +146,9 @@ void SceneNode::SetRotationAbsolute(const Vector3f& rot)
 
 void SceneNode::SetScaleRelative(float x, float y, float z)
 {
-    m_scaleX += x;
-    m_scaleY += y;
-    m_scaleZ += z;
+    m_scale.x += x;
+    m_scale.y += y;
+    m_scale.z += z;
 }
 
 void SceneNode::SetScaleRelative(const Vector3f& scale)
@@ -158,9 +158,9 @@ void SceneNode::SetScaleRelative(const Vector3f& scale)
 
 void SceneNode::SetScaleAbsolute(float x, float y, float z)
 {
-    m_scaleX = x;
-    m_scaleY = y;
-    m_scaleZ = z;
+    m_scale.x = x;
+    m_scale.y = y;
+    m_scale.z = z;
 }
 
 void SceneNode::SetScaleAbsolute(const Vector3f& scale)
@@ -168,19 +168,24 @@ void SceneNode::SetScaleAbsolute(const Vector3f& scale)
     SetScaleAbsolute(scale.x, scale.y, scale.z);
 }
 
+const Vector3f& SceneNode::GetPosition() const
+{
+    return m_position;
+}
+
 float SceneNode::GetRotX() const
 {
-    return m_rotX;
+    return m_rotation.x;
 }
 
 float SceneNode::GetRotY() const
 {
-    return m_rotY;
+    return m_rotation.y;
 }
 
 float SceneNode::GetRotZ() const
 {
-    return m_rotZ;
+    return m_rotation.z;
 }
 
 RigidBody* SceneNode::AddToPhysic(float weight, const Vector3f& position)
@@ -224,13 +229,13 @@ void SceneNode::BindToRigidBody(RigidBody* rigidBody)
     m_rigidBody = rigidBody;
 }
 
-void SceneNode::UpdateProjectionMatrix(Matrix4f& /*projection*/)
+void SceneNode::UpdateProjectionMatrix(Matrix4f& /*projection*/, Camera* /*camera*/)
 {
     // Bu default do nothing, but a derived node coule
     // override this method to change the projection matrix
 }
 
-void SceneNode::UpdateModelviewMatrix(Matrix4f& /*modelview*/)
+void SceneNode::UpdateModelviewMatrix(Matrix4f& /*modelview*/, Camera* /*camera*/)
 {
     // Bu default do nothing, but a derived node coule
     // override this method to change the model view matrix
@@ -300,14 +305,14 @@ void SceneNode::InternalPrepareRender(RenderList& renderList, Matrix4f projectio
     if(!IsVisible())
         return;
 
-    modelview.ApplyTranslation(m_posX, m_posY, m_posZ);
-    modelview.ApplyRotation(m_rotX, 1.f, 0, 0);
-    modelview.ApplyRotation(m_rotY, 0, 1.f, 0);
-    modelview.ApplyRotation(m_rotZ, 0, 0, 1.f);
-    modelview.ApplyScale(m_scaleX, m_scaleY, m_scaleZ);
+    modelview.ApplyTranslation(m_position.x, m_position.y, m_position.z);
+    modelview.ApplyRotation(m_rotation.x, 1.f, 0, 0);
+    modelview.ApplyRotation(m_rotation.y, 0, 1.f, 0);
+    modelview.ApplyRotation(m_rotation.z, 0, 0, 1.f);
+    modelview.ApplyScale(m_scale.x, m_scale.y, m_scale.z);
 
-    UpdateProjectionMatrix(projection);
-    UpdateModelviewMatrix(modelview);
+    UpdateProjectionMatrix(projection, params.GetCamera());
+    UpdateModelviewMatrix(modelview, params.GetCamera());
 
     SortKey key;
 

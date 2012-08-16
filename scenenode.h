@@ -195,6 +195,8 @@ class SceneNode
         void SetScaleAbsolute(float x, float y, float z);
         void SetScaleAbsolute(const Vector3f& scale);
 
+        const Vector3f& GetPosition() const;
+
         float GetRotX() const;
         float GetRotY() const;
         float GetRotZ() const;
@@ -220,8 +222,8 @@ class SceneNode
         virtual void Update(float elapsedTime, SceneParams& params) = 0;
         virtual void Render(const Matrix4f& projection, const Matrix4f& modelview, SceneParams& params) = 0;
 
-        virtual void UpdateProjectionMatrix(Matrix4f& projection);
-        virtual void UpdateModelviewMatrix(Matrix4f& modelview);
+        virtual void UpdateProjectionMatrix(Matrix4f& projection, Camera* camera);
+        virtual void UpdateModelviewMatrix(Matrix4f& modelview, Camera* camera);
 
         void SetFlag(FLAGS flag);
         void UnsetFlag(FLAGS flag);
@@ -252,9 +254,9 @@ class SceneNode
         bool m_active;
         bool m_visible;
 
-        float m_posX, m_posY, m_posZ;
-        float m_rotX, m_rotY, m_rotZ;
-        float m_scaleX, m_scaleY, m_scaleZ;
+        Vector3f m_position;
+        Vector3f m_rotation;
+        Vector3f m_scale;
 
         RenderBlock m_renderBlock;
 
