@@ -3,6 +3,8 @@
 
 #include "texture.h"
 
+class Camera;
+
 class SceneParams
 {
     public:
@@ -16,10 +18,14 @@ class SceneParams
         void SetCurrentTexture(Texture* texture);
         Texture* GetCurrentTexture() const;
 
+        void SetCamera(Camera* camera);
+        Camera* GetCamera() const;
+
     private:
         int m_width;
         int m_height;
         Texture* m_currentTexture;
+        Camera* m_camera;
 };
 
 #endif // SCENEPARAMS_H__

@@ -1,7 +1,7 @@
 #include "sceneparams.h"
 #include <cassert>
 
-SceneParams::SceneParams() : m_width(0), m_height(0), m_currentTexture(0)
+SceneParams::SceneParams() : m_width(0), m_height(0), m_currentTexture(0), m_camera(0)
 {
 }
 
@@ -37,3 +37,12 @@ Texture* SceneParams::GetCurrentTexture() const
     return m_currentTexture;
 }
 
+void SceneParams::SetCamera(Camera* camera)
+{
+    m_camera = camera;
+}
+
+Camera* SceneParams::GetCamera() const
+{
+    return m_camera;
+}

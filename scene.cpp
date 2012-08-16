@@ -14,6 +14,7 @@ void Scene::Update(float elapsedTime)
 {
     if(m_root)
     {
+        m_params.SetCamera(m_camera);
         m_root->InternalUpdate(elapsedTime, m_params);
 
         if(m_camera)
@@ -36,6 +37,7 @@ bool Scene::Render()
         // Render!
         m_defaultShader->Use();
         m_params.SetCurrentTexture(0);
+        m_params.SetCamera(m_camera);
         for(SceneNode::RenderList::const_iterator it = m_renderList.begin(); it != m_renderList.end(); ++it)
         {
             SceneNode* node = it->second->GetNode();
