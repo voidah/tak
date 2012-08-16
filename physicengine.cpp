@@ -45,7 +45,7 @@ void PhysicEngine::Update(float elapsedTime)
     m_dynamicsWorld->stepSimulation(elapsedTime, 10);
 }
 
-bool PhysicEngine::RayCastClosestCollisionPoint(const Vector3f& from, const Vector3f& to, Vector3f& hitPoint, RigidBody*& hitBody) const
+bool PhysicEngine::RayCastClosestCollisionPoint(const Vector3f& from, const Vector3f& to, Vector3f& hitPoint, SceneNode*& hitNode) const
 {
     btVector3 btFrom = btVector3(from.x, from.y, from.z);
     btVector3 btTo = btVector3(to.x, to.y, to.z);
@@ -56,9 +56,12 @@ bool PhysicEngine::RayCastClosestCollisionPoint(const Vector3f& from, const Vect
     {
         btRigidBody* pBody = btRigidBody::upcast(rayCallback.m_collisionObject);
 
-        hitBody = 0;
+        hitNode = 0;
         if(pBody)
-            hitBody = (RigidBody*)pBody->getUserPointer();
+        {
+            RigidBody* hitBody = (RigidBody*)pBody->getUserPointer();
+            hitNode = hitBody->GetLinkedNode();
+        }
 
         btVector3& hit = rayCallback.m_hitPointWorld;
         hitPoint.x = hit.x();
