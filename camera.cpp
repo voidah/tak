@@ -48,3 +48,7 @@ const Matrix4f& Camera::GetMatrix() const
     return m_view;
 }
 
+Vector3f Camera::GetWorldPosition() const
+{
+    return m_view.GetTranslation();
+}
