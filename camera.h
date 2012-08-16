@@ -20,6 +20,8 @@ class Camera
         virtual void Update(float elapsedTime) = 0;
         const Matrix4f& GetMatrix() const;
 
+        Vector3f GetWorldPosition() const;
+
     protected:
         Matrix4f m_view;
 };
