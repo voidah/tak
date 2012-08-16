@@ -4,6 +4,8 @@
 #include <btBulletDynamicsCommon.h>
 #include "vector3.h"
 
+class SceneNode;
+
 class RigidBody
 {
     public:
@@ -24,9 +26,16 @@ class RigidBody
 
         btRigidBody* GetInternalHandle() const;
 
+        void LinkWithNode(SceneNode* node);
+        SceneNode* GetLinkedNode() const;
+
     protected:
+        void SetInternalHandle(btRigidBody* handle);
+
+    private:
         btRigidBody* m_rigidBody;
         float m_weight;
+        SceneNode* m_node;
 };
 
 class BoxRigidBody : public RigidBody

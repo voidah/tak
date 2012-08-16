@@ -95,11 +95,12 @@ class Player
             btVector3 fallInertia(0,0,0);
             m_shape->calculateLocalInertia(mass,fallInertia);
             btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,motionState,m_shape,fallInertia);
-            m_rigidBody = new btRigidBody(fallRigidBodyCI);
+            
+            btRigidBody* rb = new btRigidBody(fallRigidBodyCI);
+            rb->setSleepingThresholds(0, 0);
+            rb->setAngularFactor(0);
+            SetInternalHandle(rb);
 
-
-            m_rigidBody->setSleepingThresholds(0, 0);
-            m_rigidBody->setAngularFactor(0);
             SetKinematic();
         }
 

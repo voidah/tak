@@ -45,6 +45,31 @@ void PhysicEngine::Update(float elapsedTime)
     m_dynamicsWorld->stepSimulation(elapsedTime, 10);
 }
 
+bool PhysicEngine::RayCastClosestCollisionPoint(const Vector3f& from, const Vector3f& to, Vector3f& hitPoint, RigidBody*& hitBody) const
+{
+    btVector3 btFrom = btVector3(from.x, from.y, from.z);
+    btVector3 btTo = btVector3(to.x, to.y, to.z);
+    btCollisionWorld::ClosestRayResultCallback rayCallback(btFrom, btTo);
+    m_dynamicsWorld->rayTest(btFrom, btTo, rayCallback);
+
+    if(rayCallback.hasHit())
+    {
+        btRigidBody* pBody = btRigidBody::upcast(rayCallback.m_collisionObject);
+
+        hitBody = 0;
+        if(pBody)
+            hitBody = (RigidBody*)pBody->getUserPointer();
+
+        btVector3& hit = rayCallback.m_hitPointWorld;
+        hitPoint.x = hit.x();
+        hitPoint.y = hit.y();
+        hitPoint.z = hit.z();
+        return true;
+    }
+
+    return false;
+}
+
 void PhysicEngine::Init()
 {
     m_broadphase = new btDbvtBroadphase();

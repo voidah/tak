@@ -227,6 +227,7 @@ void SceneNode::ShowGraph(bool useGraphviz) const
 void SceneNode::BindToRigidBody(RigidBody* rigidBody)
 {
     m_rigidBody = rigidBody;
+    m_rigidBody->LinkWithNode(this);
 }
 
 void SceneNode::UpdateProjectionMatrix(Matrix4f& /*projection*/, Camera* /*camera*/)

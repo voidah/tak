@@ -1,7 +1,7 @@
 #include "rigidbody.h"
 #include "define.h"
 
-RigidBody::RigidBody(float weight) : m_rigidBody(0), m_weight(weight)
+RigidBody::RigidBody(float weight) : m_rigidBody(0), m_weight(weight), m_node(0)
 {
 }
 
@@ -80,6 +80,22 @@ btRigidBody* RigidBody::GetInternalHandle() const
     return m_rigidBody;
 }
 
+void RigidBody::LinkWithNode(SceneNode* node)
+{
+    m_node = node;
+}
+
+SceneNode* RigidBody::GetLinkedNode() const
+{
+    return m_node;
+}
+
+void RigidBody::SetInternalHandle(btRigidBody* handle)
+{
+    m_rigidBody = handle;
+    m_rigidBody->setUserPointer(this);
+}
+
 BoxRigidBody::BoxRigidBody(float weight, const Vector3f& position, const Vector3f& size) : RigidBody(weight)
 {
     btCollisionShape* fallShape = new btBoxShape(btVector3(size.x / 2.f, size.y / 2.f, size.z / 2.f));
@@ -92,7 +108,7 @@ BoxRigidBody::BoxRigidBody(float weight, const Vector3f& position, const Vector3
     btVector3 fallInertia(0,0,0);
     fallShape->calculateLocalInertia(mass,fallInertia);
     btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,fallMotionState,fallShape,fallInertia);
-    m_rigidBody = new btRigidBody(fallRigidBodyCI);
+    SetInternalHandle(new btRigidBody(fallRigidBodyCI));
 }
 
 BoxRigidBody::~BoxRigidBody()
@@ -111,7 +127,7 @@ CapsuleRigidBody::CapsuleRigidBody(float weight) : RigidBody(weight)
     btVector3 fallInertia(0,0,0);
     fallShape->calculateLocalInertia(mass,fallInertia);
     btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass,fallMotionState,fallShape,fallInertia);
-    m_rigidBody = new btRigidBody(fallRigidBodyCI);
+    SetInternalHandle(new btRigidBody(fallRigidBodyCI));
 }
 
 CapsuleRigidBody::~CapsuleRigidBody()

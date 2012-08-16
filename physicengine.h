@@ -34,6 +34,8 @@ class PhysicEngine
 
         void Update(float elapsedTime);
 
+        bool RayCastClosestCollisionPoint(const Vector3f& from, const Vector3f& to, Vector3f& hitPoint, RigidBody*& hitBody) const;
+
     private:
         PhysicEngine();
         ~PhysicEngine();
