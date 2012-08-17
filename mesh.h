@@ -43,16 +43,19 @@ struct VertexData3d
     static const bool HAS_TCOORD = true;
 
     typedef float VCOORD_TYPE;
+    typedef float NORMAL_TYPE;
     typedef float COLOR_TYPE;
     typedef float TCOORD_TYPE;
 
     enum  A{ VCOORD_COUNT = 3 };
     VertexData3d::VCOORD_TYPE x, y, z;
 
-    enum B { COLOR_COUNT = 3 };
+    enum B { NORMAL_COUNT = 0 };
+
+    enum C { COLOR_COUNT = 3 };
     VertexData3d::COLOR_TYPE r, g, b;
 
-    enum C { TCOORD_COUNT = 2 };
+    enum D { TCOORD_COUNT = 2 };
     VertexData3d::TCOORD_TYPE u, v;
 
     VertexData3d() {}
@@ -68,16 +71,19 @@ struct VertexData2d
     static const bool HAS_TCOORD = true;
 
     typedef float VCOORD_TYPE;
+    typedef float NORMAL_TYPE;
     typedef float COLOR_TYPE;
     typedef float TCOORD_TYPE;
 
     enum  A{ VCOORD_COUNT = 2 };
     VertexData3d::VCOORD_TYPE x, y;
 
-    enum B { COLOR_COUNT = 3 };
+    enum B { NORMAL_COUNT = 0 };
+
+    enum C { COLOR_COUNT = 3 };
     VertexData3d::COLOR_TYPE r, g, b;
 
-    enum C { TCOORD_COUNT = 2 };
+    enum D { TCOORD_COUNT = 2 };
     VertexData3d::TCOORD_TYPE u, v;
 
     float padding;
@@ -122,6 +128,8 @@ class Mesh
     template <class T>
 Mesh<T>::Mesh(MESH_TYPE meshType) : m_meshType(meshType), m_isValid(false), m_transparentStart(-1)
 {
+    // For maximum performance T's size must be a multiple of 32
+    assert(sizeof(T) % 32 == 0);
 }
 
     template <class T>
@@ -233,16 +241,37 @@ void Mesh<T>::RenderRange(int begin, int count) const
 
     glClientActiveTexture(GL_TEXTURE0);
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexVboId);
+
+    char* dataOffset = 0;
+
     glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(T::VCOORD_COUNT, GL_FLOAT, sizeof(VertexData), (char*)0);
-    glEnableClientState(GL_COLOR_ARRAY);
-    glColorPointer(T::COLOR_COUNT, GL_FLOAT, sizeof(VertexData), (char*)(T::VCOORD_COUNT * sizeof(typename T::VCOORD_TYPE)));
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glTexCoordPointer(T::TCOORD_COUNT, GL_FLOAT, sizeof(VertexData), (char*)(T::VCOORD_COUNT * sizeof(typename T::VCOORD_TYPE)) + (T::COLOR_COUNT * sizeof(typename T::COLOR_TYPE)));
+    glVertexPointer(T::VCOORD_COUNT, GL_FLOAT, sizeof(VertexData), dataOffset);
+    dataOffset += T::VCOORD_COUNT * sizeof(typename T::VCOORD_TYPE);
+
+    if(T::HAS_NORMAL)
+    {
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glNormalPointer(GL_FLOAT, sizeof(VertexData), dataOffset);
+        dataOffset += T::NORMAL_COUNT * sizeof(typename T::NORMAL_TYPE);
+    }
+
+    if(T::HAS_COLOR)
+    {
+        glEnableClientState(GL_COLOR_ARRAY);
+        glColorPointer(T::COLOR_COUNT, GL_FLOAT, sizeof(VertexData), dataOffset);
+        dataOffset += T::COLOR_COUNT * sizeof(typename T::COLOR_TYPE);
+    }
+
+    if(T::HAS_TCOORD)
+    {
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        glTexCoordPointer(T::TCOORD_COUNT, GL_FLOAT, sizeof(VertexData), dataOffset);
+        dataOffset += T::TCOORD_COUNT * sizeof(typename T::TCOORD_TYPE);
+    }
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexVboId);
     //glDrawElements(GL_QUADS, m_vertexCount, GL_UNSIGNED_SHORT, (char*)0);
-    // TODO
+
     if(m_meshType == MT_QUAD)
         glDrawRangeElements(GL_QUADS, begin, m_vertexCount, begin + count, GL_UNSIGNED_SHORT, (char*)0);
     else if(m_meshType == MT_TRIANGLE)
@@ -252,9 +281,16 @@ void Mesh<T>::RenderRange(int begin, int count) const
         assert(false); // Format not supported yet
     }
 
+    if(T::HAS_TCOORD)
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    if(T::HAS_COLOR)
+        glDisableClientState(GL_COLOR_ARRAY);
+
+    if(T::HAS_NORMAL)
+        glDisableClientState(GL_NORMAL_ARRAY);
+
     glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 #endif // MESH_H__
