@@ -1,8 +1,8 @@
 #ifndef SCENEPARAMS_H__
 #define SCENEPARAMS_H__
 
-#include "texture.h"
-
+class Texture;
+class Shader;
 class Camera;
 
 class SceneParams
@@ -15,8 +15,15 @@ class SceneParams
         void SetHeight(int v);
         int GetHeight() const;
 
+        void SetDefaultTexture(Texture* texture);
+        Texture* GetDefaultTexture() const;
         void SetCurrentTexture(Texture* texture);
         Texture* GetCurrentTexture() const;
+
+        void SetDefaultShader(Shader* shader);
+        Shader* GetDefaultShader() const;
+        void SetCurrentShader(Shader* shader);
+        Shader* GetCurrentShader() const;
 
         void SetCamera(Camera* camera);
         Camera* GetCamera() const;
@@ -24,7 +31,10 @@ class SceneParams
     private:
         int m_width;
         int m_height;
+        Texture* m_defaultTexture;
         Texture* m_currentTexture;
+        Shader* m_defaultShader;
+        Shader* m_currentShader;
         Camera* m_camera;
 };
 
