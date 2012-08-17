@@ -13,7 +13,6 @@ class Shader : public Resource<Shader>
         virtual bool Load(const std::string& key, const OptionList& options);
         virtual bool Release();
 
-        bool LoadFromMemory(const std::string& vertShader, const std::string& fragShader, bool verbose = false);
         void Use() const;
 
         bool IsValid() const;
@@ -39,6 +38,8 @@ class Shader : public Resource<Shader>
         bool m_valid;
 
     private:
+        bool LoadFromMemory(const std::string& vertShader, const std::string& fragShader, bool verbose = false);
+
         bool CheckShaderError(GLenum shader, bool verbose);
         bool CheckProgramError(GLenum program, bool showWarning, bool verbose);
         bool LoadFromFile(const std::string& vertFile, const std::string& fragFile, bool verbose = false);

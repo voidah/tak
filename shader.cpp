@@ -52,70 +52,6 @@ bool Shader::LoadFromFile(const std::string& vertFile, const std::string& fragFi
     return LoadFromMemory(vertexShader, fragmentShader, verbose);
 }
 
-bool Shader::LoadFromMemory(const std::string& vertShader, const std::string& fragShader, bool verbose)
-{
-    const char* my_vertex_shader_source = vertShader.c_str();
-    const char* my_fragment_shader_source = fragShader.c_str();
-
-    //std::cout << fragmentShader << std::endl;
-    //std::cout << vertexShader << std::endl;
-
-    m_program = glCreateProgram();
-    CHECK_GL_ERROR();
-    assert(glIsProgram(m_program));
-
-    m_vertexShader = glCreateShader(GL_VERTEX_SHADER_ARB);
-    CHECK_GL_ERROR();
-    assert(glIsShader(m_vertexShader));
-
-    m_fragmentShader = glCreateShader(GL_FRAGMENT_SHADER_ARB);
-    CHECK_GL_ERROR();
-    assert(glIsShader(m_fragmentShader));
-
-    // Load Shader Sources
-    glShaderSource(m_vertexShader, 1, (const GLchar**)&my_vertex_shader_source, NULL);
-    CHECK_GL_ERROR();
-    glShaderSource(m_fragmentShader, 1, (const GLchar**)&my_fragment_shader_source, NULL);
-    CHECK_GL_ERROR();
-
-    // Compile The Shaders
-    if(verbose)
-        std::cout << "Compiling vertex shader..." << std::endl;
-    glCompileShader(m_vertexShader);
-    if(!CheckShaderError(m_vertexShader, verbose))
-        return false;
-
-    if(verbose)
-        std::cout << "Compiling fragment shader..." << std::endl;
-    glCompileShader(m_fragmentShader);
-    if(!CheckShaderError(m_fragmentShader, verbose))
-        return false;
-
-    // Attach The Shader Objects To The Program Object
-    glAttachShader(m_program, m_vertexShader);
-    CHECK_GL_ERROR();
-    glAttachShader(m_program, m_fragmentShader);
-    CHECK_GL_ERROR();
-
-    // Link The Program Object
-    glLinkProgram(m_program);
-    //if(!CheckProgramError(m_program, verbose))
-    //    return false;
-    CheckProgramError(m_program, true, verbose);
-    CHECK_GL_ERROR();
-
-    if(verbose)
-    {
-        std::cout << "Shader attributes:" << std::endl;
-        ShowAttributes();
-        std::cout << "Shader uniforms:" << std::endl;
-        ShowUniforms();
-    }
-
-    m_valid = true;
-    return true;
-}
-
 void Shader::Use() const
 {
     assert(m_valid);
@@ -214,6 +150,70 @@ void Shader::ShowUniforms() const
         std::cout << "Location " << location << ": " << name << std::endl;
     }
     delete [] name;
+}
+
+bool Shader::LoadFromMemory(const std::string& vertShader, const std::string& fragShader, bool verbose)
+{
+    const char* my_vertex_shader_source = vertShader.c_str();
+    const char* my_fragment_shader_source = fragShader.c_str();
+
+    //std::cout << fragmentShader << std::endl;
+    //std::cout << vertexShader << std::endl;
+
+    m_program = glCreateProgram();
+    CHECK_GL_ERROR();
+    assert(glIsProgram(m_program));
+
+    m_vertexShader = glCreateShader(GL_VERTEX_SHADER_ARB);
+    CHECK_GL_ERROR();
+    assert(glIsShader(m_vertexShader));
+
+    m_fragmentShader = glCreateShader(GL_FRAGMENT_SHADER_ARB);
+    CHECK_GL_ERROR();
+    assert(glIsShader(m_fragmentShader));
+
+    // Load Shader Sources
+    glShaderSource(m_vertexShader, 1, (const GLchar**)&my_vertex_shader_source, NULL);
+    CHECK_GL_ERROR();
+    glShaderSource(m_fragmentShader, 1, (const GLchar**)&my_fragment_shader_source, NULL);
+    CHECK_GL_ERROR();
+
+    // Compile The Shaders
+    if(verbose)
+        std::cout << "Compiling vertex shader..." << std::endl;
+    glCompileShader(m_vertexShader);
+    if(!CheckShaderError(m_vertexShader, verbose))
+        return false;
+
+    if(verbose)
+        std::cout << "Compiling fragment shader..." << std::endl;
+    glCompileShader(m_fragmentShader);
+    if(!CheckShaderError(m_fragmentShader, verbose))
+        return false;
+
+    // Attach The Shader Objects To The Program Object
+    glAttachShader(m_program, m_vertexShader);
+    CHECK_GL_ERROR();
+    glAttachShader(m_program, m_fragmentShader);
+    CHECK_GL_ERROR();
+
+    // Link The Program Object
+    glLinkProgram(m_program);
+    //if(!CheckProgramError(m_program, verbose))
+    //    return false;
+    CheckProgramError(m_program, true, verbose);
+    CHECK_GL_ERROR();
+
+    if(verbose)
+    {
+        std::cout << "Shader attributes:" << std::endl;
+        ShowAttributes();
+        std::cout << "Shader uniforms:" << std::endl;
+        ShowUniforms();
+    }
+
+    m_valid = true;
+    return true;
 }
 
 bool Shader::CheckShaderError(GLenum shader, bool verbose)
