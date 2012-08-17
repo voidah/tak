@@ -26,3 +26,4 @@
 #include "resourcemanager.h"
 #include "resource.h"
 #include "model.h"
+#include "sound.h"
