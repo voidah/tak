@@ -141,7 +141,13 @@ void Engine::Render(float elapsedTime)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
     m_game->Render3d(elapsedTime);
-    m_scene.Render();
+
+    Shader* defaultShader = m_game->GetDefaultShader();
+    assert(defaultShader);
+    Texture* defaultTexture = m_game->GetDefaultTexture();
+    assert(defaultTexture);
+    m_scene.Render(defaultShader, defaultTexture);
+
     glDisable(GL_BLEND);
     glPopMatrix();
 

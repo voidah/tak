@@ -27,11 +27,13 @@ class SceneNode
                     std::cout << "Created RenderBlock with id=" << m_id << std::endl;
                 }
 
-                void Set(SceneNode* node, const Matrix4f& projection, const Matrix4f& modelview)
+                void Set(SceneNode* node, const Matrix4f& projection, const Matrix4f& modelview, Texture* texture, Shader* shader)
                 {
                     m_node = node;
                     m_projection = projection;
                     m_modelview = modelview;
+                    m_texture = texture;
+                    m_shader = shader;
                 }
 
                 virtual ~RenderBlock()
@@ -59,6 +61,16 @@ class SceneNode
                     return m_modelview;
                 }
 
+                Texture* GetTexture() const
+                {
+                    return m_texture;
+                }
+
+                Shader* GetShader() const
+                {
+                    return m_shader;
+                }
+
             private:
                 static UniqueIdGenerator<uint64> m_idGenerator;
                 uint64 m_id;
@@ -66,6 +78,9 @@ class SceneNode
                 SceneNode* m_node;
                 Matrix4f m_projection;
                 Matrix4f m_modelview;
+
+                Texture* m_texture;
+                Shader* m_shader;
         };
 
     public:
@@ -78,7 +93,7 @@ class SceneNode
                 // Order is important, the item with the higher priority is first...
                 // LAST _must_ be the last item in the enum
                 // When a new field is added, it must be added to m_fieldOption
-                enum Field { HUD, TEST, LAST };
+                enum Field { HUD, SHADER, TEXTURE, LAST };
 
             public:
                 SortKey() : m_value(0)
@@ -160,6 +175,8 @@ class SceneNode
         Material& GetMaterial();
         void SetTexture(Texture* texture);
         Texture* GetTexture() const;
+        void SetShader(Shader* shader);
+        Shader* GetShader() const;
 
         void SetActive(bool v);
         bool IsActive() const;
@@ -228,7 +245,7 @@ class SceneNode
 
         bool InternalUpdate(float elapsedTime, SceneParams& params);
         void InternalPrepareRender(RenderList& renderList, Matrix4f projection, Matrix4f modelview, SceneParams& params);
-        void InternalRender(const RenderBlock* renderBlock, Shader* shader, SceneParams& params);
+        void InternalRender(const RenderBlock* renderBlock, SceneParams& params);
 
         void DeleteRecursively(SceneNode* node);
 

@@ -8,7 +8,8 @@ UniqueIdGenerator<uint64> SceneNode::RenderBlock::m_idGenerator;
 // The order of these fields must match the order found in the SortKey::Field enum
 SceneNode::SortKey::FieldOption SceneNode::SortKey::m_fieldOption[SceneNode::SortKey::LAST] = {
     {SceneNode::SortKey::HUD, 1},
-    {SceneNode::SortKey::TEST, 3}
+    {SceneNode::SortKey::SHADER, 4},
+    {SceneNode::SortKey::TEXTURE, 5}
 };
 
 SceneNode::SceneNode(const std::string& name) : m_parent(0), m_name(name), m_flags(FLAG_NONE), m_rigidBody(0), m_active(true), m_visible(true), m_position(0, 0, 0), m_rotation(0, 0, 0), m_scale(1.f, 1.f, 1.f)
@@ -48,6 +49,16 @@ void SceneNode::SetTexture(Texture* texture)
 Texture* SceneNode::GetTexture() const
 {
     return m_material.texture;
+}
+
+void SceneNode::SetShader(Shader* shader)
+{
+    m_material.shader = shader;
+}
+
+Shader* SceneNode::GetShader() const
+{
+    return m_material.shader;
 }
 
 void SceneNode::SetActive(bool v)
@@ -326,6 +337,9 @@ void SceneNode::InternalPrepareRender(RenderList& renderList, Matrix4f projectio
     if(!IsVisible())
         return;
 
+    assert(params.GetDefaultShader());
+    assert(params.GetDefaultTexture());
+
     modelview.ApplyTranslation(m_position.x, m_position.y, m_position.z);
     modelview.ApplyRotation(m_rotation.x, 1.f, 0, 0);
     modelview.ApplyRotation(m_rotation.y, 0, 1.f, 0);
@@ -335,12 +349,37 @@ void SceneNode::InternalPrepareRender(RenderList& renderList, Matrix4f projectio
     UpdateProjectionMatrix(projection, params.GetCamera());
     UpdateModelviewMatrix(modelview, params.GetCamera());
 
+    Texture* texture = GetTexture();
+    Shader* shader = GetShader();
+
+    if(!texture)
+        texture = params.GetDefaultTexture();
+    assert(texture);
+
+    if(!shader)
+        shader = params.GetDefaultShader();
+    assert(shader);
+
+
     SortKey key;
 
     if(IsFlagSet(FLAG_HUD))
         key.SetValue(SortKey::HUD, 1);
 
-    m_renderBlock.Set(this, projection, modelview);
+    Resource<Shader>::SequentialKeyType shaderKey = shader->GetSequentialKey();
+    Resource<Texture>::SequentialKeyType textureKey = texture->GetSequentialKey();
+
+    if(shaderKey == Resource<Shader>::INVALID_KEY)
+        shaderKey = 0;
+
+    if(textureKey == Resource<Texture>::INVALID_KEY)
+        textureKey = 0;
+
+    // We add +1 to the key because INVALID_KEY are assigned the value 0
+    key.SetValue(SortKey::SHADER, shaderKey + 1);
+    key.SetValue(SortKey::TEXTURE, textureKey + 1);
+
+    m_renderBlock.Set(this, projection, modelview, texture, shader);
     renderList.insert(std::make_pair(key, &m_renderBlock));
 
     for(ChildNodes::const_iterator it = m_childs.begin(); it != m_childs.end(); ++it)
@@ -349,38 +388,61 @@ void SceneNode::InternalPrepareRender(RenderList& renderList, Matrix4f projectio
     }
 }
 
-void SceneNode::InternalRender(const RenderBlock* renderBlock, Shader* shader, SceneParams& params)
+void SceneNode::InternalRender(const RenderBlock* renderBlock, SceneParams& params)
 {
+    assert(params.GetDefaultShader());
+    assert(params.GetDefaultTexture());
+
     Matrix4f modelview = renderBlock->GetModelviewMatrix();
     Matrix4f projection = renderBlock->GetProjectionMatrix();
+
+    Shader* shader = renderBlock->GetShader();
+    assert(shader);
+    bool newShaderBound = false;
+    if(shader != params.GetCurrentShader())
+    {
+        newShaderBound = true;
+        shader->Use();
+    }
+
+    if(newShaderBound)
+    {
+        //std::cout << "Binding new shader (seqKey=" << shader->GetSequentialKey() << ")";
+        //std::cout << " (old shader was: " << (params.GetCurrentShader() ? params.GetCurrentShader()->GetSequentialKey() : -1) << ")";
+        //std::cout << std::endl;
+    }
+
+    params.SetCurrentShader(shader);
+
 
     shader->SetMat4Uniform("projectionMatrix", projection.GetInternalValues());
     shader->SetMat4Uniform("modelViewMatrix", modelview.GetInternalValues());
     CHECK_GL_ERROR();
 
-    Texture* texture = GetTexture();
-    if(texture && texture != params.GetCurrentTexture())
+    Texture* texture = renderBlock->GetTexture();
+    assert(texture);
+    bool newTextureBound = false;
+    if(texture != params.GetCurrentTexture())
     {
-        //std::cout << "Binding texture name=" << texture->GetTextureName() << std::endl;
+        newTextureBound = true;
         texture->Bind();
-
-        params.SetCurrentTexture(texture);
     }
-    else
+
+    if(newTextureBound)
     {
-        //std::cout << "no bind, same texture" << std::endl;
+        //std::cout << "Binding new texture (seqKey=" << texture->GetSequentialKey() << ")";
+        //std::cout << " (old texture was: " << (params.GetCurrentTexture() ? params.GetCurrentTexture()->GetSequentialKey() : -1) << ")";
+        //std::cout << std::endl;
     }
 
-    //if(!GetParent())
-    //std::cout << "=============================" << std::endl;
-    //std::cout << "Rendering " << GetName() << std::endl;
+    params.SetCurrentTexture(texture);
+
     Render(projection, modelview, params);
 }
 
 void SceneNode::DeleteRecursively(SceneNode* node)
 {
     // TODO all nodes should be allocated/freed using a factory
-    std::cout << "DR: " << node->GetId() << std::endl;
     for(ChildNodes::const_iterator it = node->m_childs.begin(); it != node->m_childs.end(); ++it)
     {
         DeleteRecursively(*it);

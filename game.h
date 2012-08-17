@@ -4,6 +4,9 @@
 #include "engine.h"
 #include <string>
 
+class Shader;
+class Texture;
+
 class Game
 {
     public:
@@ -22,6 +25,9 @@ class Game
         virtual void MouseReleaseEvent(const MOUSE_BUTTON &button, int x, int y) = 0;
         virtual void WindowFocusEvent(bool hasFocus) = 0;
         virtual void WindowResizeEvent(int width, int height) = 0;
+
+        virtual Shader* GetDefaultShader() = 0;
+        virtual Texture* GetDefaultTexture() = 0;
 
         const std::string& GetName() const;
         const std::string& GetVersion() const;

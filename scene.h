@@ -7,6 +7,8 @@
 #include "sceneparams.h"
 #include "camera.h"
 
+class Texture;
+
 class Scene
 {
     public:
@@ -14,7 +16,7 @@ class Scene
         ~Scene();
 
         void Update(float elapsedTime);
-        bool Render();
+        bool Render(Shader* defaultShader, Texture* defaultTexture);
 
         void SetRoot(SceneNode* node);
         SceneNode* GetRoot() const;
@@ -38,9 +40,10 @@ class Scene
         bool InitDefaultShaderIfNeeded();
         bool InitDefaultPerspective(int width, int height);
 
+        void InitSceneParams(Shader* defaultShader, Texture* defaultTexture);
+
     private:
         SceneNode* m_root;
-        Shader* m_defaultShader;
 
         SceneParams m_params;
 
