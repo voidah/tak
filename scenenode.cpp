@@ -35,7 +35,7 @@ const std::string& SceneNode::GetName() const
     return m_name;
 }
 
-SceneNode::Material& SceneNode::GetMaterial()
+Material& SceneNode::GetMaterial()
 {
     return m_material;
 }

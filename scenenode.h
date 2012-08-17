@@ -12,6 +12,7 @@
 #include "texture.h"
 #include "rigidbody.h"
 #include "vector3.h"
+#include "material.h"
 
 
 class SceneNode
@@ -148,14 +149,6 @@ class SceneNode
     public:
         typedef uint64 IdType;
         typedef std::multimap<SortKey, RenderBlock*> RenderList;
-
-    public:
-        struct Material
-        {
-            Texture* texture;
-
-            Material() : texture(0) {}
-        };
 
     public:
         SceneNode(const std::string& name);
