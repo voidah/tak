@@ -278,10 +278,10 @@ void SceneNode::InternalShowGraphGraphviz(std::ofstream& file, const SceneNode* 
     }
 }
 
-void SceneNode::InternalUpdate(float elapsedTime, SceneParams& params)
+bool SceneNode::InternalUpdate(float elapsedTime, SceneParams& params)
 {
     if(!IsActive())
-        return;
+        return true;
 
     if(IsBoundToRigidBody())
     {
@@ -293,12 +293,32 @@ void SceneNode::InternalUpdate(float elapsedTime, SceneParams& params)
         SetRotationAbsolute(m_rigidBody->GetRotation());
     }
 
-    Update(elapsedTime, params);
+    if(!Update(elapsedTime, params))
+        return false;;
 
+    std::vector<SceneNode*> nodesToDelete;
     for(ChildNodes::const_iterator it = m_childs.begin(); it != m_childs.end(); ++it)
     {
-        (*it)->InternalUpdate(elapsedTime, params);
+        if(!(*it)->InternalUpdate(elapsedTime, params))
+            nodesToDelete.push_back(*it);
     }
+
+    for(int i = 0; i < nodesToDelete.size(); ++i)
+    {
+        SceneNode* node = nodesToDelete[i];
+        std::cout << "Automatically removing node and it's childs (id=" << node->GetId() << ")" << std::endl;
+
+        // Delete all childs recursively:
+        for(ChildNodes::const_iterator it = node->m_childs.begin(); it != node->m_childs.end(); ++it)
+            DeleteRecursively(*it);
+
+        RemoveChild(node);
+        // TODO all nodes should be allocated/freed using a factory
+        delete node;
+
+    }
+
+    return true;
 }
 
 void SceneNode::InternalPrepareRender(RenderList& renderList, Matrix4f projection, Matrix4f modelview, SceneParams& params)
@@ -355,5 +375,17 @@ void SceneNode::InternalRender(const RenderBlock* renderBlock, Shader* shader, S
     //std::cout << "=============================" << std::endl;
     //std::cout << "Rendering " << GetName() << std::endl;
     Render(projection, modelview, params);
+}
+
+void SceneNode::DeleteRecursively(SceneNode* node)
+{
+    // TODO all nodes should be allocated/freed using a factory
+    std::cout << "DR: " << node->GetId() << std::endl;
+    for(ChildNodes::const_iterator it = node->m_childs.begin(); it != node->m_childs.end(); ++it)
+    {
+        DeleteRecursively(*it);
+    }
+
+    delete node;
 }
 

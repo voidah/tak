@@ -219,7 +219,7 @@ class SceneNode
     protected:
         void BindToRigidBody(RigidBody* rigidBody);
 
-        virtual void Update(float elapsedTime, SceneParams& params) = 0;
+        virtual bool Update(float elapsedTime, SceneParams& params) = 0;
         virtual void Render(const Matrix4f& projection, const Matrix4f& modelview, SceneParams& params) = 0;
 
         virtual void UpdateProjectionMatrix(Matrix4f& projection, Camera* camera);
@@ -233,9 +233,11 @@ class SceneNode
         void InternalShowGraphConsole(const SceneNode* node, int level = 0) const;
         void InternalShowGraphGraphviz(std::ofstream& file, const SceneNode* node) const;
 
-        void InternalUpdate(float elapsedTime, SceneParams& params);
+        bool InternalUpdate(float elapsedTime, SceneParams& params);
         void InternalPrepareRender(RenderList& renderList, Matrix4f projection, Matrix4f modelview, SceneParams& params);
         void InternalRender(const RenderBlock* renderBlock, Shader* shader, SceneParams& params);
+
+        void DeleteRecursively(SceneNode* node);
 
     private:
         SceneNode* m_parent;
