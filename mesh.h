@@ -128,7 +128,7 @@ class Mesh
     template <class T>
 Mesh<T>::Mesh(MESH_TYPE meshType) : m_meshType(meshType), m_isValid(false), m_transparentStart(-1)
 {
-    // For maximum performance T's size must be a multiple of 32
+    // For maximum performance sizeof(T) size must be a multiple of 32
     assert(sizeof(T) % 32 == 0);
 }
 
