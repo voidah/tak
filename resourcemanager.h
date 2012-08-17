@@ -87,6 +87,8 @@ class ResourceManager
         ~ResourceManager();
         static T* Get(const std::string& key);
 
+        static void Release(T* resource);
+
         static void SetBasePath(const std::string& basePath);
 
     private:
@@ -168,8 +170,68 @@ T* ResourceManager<T>::Get(const std::string& key)
         return 0;
     }
 
+    // Assing sequential key that will be used in the scene graph rendering
+    // to sort on particular resource and thus minimising context change
+    // If a resource was deleted, it's key is now free to use.
+    // This is probably not very efficient, but it's done only once at
+    // resource load.
+    typename T::SequentialKeyType seqKey = 0;
+    // Find highest key + 1
+    for(typename Resources::const_iterator it = m_resources.begin(); it != m_resources.end(); ++it)
+    {
+        typename T::SequentialKeyType key = it->second->GetSequentialKey();
+
+        if(key != T::INVALID_KEY && seqKey <= key)
+            seqKey = key + 1;
+    }
+
+    // Now check if some lower key than seqKey is free to use and use it
+    bool* keyInUse = new bool[seqKey];
+    for(int i = 0; i < seqKey; ++i)
+        keyInUse[i] = false;
+    for(typename Resources::const_iterator it = m_resources.begin(); it != m_resources.end(); ++it)
+    {
+        typename T::SequentialKeyType key = it->second->GetSequentialKey();
+        if(key != T::INVALID_KEY)
+            keyInUse[key] = true;
+    }
+    for(int i = 0; i < seqKey; ++i)
+    {
+        if(keyInUse[i] == false)
+        {
+            seqKey = i;
+            break;
+        }
+    }
+
+    std::cout << "Using seqKey=" << seqKey << std::endl;
+    resource->m_sequentialKey = seqKey;
+
     m_resources.insert(std::make_pair(stdKey, resource));
     return resource;
+}
+
+    template <class T>
+void ResourceManager<T>::Release(T* resource)
+{
+    typename Resources::iterator toDelete = m_resources.end();
+    for(typename Resources::iterator it = m_resources.begin(); it != m_resources.end(); ++it)
+    {
+        if(resource == it->second)
+        {
+            toDelete = it;
+            break;
+        }
+    }
+
+    if(toDelete != m_resources.end())
+    {
+        T* r = toDelete->second;
+        r->Release();
+        delete r;
+
+        m_resources.erase(toDelete);
+    }
 }
 
     template <class T>
