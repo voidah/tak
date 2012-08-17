@@ -89,6 +89,9 @@ bool Texture::Load(const std::string& filename, bool mipmap)
 
 bool Texture::LoadFromMemoryRGBA(const std::string& name, const uint8* data, int width, int height, bool mipmap)
 {
+    std::cout << "WARNING: [Texture::LoadFromMemoryRGBA]: This texture resource will not have a sequential key set, as it's not loaded using the resource manager..." << std::endl;
+
+
     m_textureName = name;
 
     glGenTextures(1, &m_textureId);
