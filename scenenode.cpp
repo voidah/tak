@@ -8,6 +8,7 @@ UniqueIdGenerator<uint64> SceneNode::RenderBlock::m_idGenerator;
 // The order of these fields must match the order found in the SortKey::Field enum
 SceneNode::SortKey::FieldOption SceneNode::SortKey::m_fieldOption[SceneNode::SortKey::LAST] = {
     {SceneNode::SortKey::HUD, 1},
+    {SceneNode::SortKey::DEPTH_TEST, 1},
     {SceneNode::SortKey::SHADER, 4},
     {SceneNode::SortKey::TEXTURE, 5}
 };
@@ -366,6 +367,10 @@ void SceneNode::InternalPrepareRender(RenderList& renderList, Matrix4f projectio
     if(IsFlagSet(FLAG_HUD))
         key.SetValue(SortKey::HUD, 1);
 
+    bool depthTest = !IsFlagSet(FLAG_NO_DEPTH_TEST);
+    if(!depthTest)
+        key.SetValue(SortKey::DEPTH_TEST, 1);
+
     Resource<Shader>::SequentialKeyType shaderKey = shader->GetSequentialKey();
     Resource<Texture>::SequentialKeyType textureKey = texture->GetSequentialKey();
 
@@ -379,7 +384,7 @@ void SceneNode::InternalPrepareRender(RenderList& renderList, Matrix4f projectio
     key.SetValue(SortKey::SHADER, shaderKey + 1);
     key.SetValue(SortKey::TEXTURE, textureKey + 1);
 
-    m_renderBlock.Set(this, projection, modelview, texture, shader);
+    m_renderBlock.Set(this, projection, modelview, texture, shader, depthTest);
     renderList.insert(std::make_pair(key, &m_renderBlock));
 
     for(ChildNodes::const_iterator it = m_childs.begin(); it != m_childs.end(); ++it)
@@ -436,6 +441,13 @@ void SceneNode::InternalRender(const RenderBlock* renderBlock, SceneParams& para
     }
 
     params.SetCurrentTexture(texture);
+
+    bool currentDepthTest = (params.GetCurrentDepthTest() == SceneParams::ENABLED);
+    if(renderBlock->GetDepthTest() != currentDepthTest)
+    {
+        glDepthMask(renderBlock->GetDepthTest());
+        params.SetCurrentDepthTest(renderBlock->GetDepthTest() ? SceneParams::ENABLED : SceneParams::DISABLED);
+    }
 
     Render(projection, modelview, params);
 }

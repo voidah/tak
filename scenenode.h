@@ -27,13 +27,14 @@ class SceneNode
                     std::cout << "Created RenderBlock with id=" << m_id << std::endl;
                 }
 
-                void Set(SceneNode* node, const Matrix4f& projection, const Matrix4f& modelview, Texture* texture, Shader* shader)
+                void Set(SceneNode* node, const Matrix4f& projection, const Matrix4f& modelview, Texture* texture, Shader* shader, bool depthTest)
                 {
                     m_node = node;
                     m_projection = projection;
                     m_modelview = modelview;
                     m_texture = texture;
                     m_shader = shader;
+                    m_depthTest = depthTest;
                 }
 
                 virtual ~RenderBlock()
@@ -71,6 +72,11 @@ class SceneNode
                     return m_shader;
                 }
 
+                bool GetDepthTest() const
+                {
+                    return m_depthTest;
+                }
+
             private:
                 static UniqueIdGenerator<uint64> m_idGenerator;
                 uint64 m_id;
@@ -81,6 +87,8 @@ class SceneNode
 
                 Texture* m_texture;
                 Shader* m_shader;
+
+                bool m_depthTest;
         };
 
     public:
@@ -93,7 +101,7 @@ class SceneNode
                 // Order is important, the item with the higher priority is first...
                 // LAST _must_ be the last item in the enum
                 // When a new field is added, it must be added to m_fieldOption
-                enum Field { HUD, SHADER, TEXTURE, LAST };
+                enum Field { HUD, DEPTH_TEST, SHADER, TEXTURE, LAST };
 
             public:
                 SortKey() : m_value(0)
@@ -222,8 +230,9 @@ class SceneNode
 
         enum FLAGS
         {
-            FLAG_NONE       = 0x0000,
-            FLAG_HUD         = 0x0001
+            FLAG_NONE           = 0x0000,
+            FLAG_HUD            = 0x0001,
+            FLAG_NO_DEPTH_TEST  = 0x0002
         };
 
     protected:

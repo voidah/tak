@@ -8,6 +8,9 @@ class Camera;
 class SceneParams
 {
     public:
+        enum PARAM_VALUE { NOT_SET, ENABLED, DISABLED };
+
+    public:
         SceneParams();
 
         void SetWidth(int v);
@@ -28,6 +31,9 @@ class SceneParams
         void SetCamera(Camera* camera);
         Camera* GetCamera() const;
 
+        void SetCurrentDepthTest(PARAM_VALUE depthTest);
+        PARAM_VALUE GetCurrentDepthTest() const;
+
     private:
         int m_width;
         int m_height;
@@ -36,6 +42,8 @@ class SceneParams
         Shader* m_defaultShader;
         Shader* m_currentShader;
         Camera* m_camera;
+
+        PARAM_VALUE m_depthTest;
 };
 
 #endif // SCENEPARAMS_H__

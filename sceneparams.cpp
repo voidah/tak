@@ -1,7 +1,7 @@
 #include "sceneparams.h"
 #include <cassert>
 
-SceneParams::SceneParams() : m_width(0), m_height(0), m_defaultTexture(0), m_currentTexture(0), m_defaultShader(0), m_currentShader(0), m_camera(0)
+SceneParams::SceneParams() : m_width(0), m_height(0), m_defaultTexture(0), m_currentTexture(0), m_defaultShader(0), m_currentShader(0), m_camera(0), m_depthTest(NOT_SET)
 {
 }
 
@@ -76,3 +76,14 @@ Camera* SceneParams::GetCamera() const
 {
     return m_camera;
 }
+
+void SceneParams::SetCurrentDepthTest(SceneParams::PARAM_VALUE depthTest)
+{
+    m_depthTest = depthTest;
+}
+
+SceneParams::PARAM_VALUE SceneParams::GetCurrentDepthTest() const
+{
+    return m_depthTest;
+}
+
