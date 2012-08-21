@@ -46,9 +46,6 @@ class Engine : public OpenglContext
         bool m_wireframe;
         bool m_takeScreenshot;
 
-        Texture* m_textureFont;
-        //Shader m_shader01;
-
         SyncValueManager m_syncValueManager;
         ParticleManager m_particleManager;
 

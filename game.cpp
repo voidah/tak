@@ -20,11 +20,6 @@ ParticleManager* Game::GetParticleManager()
     return m_particleManager;
 }
 
-void Game::PrintText(int x, int y, const std::string& text)
-{
-    m_engine->PrintText(x, y, text);
-}
-
 const std::string& Game::GetName() const
 {
     return m_name;
@@ -33,6 +28,12 @@ const std::string& Game::GetName() const
 const std::string& Game::GetVersion() const
 {
     return m_version;
+}
+
+int Game::GetFps() const
+{
+    assert(m_engine);
+    return m_engine->GetFps();
 }
 
 Scene& Game::GetScene() const

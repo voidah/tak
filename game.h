@@ -15,9 +15,7 @@ class Game
 
         virtual bool LoadResource() = 0;
         virtual bool UnloadResource() = 0;
-        virtual void Render3d(float elapsedTime) = 0;
-        virtual void Render2d(float elapsedTime) = 0;
-        virtual void RenderText(float elapsedTime) = 0;
+        virtual void Render(float elapsedTime) = 0;
         virtual void KeyPressEvent(unsigned char key) = 0;
         virtual void KeyReleaseEvent(unsigned char key) = 0;
         virtual void MouseMoveEvent(int x, int y) = 0;
@@ -32,15 +30,14 @@ class Game
         const std::string& GetName() const;
         const std::string& GetVersion() const;
 
+        int GetFps() const;
+
     public:
         struct ConfigInfo
         {
             uint InitialWidth;
             uint InitialHeight;
             uint AntialiasingFactor;
-
-            bool ShowFps;
-            bool ShowVersion;
 
             Vector3f ClearColor;
 
@@ -54,9 +51,6 @@ class Game
 
                 AntialiasingFactor = 0;
 
-                ShowFps = true;
-                ShowVersion = true;
-
                 ClearColor = Vector3f(0, 0, 0);
 
                 ShowCursor = true;
@@ -67,8 +61,6 @@ class Game
     protected:
         void AddSyncValue(SyncValue* sv);
         ParticleManager* GetParticleManager();
-
-        void PrintText(int x, int y, const std::string& text);
 
         Scene& GetScene() const;
 

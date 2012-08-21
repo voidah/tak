@@ -97,15 +97,6 @@ void Engine::DeInit()
 
 void Engine::LoadResource()
 {
-    // TODO remove that... engine does'nt need to load texture and display text
-#ifdef OSWINDOWS
-    m_textureFont = Texture::Get("../../tak/resource/font.bmp");
-#else
-    m_textureFont = Texture::Get("./tak/resource/font.bmp");
-#endif
-    assert(m_textureFont);
-    CHECK_GL_ERROR();
-
     m_game->LoadResource();
 }
 
@@ -140,7 +131,7 @@ void Engine::Render(float elapsedTime)
     glPushMatrix();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
-    m_game->Render3d(elapsedTime);
+    m_game->Render(elapsedTime);
 
     Shader* defaultShader = m_game->GetDefaultShader();
     assert(defaultShader);
@@ -150,12 +141,6 @@ void Engine::Render(float elapsedTime)
 
     glDisable(GL_BLEND);
     glPopMatrix();
-
-    if(m_wireframe)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    Render2d(elapsedTime);
-    if(m_wireframe)
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // Physic graphical debug output:
     glMatrixMode(GL_MODELVIEW);
@@ -249,134 +234,4 @@ void Engine::WindowResizeEvent(int width, int height)
     m_game->WindowResizeEvent(width, height);
 }
 
-void Engine::PrintText(int x, int y, const std::string& t)
-{
-    glPushMatrix();
-    glLoadIdentity();
-    glTranslatef(x, y, 0);
-    for(unsigned int i=0; i<t.length(); ++i)
-    {
-        float left = (float)((t[i] - 32) % 16) / 16.0f;
-        float top = (float)((t[i] - 32) / 16) / 16.0f;
-
-        top += 0.5f;
-
-        glBegin(GL_QUADS);
-        glTexCoord2f(left, 1.0f - top - 0.0625f);
-        glVertex2f(0, 12);
-        glTexCoord2f(left + 0.0625f, 1.0f - top - 0.0625f);
-        glVertex2f(12, 12);
-        glTexCoord2f(left + 0.0625f, 1.0f - top);
-        glVertex2f(12, 0);
-        glTexCoord2f(left, 1.0f - top);
-        glVertex2f(0, 0);
-        glEnd();
-
-        glTranslatef(8, 0, 0);
-    }
-    glPopMatrix();
-}
-
-
-void Engine::Render2d(float elapsedTime)
-{
-    //=========================================================================
-    // Set projection and modelview matrix
-    //=========================================================================
-    CHECK_GL_ERROR();
-    glDisable(GL_DEPTH_TEST);
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    glOrtho(0, Width(), Height(), 0, -1000.0, 1000.0);
-
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    CHECK_GL_ERROR();
-
-    //=========================================================================
-    // Call game's Render2d method
-    //=========================================================================
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    glPushMatrix();
-    m_game->Render2d(elapsedTime);
-    glPopMatrix();
-    glDisable(GL_BLEND);
-    CHECK_GL_ERROR();
-
-    //=========================================================================
-    // Show particles
-    //=========================================================================
-    glLoadIdentity();
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glEnable(GL_BLEND);
-    glDepthMask(GL_FALSE);
-    glDisable(GL_LIGHTING); // TODO
-    //glDisable(GL_CULL_FACE); // TODO
-    CHECK_GL_ERROR();
-    m_particleManager.Update(elapsedTime);
-    CHECK_GL_ERROR();
-    //m_particleManager.Render(m_player.Position());
-    m_particleManager.Render(Vector3f(0.f, 0, 50.f));
-    CHECK_GL_ERROR();
-    //glEnable(GL_CULL_FACE); // TODO
-    glEnable(GL_LIGHTING); // TODO
-    glDepthMask(GL_TRUE);
-    glDisable(GL_BLEND);
-    CHECK_GL_ERROR();
-
-
-    //=========================================================================
-    // Text
-    //=========================================================================
-    glDisable(GL_LIGHTING);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    glEnable(GL_BLEND);
-    CHECK_GL_ERROR();
-
-    m_textureFont->Bind();
-    CHECK_GL_ERROR();
-    std::ostringstream ss;
-
-    int offset = 20;
-    if(m_game->Config.ShowVersion)
-    {
-        ss << m_game->GetName() << " - v" << m_game->GetVersion();
-        ss << " (" << __DATE__ << " - " << __TIME__ << ")";
-        PrintText(10, offset, ss.str());
-        offset += 15;
-    }
-
-    static int lowFps = 99999;
-    static int highFps = 0;
-    if(m_game->Config.ShowFps)
-    {
-        int curFps = GetFps();
-        if(curFps < lowFps && curFps > 10)
-            lowFps = curFps;
-        highFps = std::max(highFps, curFps);
-        ss.str("");
-        ss << "Fps: " << GetFps() << " (min=" << lowFps << ", max=" << highFps << ")";
-        PrintText(10, offset, ss.str());
-    }
-    CHECK_GL_ERROR();
-
-    m_game->RenderText(elapsedTime);
-
-    glEnable(GL_LIGHTING);
-    glDisable(GL_BLEND);
-    glEnable(GL_DEPTH_TEST);
-    CHECK_GL_ERROR();
-
-    //=========================================================================
-    // Restore projection and modelview matrix
-    //=========================================================================
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    CHECK_GL_ERROR();
-}
 
