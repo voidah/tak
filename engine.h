@@ -7,7 +7,6 @@
 //#include "texturebank.h"
 #include "array2d.h"
 #include "syncvaluemanager.h"
-#include "particlemanager.h"
 #include "scene.h"
 
 // TODO
@@ -47,7 +46,6 @@ class Engine : public OpenglContext
         bool m_takeScreenshot;
 
         SyncValueManager m_syncValueManager;
-        ParticleManager m_particleManager;
 
         Scene m_scene;
 };

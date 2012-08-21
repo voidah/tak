@@ -14,7 +14,6 @@
 Engine::Engine(Game* game) : m_game(game), m_wireframe(false), m_takeScreenshot(false)
 {
     game->m_syncValueManager = &m_syncValueManager;
-    game->m_particleManager = &m_particleManager;
     game->m_scene = &m_scene;
     game->m_engine = this;
 }

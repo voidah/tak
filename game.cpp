@@ -15,11 +15,6 @@ void Game::AddSyncValue(SyncValue* sv)
     m_syncValueManager->Add(sv);
 }
 
-ParticleManager* Game::GetParticleManager()
-{
-    return m_particleManager;
-}
-
 const std::string& Game::GetName() const
 {
     return m_name;
