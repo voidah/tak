@@ -15,7 +15,7 @@ class Model : public Resource<Model>
         virtual bool Load(const std::string& key, const OptionList& options);
         virtual bool Release();
 
-        Mesh<VertexData3d>* GetMesh();
+        Mesh<VertexData3dNormal>* GetMesh();
 
     private:
         struct Vertex

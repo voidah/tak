@@ -56,21 +56,20 @@ bool Model::Release()
     return true;
 }
 
-Mesh<VertexData3d>* Model::GetMesh()
+Mesh<VertexData3dNormal>* Model::GetMesh()
 {
     assert(m_vertexCount > 0 && m_indexCount > 0);
 
-    VertexData3d* vd = new VertexData3d[m_vertexCount];
+    VertexData3dNormal* vd = new VertexData3dNormal[m_vertexCount];
 
     for(int i = 0; i < m_vertexCount; ++i)
     {
         Vertex& v = m_vertices[i];
 
-        vd[i] = Mesh<VertexData3d>::VertexData(v.coord.x, v.coord.y, v.coord.z, 1.f, 1.f, 1.f, 0, 0);
-        // TODO add normals..
+        vd[i] = Mesh<VertexData3dNormal>::VertexData(v.coord.x, v.coord.y, v.coord.z, v.normal.x, v.normal.y, v.normal.z, 1.f, 1.f, 1.f, 0, 0);
     }
 
-    Mesh<VertexData3d>* mesh = new Mesh<VertexData3d>(Mesh<VertexData3d>::MT_TRIANGLE);
+    Mesh<VertexData3dNormal>* mesh = new Mesh<VertexData3dNormal>(Mesh<VertexData3dNormal>::MT_TRIANGLE);
     mesh->SetMeshData(vd, m_vertexCount, m_indices, m_indexCount);
     //mesh->SetMeshData(vd, m_vertexCount);
 
