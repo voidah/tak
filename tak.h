@@ -29,3 +29,4 @@
 #include "resource.h"
 #include "model.h"
 #include "sound.h"
+#include "nodes.h"
