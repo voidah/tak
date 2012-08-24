@@ -11,6 +11,8 @@
 #include "texture.h"
 #include "tool.h"
 #include "uniqueidgenerator.h"
+#include "matrix3.h"
+#include "matrix4.h"
 #include "vector3.h"
 #include "game.h"
 #include "init.h"

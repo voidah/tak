@@ -1,5 +1,7 @@
 #include "scenenode.h"
 #include "tool.h"
+#include "matrix3.h"
+#include "camera.h"
 #include <cassert>
 
 UniqueIdGenerator<SceneNode::IdType> SceneNode::m_idGenerator;
@@ -419,9 +421,41 @@ void SceneNode::InternalRender(const RenderBlock* renderBlock, SceneParams& para
 
     params.SetCurrentShader(shader);
 
+    // Calculate normal matrix:
+    // http://www.lighthouse3d.com/tutorials/glsl-tutorial/the-normal-matrix/
+    Matrix3f normal = Matrix3f(modelview.Get11(), modelview.Get12(), modelview.Get13(),
+            modelview.Get21(), modelview.Get22(), modelview.Get23(),
+            modelview.Get31(), modelview.Get32(), modelview.Get33());
+    normal.Invert();
+    normal.Transpose();
 
     shader->SetMat4Uniform("projectionMatrix", projection.GetInternalValues());
     shader->SetMat4Uniform("modelViewMatrix", modelview.GetInternalValues());
+    shader->SetMat3Uniform("normalMatrix", normal.GetInternalValues());
+
+    // TODO implement per-node material properly
+    shader->SetVec4Uniform("gl_FrontMaterial.ambient", 1, 1, 1, 1);
+    shader->SetVec4Uniform("gl_FrontMaterial.diffuse", 1, 1, 1, 1);
+    shader->SetVec4Uniform("gl_LightModel.ambient", 1, 1, 1, 1);
+    shader->SetVec4Uniform("gl_FrontLightModelProduct.sceneColor", 1, 1, 1, 1);
+    shader->SetVec4Uniform("gl_FrontLightProduct[0].ambient", 1, 1, 1, 1);
+    shader->SetVec4Uniform("gl_FrontLightProduct[0].diffuse", 1, 1, 1, 1);
+    shader->SetVec4Uniform("gl_LightSource[0].ambient", 1, 1, 1, 1);
+    shader->SetVec4Uniform("gl_LightSource[0].diffuse", 1, 1, 1, 1);
+
+    // Position is set in scene.cpp, before rendering
+    // the position is transformed by opengl to the eye view
+    // TODO quick fix to prevend light to rotate with the camera...
+    // http://stackoverflow.com/questions/4371137/glsl-phong-shader-and-camera
+    // Check that later
+    glMatrixMode(GL_MODELVIEW);
+    glLoadMatrixf(params.GetCamera()->GetMatrix().GetInternalValues());
+    GLfloat light0Pos[4]  = {2.0f, 10.f, 2.0f, 1.0f};
+    glLightfv(GL_LIGHT0, GL_POSITION, light0Pos);
+
+    //shader->SetVec4Uniform("gl_LightSource[0].position", lightPosition.x, lightPosition.y, lightPosition.z, 1);
+
+
     CHECK_GL_ERROR();
 
     Texture* texture = renderBlock->GetTexture();
