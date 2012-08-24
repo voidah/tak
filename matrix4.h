@@ -27,6 +27,23 @@ class Matrix4
                 const T& m_31, const T& m_32, const T& m_33, const T& m_34, 
                 const T& m_41, const T& m_42, const T& m_43, const T& m_44);
 
+        const T& Get11() const;
+        const T& Get12() const;
+        const T& Get13() const;
+        const T& Get14() const;
+        const T& Get21() const;
+        const T& Get22() const;
+        const T& Get23() const;
+        const T& Get24() const;
+        const T& Get31() const;
+        const T& Get32() const;
+        const T& Get33() const;
+        const T& Get34() const;
+        const T& Get41() const;
+        const T& Get42() const;
+        const T& Get43() const;
+        const T& Get44() const;
+
         Matrix4<T>& operator=(const Matrix4<T>& m);
 
         Matrix4<T> operator+(const Matrix4<T>& m) const;
@@ -40,6 +57,9 @@ class Matrix4
         Matrix4<T> operator*(const T& v) const;
         const Matrix4<T>& operator*=(const Matrix4<T>& m);
         const Matrix4<T>& operator*=(const T& v);
+
+        Matrix4<T> operator/(const T& v) const;
+        const Matrix4<T>& operator/=(const T& v);
 
 
         bool operator==(const Matrix4<T>& m) const;
@@ -65,7 +85,6 @@ class Matrix4
         T* GetInternalValues();
         std::string ToString(const std::string& lineBegin = "|", const std::string& lineEnd = "|\n") const;
 
-        //void Transpose();
 
 
     private:
@@ -141,6 +160,103 @@ Matrix4<T>::Matrix4(const T& m_11, const T& m_12, const T& m_13, const T& m_14,
     this->m_43 = m_43;
     this->m_44 = m_44;
 }
+
+template <class T>
+const T& Matrix4<T>::Get11() const
+{
+    return m_11;
+}
+
+template <class T>
+const T& Matrix4<T>::Get12() const
+{
+    return m_12;
+}
+
+template <class T>
+const T& Matrix4<T>::Get13() const
+{
+    return m_13;
+}
+
+template <class T>
+const T& Matrix4<T>::Get14() const
+{
+    return m_14;
+}
+
+template <class T>
+const T& Matrix4<T>::Get21() const
+{
+    return m_21;
+}
+
+template <class T>
+const T& Matrix4<T>::Get22() const
+{
+    return m_22;
+}
+
+template <class T>
+const T& Matrix4<T>::Get23() const
+{
+    return m_23;
+}
+
+template <class T>
+const T& Matrix4<T>::Get24() const
+{
+    return m_24;
+}
+
+template <class T>
+const T& Matrix4<T>::Get31() const
+{
+    return m_31;
+}
+
+template <class T>
+const T& Matrix4<T>::Get32() const
+{
+    return m_32;
+}
+
+template <class T>
+const T& Matrix4<T>::Get33() const
+{
+    return m_33;
+}
+
+template <class T>
+const T& Matrix4<T>::Get34() const
+{
+    return m_34;
+}
+
+template <class T>
+const T& Matrix4<T>::Get41() const
+{
+    return m_41;
+}
+
+template <class T>
+const T& Matrix4<T>::Get42() const
+{
+    return m_42;
+}
+
+template <class T>
+const T& Matrix4<T>::Get43() const
+{
+    return m_43;
+}
+
+template <class T>
+const T& Matrix4<T>::Get44() const
+{
+    return m_44;
+}
+
 
     template <class T>
 Matrix4<T>& Matrix4<T>::operator=(const Matrix4<T>& m)
@@ -244,6 +360,23 @@ const Matrix4<T>& Matrix4<T>::operator*=(const Matrix4<T>& m)
 const Matrix4<T>& Matrix4<T>::operator*=(const T& v)
 {
     *this = *this * v;
+    return *this;
+}
+
+template <class T>
+Matrix4<T> Matrix4<T>::operator/(const T& v) const
+{
+    return Matrix4<T>(
+            m_11 / v, m_12 / v, m_13 / v, m_14 / v,
+            m_21 / v, m_22 / v, m_23 / v, m_24 / v,
+            m_31 / v, m_32 / v, m_33 / v, m_34 / v,
+            m_41 / v, m_42 / v, m_43 / v, m_44 / v);
+}
+
+    template <class T>
+const Matrix4<T>& Matrix4<T>::operator/=(const T& v)
+{
+    *this = *this / v;
     return *this;
 }
 
