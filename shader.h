@@ -21,9 +21,11 @@ class Shader : public Resource<Shader>
         void UpdateIntUniform(GLint name, GLint value) const;
         void SetIntUniform(const std::string& name, GLint value) const;
         void SetVec3Uniform(const std::string& name, GLfloat x, GLfloat y, GLfloat z) const;
+        void SetVec4Uniform(const std::string& name, GLfloat x, GLfloat y, GLfloat z, GLfloat a) const;
         void SetFloatUniform(const std::string& name, GLfloat value) const;
         void UpdateFloatUniform(GLint name, GLfloat value) const;
         void SetMat4Uniform(const std::string& name, float values[16]) const;
+        void SetMat3Uniform(const std::string& name, float values[9]) const;
 
         static void Disable();
 

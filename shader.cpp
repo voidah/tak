@@ -89,6 +89,13 @@ void Shader::SetVec3Uniform(const std::string& name, GLfloat x, GLfloat y, GLflo
     glUniform3f(location, x, y, z);
 }
 
+void Shader::SetVec4Uniform(const std::string& name, GLfloat x, GLfloat y, GLfloat z, GLfloat a) const
+{
+    assert(m_valid);
+    GLint location = glGetUniformLocation(m_program, name.c_str());
+    glUniform4f(location, x, y, z, a);
+}
+
 void Shader::SetFloatUniform(const std::string& name, GLfloat value) const
 {
     assert(m_valid);
@@ -107,6 +114,13 @@ void Shader::SetMat4Uniform(const std::string& name, float values[16]) const
     assert(m_valid);
     GLint location = glGetUniformLocation(m_program, name.c_str());
     glUniformMatrix4fv(location,  1, false, values);
+}
+
+void Shader::SetMat3Uniform(const std::string& name, float values[9]) const
+{
+    assert(m_valid);
+    GLint location = glGetUniformLocation(m_program, name.c_str());
+    glUniformMatrix3fv(location,  1, false, values);
 }
 
 void Shader::Disable()
