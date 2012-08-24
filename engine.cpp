@@ -120,6 +120,7 @@ void Engine::Render(float elapsedTime)
 
     m_syncValueManager.Update(elapsedTime);
     m_scene.Update(elapsedTime);
+    m_game->Update(elapsedTime);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -130,7 +131,6 @@ void Engine::Render(float elapsedTime)
     glPushMatrix();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
-    m_game->Render(elapsedTime);
 
     Shader* defaultShader = m_game->GetDefaultShader();
     assert(defaultShader);

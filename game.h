@@ -15,7 +15,7 @@ class Game
 
         virtual bool LoadResource() = 0;
         virtual bool UnloadResource() = 0;
-        virtual void Render(float elapsedTime) = 0;
+        virtual void Update(float elapsedTime) = 0;
         virtual void KeyPressEvent(unsigned char key) = 0;
         virtual void KeyReleaseEvent(unsigned char key) = 0;
         virtual void MouseMoveEvent(int x, int y) = 0;
