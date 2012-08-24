@@ -37,6 +37,7 @@ class Matrix3
 
         Matrix3<T> operator*(const Matrix3<T>& m) const;
         Matrix3<T> operator*(const T& v) const;
+        Vector3<T> operator*(const Vector3<T>& v) const;
         const Matrix3<T>& operator*=(const Matrix3<T>& m);
         const Matrix3<T>& operator*=(const T& v);
 
@@ -206,6 +207,15 @@ Matrix3<T> Matrix3<T>::operator*(const T& v) const
             m_11 * v, m_12 * v, m_13 * v,
             m_21 * v, m_22 * v, m_23 * v,
             m_31 * v, m_32 * v, m_33 * v);
+}
+
+template <class T>
+Vector3<T> Matrix3<T>::operator*(const Vector3<T>& v) const
+{
+    return Vector3<T>(
+            v.x * m_11 + v.y * m_12 + v.z * m_13,
+            v.x * m_21 + v.y * m_22 + v.z * m_23,
+            v.x * m_31 + v.y * m_32 + v.z * m_33);
 }
 
     template <class T>
