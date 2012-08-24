@@ -274,13 +274,13 @@ Matrix3<T> Matrix3<T>::GetCofactor() const
     Matrix3<T> result;
 
     result.m_11 = m_22 * m_33 - m_32 * m_23;
-    result.m_21 = -(m_12 * m_33 - m_32 * m_12);
-    result.m_31 = m_12 * m_23 - m_22 * m_12;
     result.m_12 = -(m_21 * m_33 - m_31 * m_23);
-    result.m_22 = m_11 * m_33 - m_31 * m_12;
-    result.m_32 = -(m_11 * m_23 - m_21 * m_12);
-    result.m_12 = m_21 * m_32 - m_31 * m_22;
+    result.m_13 = m_21 * m_32 - m_31 * m_22;
+    result.m_21 = -(m_12 * m_33 - m_32 * m_13);
+    result.m_22 = m_11 * m_33 - m_31 * m_13;
     result.m_23 = -(m_11 * m_32 - m_31 * m_12);
+    result.m_31 = m_12 * m_23 - m_22 * m_13;
+    result.m_32 = -(m_11 * m_23 - m_21 * m_13);
     result.m_33 = m_11 * m_22 - m_21 * m_12;
 
     return result;
