@@ -275,7 +275,7 @@ void SceneNode::InternalShowGraphConsole(const SceneNode* node, int level) const
 {
     for(int i = 0; i < level; ++i)
         std::cout << "  ";
-    std::cout << node->GetId() << std::endl;
+    std::cout << "[" << node->GetId() << "] " << node->GetName() << std::endl;
 
     for(ChildNodes::const_iterator it = node->m_childs.begin(); it != node->m_childs.end(); ++it)
         InternalShowGraphConsole(*it, level + 1);
