@@ -52,3 +52,9 @@ Vector3f Camera::GetWorldPosition() const
 {
     return m_view.GetTranslation();
 }
+
+Vector3f Camera::GetViewDirection() const
+{
+    return Vector3f(-m_view.Get31(), -m_view.Get32(), -m_view.Get33());
+}
+

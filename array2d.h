@@ -12,7 +12,8 @@ class Array2d
     Array2d(const Array2d<T>& array);
 
     void Set(unsigned int x, unsigned int y, T type);
-    T Get(unsigned int x, unsigned int y) const;
+    const T& Get(unsigned int x, unsigned int y) const;
+    T& Get(unsigned int x, unsigned int y);
 
     unsigned int SizeX() const;
     unsigned int SizeY() const;
@@ -57,7 +58,13 @@ void Array2d<T>::Set(unsigned int x, unsigned int y, T type)
 }
 
 template <class T>
-T Array2d<T>::Get(unsigned int x, unsigned int y) const
+const T& Array2d<T>::Get(unsigned int x, unsigned int y) const
+{
+    return GetElement(x, y);
+}
+
+template <class T>
+T& Array2d<T>::Get(unsigned int x, unsigned int y)
 {
     return GetElement(x, y);
 }

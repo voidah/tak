@@ -21,6 +21,7 @@ class Camera
         const Matrix4f& GetMatrix() const;
 
         Vector3f GetWorldPosition() const;
+        Vector3f GetViewDirection() const;
 
     protected:
         Matrix4f m_view;
