@@ -54,7 +54,7 @@ bool PhysicEngine::RayCastClosestCollisionPoint(const Vector3f& from, const Vect
 
     if(rayCallback.hasHit())
     {
-        btRigidBody* pBody = btRigidBody::upcast(rayCallback.m_collisionObject);
+        const btRigidBody* pBody = btRigidBody::upcast(rayCallback.m_collisionObject);
 
         hitNode = 0;
         if(pBody)
