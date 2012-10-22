@@ -13,7 +13,7 @@ Bullet Physics
 
 To manually install boost on windows:
 Download boost, extract it to C:\boost
-in the boost folder, in a terminal, run bootstrap, then .\b2
+in the boost folder, in a terminal, run bootstrap, then .\b2 (.\b2 --toolset=msvc-10.0 to force build on vstudio 2010)
 Set the BOOST_PATH environment variable
 
 
