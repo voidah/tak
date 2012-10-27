@@ -19,7 +19,7 @@
 #include <cmath>
 #include <climits>
 
-#ifdef _WIN32
+#ifdef OS_WINDOWS
 #include <windows.h>
 #endif
 
