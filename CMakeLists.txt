@@ -79,5 +79,9 @@ else(MSVC)
 	target_link_libraries (tak GLEW)
 endif(MSVC)
 
+if(NOT MSVC)
+	target_link_libraries (tak pthread)
+endif(NOT MSVC)
+
 #avoid ZERO_CHECK project generated on visual studio
 set(CMAKE_SUPPRESS_REGENERATION TRUE)

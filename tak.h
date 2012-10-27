@@ -30,3 +30,5 @@
 #include "model.h"
 #include "sound.h"
 #include "nodes.h"
+#include "autolock.h"
+#include "mutex.h"
