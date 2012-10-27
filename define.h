@@ -1,6 +1,17 @@
 #ifndef TAK__DEFINE_H__
 #define TAK__DEFINE_H__
 
+#include "config.h"
+
+// OS detection
+#if(defined(_WIN32))
+#define OS_WINDOWS
+#elif(defined(__gnu_linux__))
+#define OS_LINUX
+#else
+#error "Could not determine operating system"
+#endif
+
 #include <GL/glew.h>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>

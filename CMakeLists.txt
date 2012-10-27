@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 2.6)
 
+OPTION(TAK_USE_ENET "Enable ENET support" ON)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
+
 FILE(GLOB all_headers *.h)
 source_group(headers FILES ${all_headers})
 FILE(GLOB all_sources *.cpp)
