@@ -1,5 +1,6 @@
 #include "openglcontext.h"
 #include "define.h"
+#include "network.h"
 #include <fstream>
 
 OpenglContext::OpenglContext() : m_maxFps(999999), m_fullscreen(false), m_antialiasingFactor(0), m_title(""), m_lastFrameTime(0), m_cursorVisible(true)
@@ -29,6 +30,8 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
 
     while (m_app.isOpen())
     {
+        clock.restart();
+
         sf::Event Event;
         while (m_app.pollEvent(Event))
         {
@@ -72,10 +75,10 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
         }
 
         m_app.setActive();
-        m_lastFrameTime = clock.getElapsedTime().asSeconds();
         Render(m_lastFrameTime);
-        clock.restart();
         m_app.display();
+
+        m_lastFrameTime = clock.getElapsedTime().asSeconds();
     }
 
     UnloadResource();
