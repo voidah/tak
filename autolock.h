@@ -15,14 +15,12 @@ class AutoLock
     template <class T>
 AutoLock<T>::AutoLock(T& lock) : m_lock(lock)
 {
-    std::cout << "locking" << std::endl;
     m_lock.Lock();
 }
 
     template <class T>
 AutoLock<T>::~AutoLock()
 {
-    std::cout << "unlocking" << std::endl;
     m_lock.UnLock();
 }
 
