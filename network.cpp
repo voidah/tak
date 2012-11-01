@@ -68,9 +68,7 @@ bool Network::Tick()
 
     ENetEvent event;
 
-    /* Wait up to 1000 milliseconds for an event. */
-    //while(enet_host_service(m_host, &event, 0) > 0)
-    if(enet_host_service((ENetHost*)m_host, &event, 0) > 0)
+    while(enet_host_service((ENetHost*)m_host, &event, 0) > 0)
     {
         switch(event.type)
         {
