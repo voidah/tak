@@ -8,6 +8,7 @@
 #include <sstream>
 #include "game.h"
 #include "physicengine.h"
+#include "network.h"
 
 
 
@@ -30,6 +31,10 @@ void Engine::Init()
         std::cerr << "Error while initializing glew.. abording (" << glewGetErrorString(err) << ")" << std::endl;
         abort();
     }
+
+#ifdef TAK_USE_ENET
+    GNetwork.Init(Network::CLIENT);
+#endif
 
     GPhysicEngine.Init();
 
@@ -118,6 +123,11 @@ void Engine::Render(float elapsedTime)
             HideCursor();
     }
 
+#ifdef TAK_USE_ENET
+    // Tick network
+    GNetwork.Tick();
+#endif
+
     m_syncValueManager.Update(elapsedTime);
     m_scene.Update(elapsedTime);
     m_game->Update(elapsedTime);
@@ -150,6 +160,11 @@ void Engine::Render(float elapsedTime)
 
     // Simulate physic
     GPhysicEngine.Update(elapsedTime);
+
+#ifdef TAK_USE_ENET
+    // Tick network
+    GNetwork.Tick();
+#endif
 
     if(m_takeScreenshot)
     {

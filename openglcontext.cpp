@@ -1,6 +1,5 @@
 #include "openglcontext.h"
 #include "define.h"
-#include "network.h"
 #include <fstream>
 
 OpenglContext::OpenglContext() : m_maxFps(999999), m_fullscreen(false), m_antialiasingFactor(0), m_title(""), m_lastFrameTime(0), m_cursorVisible(true)

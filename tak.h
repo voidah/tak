@@ -32,3 +32,5 @@
 #include "nodes.h"
 #include "autolock.h"
 #include "mutex.h"
+#include "network.h"
+#include "networkcallback.h"
