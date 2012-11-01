@@ -58,7 +58,7 @@ class Tool
             {
                 std::ostringstream ss;
                 ss << v;
-                return v.str();
+                return ss.str();
             }
 
         template <class T>
