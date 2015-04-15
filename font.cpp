@@ -51,7 +51,7 @@ bool Font::Load(const std::string& f, int textureSize, const std::string& ansiCo
         int x = i % charPerSide;
         int y = i / charPerSide;
 
-        sf::IntRect bound = font.getGlyph(charCode, charSize, false).bounds;
+        sf::FloatRect bound = font.getGlyph(charCode, charSize, false).bounds;
         if(charCode == ' ')
             bound.width = charSize / 2; // TODO hack
 
@@ -64,7 +64,7 @@ bool Font::Load(const std::string& f, int textureSize, const std::string& ansiCo
         sf::String sfStr;
         sfStr = ss;
 
-        sf::Text letter(sf::String(Unicode::FromAnsiToWstring(ss, ansiCodePage)));
+        sf::Text letter(sf::String(Unicode::FromAnsiToWstring(ss, ansiCodePage)), font);
         letter.setFont(font);
         letter.setCharacterSize(charSize);
         letter.setColor(sf::Color::White);

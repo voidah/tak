@@ -1,3 +1,5 @@
+#ifdef TAK_USE_ENET
+
 #include "networkpeer.h"
 #include <enet/enet.h>
 #include <sstream>
@@ -44,3 +46,4 @@ unsigned short NetworkPeer::GetPort() const
     return ((ENetPeer*)m_peer)->address.port;
 }
 
+#endif // TAK_USE_ENET
