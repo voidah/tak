@@ -1,8 +1,0 @@
-Steps to build the libs:
-
-1. Download the source package from the bullet web site
-2. Extract, build libraries (all non App_* projects) in debug AND release mode
-3. Take the .lib in the lib folder, copy to external\vstudio2k10\bullet-2.80\lib
-4. Take content of the src folder and copy to external\vstudio2k10\bullet-2.80\include
-5. Remove all .cpp recursively from the include folder
-6. Voila!
