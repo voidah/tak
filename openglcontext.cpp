@@ -2,7 +2,7 @@
 #include "define.h"
 #include <fstream>
 
-OpenglContext::OpenglContext() : m_maxFps(999999), m_fullscreen(false), m_antialiasingFactor(0), m_title(""), m_lastFrameTime(0), m_cursorVisible(true)
+OpenglContext::OpenglContext() : m_maxFps(60), m_fullscreen(false), m_antialiasingFactor(0), m_title(""), m_lastFrameTime(0), m_cursorVisible(true)
 {
 }
 
@@ -17,6 +17,7 @@ bool OpenglContext::Start(const std::string& title, int width, int height, bool 
     m_antialiasingFactor = antialiasingFactor;
     InitWindow(width, height);
 
+    SetMaxFps(m_maxFps);
     Init();
 
     // Make sure the resize event is called at least once for the intial window dimension
