@@ -1,5 +1,6 @@
 #include "rigidbody.h"
 #include "define.h"
+#include <cassert>
 
 RigidBody::RigidBody(float weight) : m_rigidBody(0), m_weight(weight), m_node(0)
 {
