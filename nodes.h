@@ -279,6 +279,51 @@ class Sprite: public SceneNode
         Mesh<VertexData3d> m_mesh;
 };
 
+class Floor : public SceneNode
+{
+    public:
+        Floor(const float sizeX, const float sizeZ, float textureRepeat = 1.f, const std::string& name = "Floor") : SceneNode(name), m_mesh(Mesh<VertexData3dNormal>::MT_QUAD), m_sizeX(sizeX), m_sizeZ(sizeZ)
+        {
+            VertexData3dNormal vd[4];
+
+            float hx = m_sizeX * .5f;
+            float hz = m_sizeZ * .5f;
+
+            vd[0] = Mesh<VertexData3dNormal>::VertexData(-hx,  0,  hz, 0, 1, 0, 1, 1, 1, textureRepeat, 0);
+            vd[1] = Mesh<VertexData3dNormal>::VertexData( hx,  0,  hz, 0, 1, 0, 1, 1, 1, 0, 0);
+            vd[2] = Mesh<VertexData3dNormal>::VertexData( hx,  0, -hz, 0, 1, 0, 1, 1, 1, 0, textureRepeat);
+            vd[3] = Mesh<VertexData3dNormal>::VertexData(-hx,  0, -hz, 0, 1, 0, 1, 1, 1, textureRepeat, textureRepeat);
+
+            m_mesh.SetMeshData(vd, 4);
+        }
+
+        const float& GetSizeX() const
+        {
+            return m_sizeX;
+        }
+
+        const float& GetSizeZ() const
+        {
+            return m_sizeZ;
+        }
+
+    protected:
+        virtual bool Update(float elapsedTime, SceneParams& params)
+        {
+            return true;
+        }
+
+        virtual void Render(const Matrix4f& projection, const Matrix4f& modelview, SceneParams& params)
+        {
+            m_mesh.Render();
+        }
+
+    private:
+        Mesh<VertexData3dNormal> m_mesh;
+        float m_sizeX, m_sizeZ;
+};
+
+
 class Cube : public SceneNode
 {
     public:
