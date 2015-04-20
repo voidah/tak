@@ -21,6 +21,7 @@
 #include "unicode.h"
 #include "fpscamera.h"
 #include "lookatcamera.h"
+#include "topdowncamera.h"
 #include "fixedcamera.h"
 #include "thirdpersoncamera.h"
 #include "physicengine.h"
