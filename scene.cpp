@@ -35,10 +35,12 @@ bool Scene::Render(Shader* defaultShader, Texture* defaultTexture)
         m_root->InternalPrepareRender(m_renderList, m_projection, m_camera ? m_camera->GetMatrix() : Matrix4f::IDENTITY, m_params);
 
         // Render!
+        //std::cout << "======================" << std::endl;
         InitSceneParams(defaultShader, defaultTexture);
         for(SceneNode::RenderList::const_iterator it = m_renderList.begin(); it != m_renderList.end(); ++it)
         {
             SceneNode* node = it->second->GetNode();
+            //std::cout << node->GetName() << " (sortkey=" << std::hex << it->first.GetValue() << ")" << std::endl;
             node->InternalRender(it->second, m_params);
         }
         Shader::Disable();

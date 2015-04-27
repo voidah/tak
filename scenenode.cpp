@@ -449,7 +449,11 @@ void SceneNode::InternalRender(const RenderBlock* renderBlock, SceneParams& para
     // http://stackoverflow.com/questions/4371137/glsl-phong-shader-and-camera
     // Check that later
     glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixf(params.GetCamera()->GetMatrix().GetInternalValues());
+    Camera* camera = params.GetCamera();
+    if(camera)
+        glLoadMatrixf(params.GetCamera()->GetMatrix().GetInternalValues());
+    else
+        glLoadIdentity();
     GLfloat light0Pos[4]  = {2.0f, 10.f, 2.0f, 1.0f};
     glLightfv(GL_LIGHT0, GL_POSITION, light0Pos);
 
