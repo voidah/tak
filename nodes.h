@@ -307,6 +307,11 @@ class Floor : public SceneNode
             return m_sizeZ;
         }
 
+        void DisableDepthTest()
+        {
+            SetFlag(SceneNode::FLAG_NO_DEPTH_TEST);
+        }
+
     protected:
         virtual bool Update(float elapsedTime, SceneParams& params)
         {
