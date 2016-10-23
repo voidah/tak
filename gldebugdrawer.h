@@ -1,6 +1,8 @@
 #ifndef TAK_GLDEBUGDRAWER_H__
 #define TAK_GLDEBUGDRAWER_H__
 
+#ifdef TAK_USE_BULLET_PHYSICS
+
 #include "define.h"
 #include "LinearMath/btIDebugDraw.h"
 
@@ -35,5 +37,7 @@ public:
 	virtual int		getDebugMode() const { return m_debugMode;}
 
 };
+
+#endif
 
 #endif // TAK_GLDEBUGDRAWER_H__

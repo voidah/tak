@@ -2,6 +2,8 @@
 #include "define.h"
 #include <cassert>
 
+#ifdef TAK_USE_BULLET_PHYSICS
+
 RigidBody::RigidBody(float weight) : m_rigidBody(0), m_weight(weight), m_node(0)
 {
 }
@@ -134,3 +136,6 @@ CapsuleRigidBody::CapsuleRigidBody(float weight) : RigidBody(weight)
 CapsuleRigidBody::~CapsuleRigidBody()
 {
 }
+
+#endif
+

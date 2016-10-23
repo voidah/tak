@@ -1,4 +1,7 @@
 #include "playerphysic.h"
+
+#ifdef TAK_USE_BULLET_PHYSICS
+
 #include <BulletCollision/CollisionDispatch/btGhostObject.h>
 
 // TODO
@@ -240,3 +243,6 @@ void PlayerPhysic::ClampRotation()
         m_rotation.x = -85.f;
 
 }
+
+#endif
+

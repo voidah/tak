@@ -1,6 +1,8 @@
 #ifndef TAK_PHYSICENGINE_H__
 #define TAK_PHYSICENGINE_H__
 
+#ifdef TAK_USE_BULLET_PHYSICS
+
 #include <btBulletDynamicsCommon.h>
 #include "rigidbody.h"
 #include "gldebugdrawer.h"
@@ -55,5 +57,7 @@ class PhysicEngine
 
         GLDebugDrawer m_debugDrawer;
 };
+
+#endif
 
 #endif // TAK_PHYSICENGINE_H__

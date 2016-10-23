@@ -15,8 +15,11 @@ SceneNode::SortKey::FieldOption SceneNode::SortKey::m_fieldOption[SceneNode::Sor
     {SceneNode::SortKey::TEXTURE, 5}
 };
 
-SceneNode::SceneNode(const std::string& name) : m_parent(0), m_name(name), m_flags(FLAG_NONE), m_rigidBody(0), m_active(true), m_visible(true), m_position(0, 0, 0), m_rotation(0, 0, 0), m_scale(1.f, 1.f, 1.f)
+SceneNode::SceneNode(const std::string& name) : m_parent(0), m_name(name), m_flags(FLAG_NONE), m_active(true), m_visible(true), m_position(0, 0, 0), m_rotation(0, 0, 0), m_scale(1.f, 1.f, 1.f)
 {
+#ifdef TAK_USE_BULLET_PHYSICS
+    m_rigidBody = 0;
+#endif
     m_id = m_idGenerator.Get();
 
     if(m_name == "")
@@ -202,6 +205,7 @@ float SceneNode::GetRotZ() const
     return m_rotation.z;
 }
 
+#ifdef TAK_USE_BULLET_PHYSICS
 RigidBody* SceneNode::AddToPhysic(float weight, const Vector3f& position)
 {
     // Nodes that can be added to physic should implement this method.
@@ -219,6 +223,7 @@ bool SceneNode::IsBoundToRigidBody() const
 {
     return (m_rigidBody != 0);
 }
+#endif
 
 void SceneNode::ShowGraph(bool useGraphviz) const
 {
@@ -238,11 +243,13 @@ void SceneNode::ShowGraph(bool useGraphviz) const
         InternalShowGraphConsole(this);
 }
 
+#ifdef TAK_USE_BULLET_PHYSICS
 void SceneNode::BindToRigidBody(RigidBody* rigidBody)
 {
     m_rigidBody = rigidBody;
     m_rigidBody->LinkWithNode(this);
 }
+#endif
 
 void SceneNode::UpdateProjectionMatrix(Matrix4f& /*projection*/, Camera* /*camera*/)
 {
@@ -297,6 +304,7 @@ bool SceneNode::InternalUpdate(float elapsedTime, SceneParams& params)
     if(!IsActive())
         return true;
 
+#ifdef TAK_USE_BULLET_PHYSICS
     if(IsBoundToRigidBody())
     {
         //std::cout << "SceneNode::InternalUpdate: " << m_rigidBody->GetRotation() << std::endl;
@@ -306,6 +314,7 @@ bool SceneNode::InternalUpdate(float elapsedTime, SceneParams& params)
         //SetRotationAbsolute(RADTODEG(rotRad.x), RADTODEG(rotRad.y), RADTODEG(rotRad.z));
         SetRotationAbsolute(m_rigidBody->GetRotation());
     }
+#endif
 
     if(!Update(elapsedTime, params))
         return false;;

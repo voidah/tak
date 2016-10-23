@@ -1,6 +1,8 @@
 #ifndef TAK_PLAYERPHYSIC_H__
 #define TAK_PLAYERPHYSIC_H__
 
+#ifdef TAK_USE_BULLET_PHYSICS
+
 #include <string>
 #include "define.h"
 #include "vector3.h"
@@ -205,5 +207,7 @@ class PlayerPhysic
         btPairCachingGhostObject* m_ghostObject;
 
 };
+
+#endif
 
 #endif // TAK_PLAYERPHYSIC_H__
