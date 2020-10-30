@@ -42,7 +42,7 @@ class PhysicEngine
         PhysicEngine();
         ~PhysicEngine();
         PhysicEngine(const PhysicEngine&) {}
-        PhysicEngine* operator=(const PhysicEngine&) {}
+        PhysicEngine* operator=(const PhysicEngine&) { return this; }
 
     private:
         bool m_isValid;
