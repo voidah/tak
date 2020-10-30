@@ -219,9 +219,11 @@ class SceneNode
         float GetRotY() const;
         float GetRotZ() const;
 
+#ifdef TAK_USE_BULLET_PHYSICS
         virtual RigidBody* AddToPhysic(float weight, const Vector3f& position);
         RigidBody* GetBoundRigidBody();
         bool IsBoundToRigidBody() const;
+#endif
 
         void ShowGraph(bool useGraphviz = false) const;
 
@@ -236,7 +238,9 @@ class SceneNode
         };
 
     protected:
+#ifdef TAK_USE_BULLET_PHYSICS
         void BindToRigidBody(RigidBody* rigidBody);
+#endif
 
         virtual bool Update(float elapsedTime, SceneParams& params) = 0;
         virtual void Render(const Matrix4f& projection, const Matrix4f& modelview, SceneParams& params) = 0;
@@ -270,7 +274,9 @@ class SceneNode
         uint m_flags;
 
         Material m_material;
+#ifdef TAK_USE_BULLET_PHYSICS
         RigidBody* m_rigidBody;
+#endif
 
         bool m_active;
         bool m_visible;

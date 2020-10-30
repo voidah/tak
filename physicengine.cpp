@@ -1,6 +1,8 @@
 #include "physicengine.h"
 #include <cassert>
 
+#ifdef TAK_USE_BULLET_PHYSICS
+
 PhysicEngine::PhysicEngine() : m_isValid(false)
 {
 }
@@ -119,4 +121,5 @@ btBroadphaseInterface* PhysicEngine::GetBroadphase()
     return m_broadphase;
 }
 
+#endif
 

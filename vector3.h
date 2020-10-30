@@ -3,21 +3,35 @@
 
 #include <iostream>
 #include <cmath>
-#include <SFML/System.hpp>
+//#include <SFML/System.hpp>
 
 
 template <class T>
-class Vector3 : public sf::Vector3<T>
+class Vector3
 {
     public:
         Vector3(const T& x = 0, const T& y = 0, const T& z = 0);
 
         Vector3<T> operator+(const Vector3<T>& v) const;
-        Vector3<T> operator+(const T& v) const;
         Vector3<T> operator-(const Vector3<T>& v) const;
         Vector3<T> operator-() const;
-        Vector3<T> operator*(const Vector3<T>& v) const;
+        Vector3<T> operator+(const T& v) const;
+        Vector3<T> operator-(const T& v) const;
+        Vector3<T> operator/(const T& v) const;
         Vector3<T> operator*(const T& v) const;
+
+        Vector3<T>& operator=(const Vector3<T>& v);
+
+        Vector3<T>& operator+=(const Vector3<T>& v);
+        Vector3<T>& operator-=(const Vector3<T>& v);
+        Vector3<T>& operator+=(const T& v);
+        Vector3<T>& operator-=(const T& v);
+        Vector3<T>& operator/=(const T& v);
+        Vector3<T>& operator*=(const T& v);
+
+        bool operator==(const Vector3<T>& v) const;
+        bool operator!=(const Vector3<T>& v) const;
+
         T Length() const;
         T Dot(const Vector3<T>& v) const;
         Vector3<T> Cross(const Vector3<T>& v) const;
@@ -26,6 +40,9 @@ class Vector3 : public sf::Vector3<T>
         void Zero();
 
         void RotateAroundAxis(const Vector3<T>& axis, const T& angle);
+
+    public:
+        T x, y, z;
 };
 
 typedef Vector3<int> Vector3i;
@@ -40,45 +57,107 @@ std::ostream& operator<<(std::ostream& out, const Vector3<T>& v)
 
 
     template <class T>
-Vector3<T>::Vector3(const T& x, const T& y, const T& z) : sf::Vector3<T>(x, y, z)
+Vector3<T>::Vector3(const T& x, const T& y, const T& z) : x(x), y(y), z(z)
 {
 }
 
 template <class T>
 Vector3<T> Vector3<T>::operator+(const Vector3<T>& v) const
 {
-    return Vector3<T>(this->x + v.x, this->y + v.y, this->z + v.z);
-}
-
-template <class T>
-Vector3<T> Vector3<T>::operator+(const T& v) const
-{
-    return Vector3<T>(this->x + v, this->y + v, this->z + v);
+	return Vector3<T>(x + v.x, y + v.y, z + v.z);
 }
 
 template <class T>
 Vector3<T> Vector3<T>::operator-(const Vector3<T>& v) const
 {
-    return Vector3<T>(this->x - v.x, this->y - v.y, this->z - v.z);
+	return Vector3<T>(x - v.x, y - v.y, z - v.z);
 }
 
 template <class T>
 Vector3<T> Vector3<T>::operator-() const
 {
-    return Vector3<T>(-this->x, -this->y, -this->z);
+	return Vector3<T>(-x, -y, -z);
 }
 
 template <class T>
-Vector3<T> Vector3<T>::operator*(const Vector3<T>& v) const
+Vector3<T> Vector3<T>::operator+(const T& v) const
 {
-    return Vector3<T>(this->x * v.x, this->y * v.y, this->z * v.z);
+	return Vector3<T>(x + v, y + v, z + v);
 }
 
+template <class T>
+Vector3<T> Vector3<T>::operator-(const T& v) const
+{
+	return Vector3<T>(x - v, y - v, z - v);
+}
+
+template <class T>
+Vector3<T> Vector3<T>::operator/(const T& v) const
+{
+	return Vector3<T>(x / v, y / v, z / v);
+}
 
 template <class T>
 Vector3<T> Vector3<T>::operator*(const T& v) const
 {
-    return Vector3<T>(this->x * v, this->y * v, this->z * v);
+	return Vector3<T>(x * v, y * v, z * v);
+}
+
+template <class T>
+Vector3<T>& Vector3<T>::operator=(const Vector3<T>& v)
+{
+	x = v.x;
+	y = v.y;
+	z = v.z;
+	return *this;
+}
+
+template <class T>
+Vector3<T>& Vector3<T>::operator+=(const Vector3<T>& v)
+{
+	return (*this = *this + v);
+}
+
+template <class T>
+Vector3<T>& Vector3<T>::operator-=(const Vector3<T>& v)
+{
+	return (*this = *this - v);
+}
+
+template <class T>
+Vector3<T>& Vector3<T>::operator+=(const T& v)
+{
+	return (*this = *this + v);
+}
+
+template <class T>
+Vector3<T>& Vector3<T>::operator-=(const T& v)
+{
+	return (*this = *this - v);
+}
+
+template <class T>
+Vector3<T>& Vector3<T>::operator/=(const T& v)
+{
+	return (*this = *this / v);
+}
+
+template <class T>
+Vector3<T>& Vector3<T>::operator*=(const T& v)
+{
+	return (*this = *this * v);
+}
+
+template <class T>
+bool Vector3<T>::operator==(const Vector3<T>& v) const
+{
+	return (x == v.x && y == v.y && z == v.z);
+}
+
+template <class T>
+bool Vector3<T>::operator!=(const Vector3<T>& v) const
+{
+	return !(*this == v);
 }
 
 template <class T>

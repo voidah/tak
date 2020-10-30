@@ -36,7 +36,9 @@ void Engine::Init()
     GNetwork.Init(Network::CLIENT);
 #endif
 
+#ifdef TAK_USE_BULLET_PHYSICS
     GPhysicEngine.Init();
+#endif
 
     // Informations:
     const GLubyte* string;
@@ -96,7 +98,9 @@ void Engine::Init()
 
 void Engine::DeInit()
 {
+#ifdef TAK_USE_BULLET_PHYSICS
     GPhysicEngine.DeInit();
+#endif
 }
 
 void Engine::LoadResource()
@@ -151,6 +155,7 @@ void Engine::Render(float elapsedTime)
     glDisable(GL_BLEND);
     glPopMatrix();
 
+#ifdef TAK_USE_BULLET_PHYSICS
     // Physic graphical debug output:
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -160,6 +165,7 @@ void Engine::Render(float elapsedTime)
 
     // Simulate physic
     GPhysicEngine.Update(elapsedTime);
+#endif
 
 #ifdef TAK_USE_ENET
     // Tick network

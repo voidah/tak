@@ -307,6 +307,11 @@ class Floor : public SceneNode
             return m_sizeZ;
         }
 
+        void DisableDepthTest()
+        {
+            SetFlag(SceneNode::FLAG_NO_DEPTH_TEST);
+        }
+
     protected:
         virtual bool Update(float elapsedTime, SceneParams& params)
         {
@@ -338,12 +343,14 @@ class Cube : public SceneNode
 
         ~Cube()
         {
+#ifdef TAK_USE_BULLET_PHYSICS
             if(IsBoundToRigidBody())
             {
                 RigidBody* rb = GetBoundRigidBody();
                 GPhysicEngine.RemoveRigidBody(rb);
                 delete rb;
             }
+#endif
         }
 
         const Vector3f& GetSize() const
@@ -351,6 +358,7 @@ class Cube : public SceneNode
             return m_size;
         }
 
+#ifdef TAK_USE_BULLET_PHYSICS
         virtual RigidBody* AddToPhysic(float weight, const Vector3f& position)
         {
             BoxRigidBody* br1 = new BoxRigidBody(weight, position, m_size);
@@ -359,6 +367,7 @@ class Cube : public SceneNode
 
             return br1;
         }
+#endif
 
     protected:
         virtual bool Update(float elapsedTime, SceneParams& params)

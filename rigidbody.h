@@ -1,6 +1,8 @@
 #ifndef TAK_RIGIDBODY_H__
 #define TAK_RIGIDBODY_H__
 
+#ifdef TAK_USE_BULLET_PHYSICS
+
 #include <btBulletDynamicsCommon.h>
 #include "vector3.h"
 
@@ -51,5 +53,7 @@ class CapsuleRigidBody : public RigidBody
         CapsuleRigidBody(float weight);
         ~CapsuleRigidBody();
 };
+
+#endif
 
 #endif // TAK_RIGIDBODY_H__

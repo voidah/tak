@@ -1,5 +1,7 @@
 #include "gldebugdrawer.h"
 
+#ifdef TAK_USE_BULLET_PHYSICS
+
 #include <iostream>
 
 // TODO fix this file, should not using opengl direct mode..
@@ -134,5 +136,5 @@ void	GLDebugDrawer::drawContactPoint(const btVector3& pointOnB,const btVector3& 
 
 
 
-
+#endif
 
